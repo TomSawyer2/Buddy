@@ -19,6 +19,21 @@ const routes: Array<RouteConfig> = [
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/About.vue"),
   },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
+  },
+  {
+    path: "/buddySquare",
+    name: "buddySquare",
+    component: () => import("../views/buddySquare.vue"),
+  },
+  {
+    path: "/teamSquare",
+    name: "teamSquare",
+    component: () => import("../views/teamSquare.vue"),
+  },
 ];
 
 const router = new VueRouter({
