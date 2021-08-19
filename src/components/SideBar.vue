@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <v-card v-bind:style="{ height: pageHeight + 'px' }">
+  <div v-bind:style="{ height: pageHeight + 'px' }">
       <v-navigation-drawer permanent expand-on-hover>
         <v-list>
           <v-list-item class="px-2">
@@ -39,7 +38,6 @@
           </v-list-item-group>
         </v-list>
       </v-navigation-drawer>
-    </v-card>
   </div>
 </template>
 

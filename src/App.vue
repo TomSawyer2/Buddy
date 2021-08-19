@@ -1,8 +1,10 @@
 <template>
   <v-app>
-    <SideBar />
     <v-main>
-      <router-view />
+      <v-card style="display: flex;">
+        <SideBar />
+        <router-view />
+      </v-card>
     </v-main>
   </v-app>
 </template>
