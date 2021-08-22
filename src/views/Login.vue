@@ -24,11 +24,11 @@
         v-if="passwordLogin"
       ></v-text-field>
       <v-text-field
-        v-model="verifyCode"
+        v-model="captcha"
         label="验证码"
-        :rules="verifyCodeRules"
+        :rules="captchaRules"
         required
-        v-if="verifyCodeLogin"
+        v-if="captchaLogin"
       ></v-text-field>
 
       <div style="display: flex; justify-content: center">
@@ -46,31 +46,32 @@
           color="success"
           @click="login"
           class="mr-6"
-          v-if="verifyCodeLogin"
+          v-if="captchaLogin"
           style="width: 30%"
         >
           登录
         </v-btn>
         <v-btn
           :disabled="btnDisabled"
-          v-if="verifyCodeLogin"
+          v-if="captchaLogin"
           color="warning"
-          @click="getVerifyCode"
+          @click="getCaptcha"
           style="width: 30%"
         >
           {{ codeStatus }}
         </v-btn>
       </div>
       <div class="selectBtn">
-      <v-btn text @click="changeWayToLogin" class="mt-4">
-        {{selectBtnText}}
-      </v-btn>
+        <v-btn text @click="changeWayToLogin" class="mt-4">
+          {{ selectBtnText }}
+        </v-btn>
       </div>
     </v-form>
   </div>
 </template>
 
 <script>
+import { postLoginByPassword, postLoginByCaptcha, getCaptcha } from "../apis";
 export default {
   data: () => ({
     valid: true,
@@ -84,10 +85,10 @@ export default {
       (v) => !!v || "请输入内容",
       // v => /.+@.+\..+/.test(v) || '请输入正确的密码',
     ],
-    verifyCodeRules: [(v) => !!v || "请输入内容"],
-    verifyCode: "",
+    captchaRules: [(v) => !!v || "请输入内容"],
+    captcha: "",
     passwordLogin: 1, // 采用密码登录
-    verifyCodeLogin: 0, // 采用验证码登录
+    captchaLogin: 0, // 采用验证码登录
     codeStatus: "获取验证码", // 获取验证码按钮的文字
     btnDisabled: false, // 获取验证码按钮是否可用
     countdown: 60, // 倒计时秒数
@@ -96,8 +97,8 @@ export default {
     selectBtnText: "使用验证码登录",
     pageHeight: 0,
   }),
-  mounted () {
-    this.valid = true
+  mounted() {
+    this.valid = true;
     // 自动调节组件高度
     this.pageHeight = document.documentElement.clientHeight;
     console.log(this.pageHeight);
@@ -105,57 +106,109 @@ export default {
   methods: {
     login() {
       this.$refs.form.validate();
-      //清除验证码的计时器
+
+      //验证码初始化
       this.btnDisabled = false;
       clearInterval(this.timer);
       this.timer = null;
       this.codeStatus = "获取验证码";
-      this.$store.state.isLogin = true;
-      this.$router.push({path: '/'})
-      console.log(
-        "登录!" +
-          "phoneNumber:" +
-          this.phoneNumber +
-          " password:" +
-          this.password
-      );
+
+      //发送登录请求
+      if (this.passwordLogin) {
+        var loginParamsByPassword = new Object();
+        loginParamsByPassword.phoneNumber = this.phoneNumber;
+        loginParamsByPassword.password = this.password;
+        JSON.stringify(loginParamsByPassword);
+        console.log("通过密码发送登录请求，参数为：" + loginParamsByPassword);
+        postLoginByPassword(loginParamsByPassword)
+          .then((res) => {
+            console.log(res);
+            if (res.data.status == 0) {
+              // 成功登录
+              console.log("成功登录！");
+              //状态控制为登录
+              this.$store.state.isLogin = true;
+              this.$store.state.token = res.data.data.token;
+              //跳转至主页面
+              this.$router.push({ path: "/" });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else if (this.captchaLogin) {
+        var loginParamsByCaptcha = new Object();
+        loginParamsByCaptcha.phoneNumber = this.phoneNumber;
+        loginParamsByCaptcha.validationCode = this.captcha;
+        JSON.stringify(loginParamsByCaptcha);
+        console.log("通过验证码发送登录请求，参数为：" + loginParamsByCaptcha);
+        postLoginByCaptcha(loginParamsByCaptcha)
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.status == 0) {
+              console.log("成功登录！");
+              //状态控制为登录
+              this.$store.state.isLogin = true;
+              this.$store.state.token = res.data.data.token;
+              //跳转至主页面
+              this.$router.push({ path: "/" });
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
     changePassword() {
       this.$refs.form.resetValidation();
     },
-    getVerifyCode() {
+    getCaptcha() {
       if (this.phoneNumber && this.phoneNumber.length == 11) {
-        console.log("等待验证码...");
-        this.codeStatus = "60s后再次发送";
-        this.btnDisabled = true;
+        var getCaptchaParam =
+          '{"phoneNumber": ' + '"' + this.phoneNumber + '"' + "}";
+        getCaptcha(getCaptchaParam)
+          .then((res) => {
+            console.log(res.data);
+            if (res.data.status == 0) {
+              //验证码成功发送
+              console.log("验证码发送成功");
+              this.codeStatus = "60s后再次发送";
+              this.btnDisabled = true;
 
-        const TIME_COUNT = 60;
-        if (!this.timer) {
-          this.count = TIME_COUNT;
-          this.btnDisabled = true;
-          this.timer = setInterval(() => {
-            if (this.count > 0 && this.count <= TIME_COUNT) {
-              this.count--;
-              this.codeStatus = this.count + "s后再次发送";
+              const TIME_COUNT = 60;
+              if (!this.timer) {
+                this.count = TIME_COUNT;
+                this.btnDisabled = true;
+                this.timer = setInterval(() => {
+                  if (this.count > 0 && this.count <= TIME_COUNT) {
+                    this.count--;
+                    this.codeStatus = this.count + "s后再次发送";
+                  } else {
+                    this.btnDisabled = false;
+                    clearInterval(this.timer);
+                    this.timer = null;
+                    this.codeStatus = "获取验证码";
+                  }
+                }, 1000);
+              }
             } else {
-              this.btnDisabled = false;
-              clearInterval(this.timer);
-              this.timer = null;
-              this.codeStatus = "获取验证码";
+              console.log("验证码发送失败，请重试");
             }
-          }, 1000);
-        }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     },
-    changeWayToLogin () {
-      this.passwordLogin = !this.passwordLogin
-      this.verifyCodeLogin = !this.verifyCodeLogin
+    changeWayToLogin() {
+      this.passwordLogin = !this.passwordLogin;
+      this.captchaLogin = !this.captchaLogin;
       if (this.passwordLogin) {
-        this.selectBtnText = "使用验证码登录"
+        this.selectBtnText = "使用验证码登录";
       } else {
-        this.selectBtnText = "使用密码登录"
+        this.selectBtnText = "使用密码登录";
       }
-    }
+    },
   },
 };
 </script>

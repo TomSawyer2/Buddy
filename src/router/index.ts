@@ -5,13 +5,12 @@ import Home from "../views/Home.vue";
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
-  
   {
     path: "/",
     name: "Home",
     component: Home,
     meta: { requiresAuth: true }, // 添加表示需要验证
-    children:[
+    children: [
       {
         path: "/about",
         name: "About",
@@ -31,7 +30,7 @@ const routes: Array<RouteConfig> = [
         name: "teamSquare",
         component: () => import("../views/teamSquare.vue"),
       },
-    ]
+    ],
   },
   {
     path: "/login",

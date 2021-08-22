@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <v-card style="display: flex;">
+      <v-card style="display: flex">
         <router-view />
       </v-card>
     </v-main>
