@@ -15,6 +15,7 @@ const URL = {
 
 const ERROR_CODE = {
   LOGIN_FAIL: 2,
+  PHONENUMBERNOTREGISTERED: 4, //手机号未注册
   CAPTCHA_ERR: 19,
 };
 

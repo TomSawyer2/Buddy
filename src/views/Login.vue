@@ -72,6 +72,8 @@
 
 <script>
 import { postLoginByPassword, postLoginByCaptcha, getCaptcha } from "../apis";
+import { setToken, getToken,removeToken } from "../utils/storage";
+
 export default {
   data: () => ({
     valid: true,
@@ -98,6 +100,7 @@ export default {
     pageHeight: 0,
   }),
   mounted() {
+    removeToken();
     this.valid = true;
     // 自动调节组件高度
     this.pageHeight = document.documentElement.clientHeight;
@@ -126,9 +129,11 @@ export default {
             if (res.data.status == 0) {
               // 成功登录
               console.log("成功登录！");
+              this.$message.success("登录成功！");
               //状态控制为登录
               this.$store.state.isLogin = true;
-              this.$store.state.token = res.data.data.token;
+              setToken(res.data.data.token);
+              console.log(getToken())
               //跳转至主页面
               this.$router.push({ path: "/" });
             }
@@ -149,7 +154,7 @@ export default {
               console.log("成功登录！");
               //状态控制为登录
               this.$store.state.isLogin = true;
-              this.$store.state.token = res.data.data.token;
+              setToken(res.data.data.token);
               //跳转至主页面
               this.$router.push({ path: "/" });
             }
@@ -172,6 +177,7 @@ export default {
             if (res.data.status == 0) {
               //验证码成功发送
               console.log("验证码发送成功");
+              this.$message.success("验证码发送成功！");
               this.codeStatus = "60s后再次发送";
               this.btnDisabled = true;
 
@@ -193,11 +199,14 @@ export default {
               }
             } else {
               console.log("验证码发送失败，请重试");
+              this.$message.success("验证码发送失败，请重试");
             }
           })
           .catch((err) => {
             console.log(err);
           });
+      } else {
+        this.$message.error("请输入正确的手机号~");
       }
     },
     changeWayToLogin() {

@@ -1,5 +1,7 @@
+import { getToken } from "@/utils/storage";
 import axios from "axios";
 import { baseURL, TIMEOUT, CONTENT_TYPE, ERROR_CODE } from "../config/index";
+import Message from "../components/Message";
 
 const Axios = axios.create({
   baseURL: baseURL,
@@ -11,7 +13,7 @@ const Axios = axios.create({
 // 请求拦截
 Axios.interceptors.request.use(
   (config: any) => {
-    config.headers["Authorization"] = ""; // getToken
+    config.headers["Authorization"] = getToken(); // getToken
     return config;
   },
   (err: any) => {
@@ -28,12 +30,19 @@ Axios.interceptors.response.use(
       case ERROR_CODE.LOGIN_FAIL:
         // todo
         console.log("账号或密码错误，请重试。");
+        Message.error("账号或密码错误，请重试。");
         break;
 
       case ERROR_CODE.CAPTCHA_ERR:
         console.log("验证码错误");
+        Message.error("账号或密码错误，请重试。");
         break;
-        
+
+      case ERROR_CODE.PHONENUMBERNOTREGISTERED:
+        console.log("手机号未注册");
+        Message.error("手机号未注册，请先注册。");
+        break;
+
       default:
         return res;
     }
