@@ -11,22 +11,30 @@
   >
     <v-form ref="form" v-model="valid" lazy-validation style="width: 40%">
       <v-text-field
-        v-model="phoneNumber"
-        :rules="phoneNumberRules"
+        v-model="loginDataByPwd.phoneNumber"
+        :rules="rules.phoneNumberRules"
         label="手机号"
         required
+        v-if="passwordLogin"
       ></v-text-field>
       <v-text-field
-        v-model="password"
-        :rules="passwordRules"
+        v-model="loginDataByCaptcha.phoneNumber"
+        :rules="rules.phoneNumberRules"
+        label="手机号"
+        required
+        v-if="captchaLogin"
+      ></v-text-field>
+      <v-text-field
+        v-model="loginDataByPwd.password"
+        :rules="rules.passwordRules"
         label="密码"
         required
         v-if="passwordLogin"
       ></v-text-field>
       <v-text-field
-        v-model="captcha"
+        v-model="loginDataByCaptcha.validationCode"
         label="验证码"
-        :rules="captchaRules"
+        :rules="rules.captchaRules"
         required
         v-if="captchaLogin"
       ></v-text-field>
@@ -55,7 +63,7 @@
           :disabled="btnDisabled"
           v-if="captchaLogin"
           color="warning"
-          @click="getCaptcha"
+          @click="getCaptchaFunc"
           style="width: 30%"
         >
           {{ codeStatus }}
@@ -70,93 +78,93 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { postLoginByPassword, postLoginByCaptcha, getCaptcha } from "../apis";
-import { setToken, getToken,removeToken } from "../utils/storage";
+import { setToken, getToken, removeToken } from "../utils/storage";
 
 export default {
   data: () => ({
     valid: true,
-    phoneNumber: "",
-    phoneNumberRules: [
-      (v) => !!v || "请输入手机号",
-      (v) => (v && v.length == 11) || "请输入正确的手机号",
-    ],
-    password: "",
-    passwordRules: [
-      (v) => !!v || "请输入内容",
-      // v => /.+@.+\..+/.test(v) || '请输入正确的密码',
-    ],
-    captchaRules: [(v) => !!v || "请输入内容"],
-    captcha: "",
     passwordLogin: 1, // 采用密码登录
     captchaLogin: 0, // 采用验证码登录
-    codeStatus: "获取验证码", // 获取验证码按钮的文字
+    loginDataByPwd: {
+      phoneNumber: "",
+      password: "",
+    },
+    loginDataByCaptcha: {
+      phoneNumber: "",
+      validationCode: "",
+    },
+    rules: {
+      phoneNumberRules: [
+        (v: string | undefined) => !!v || "请输入手机号",
+        (v: string | undefined) =>
+          (v && v.length == 11) || "请输入正确的手机号",
+      ],
+      passwordRules: [(v: string | undefined) => !!v || "请输入内容"],
+      captchaRules: [(v: string) => !!v || "请输入内容"],
+    },
     btnDisabled: false, // 获取验证码按钮是否可用
-    countdown: 60, // 倒计时秒数
-    count: "", // 倒计时
+    codeStatus: "获取验证码", // 获取验证码按钮的文字
+    count: "",
     timer: null,
     selectBtnText: "使用验证码登录",
     pageHeight: 0,
   }),
   mounted() {
     removeToken();
-    this.valid = true;
+    (this as any).valid = true;
     // 自动调节组件高度
-    this.pageHeight = document.documentElement.clientHeight;
-    console.log(this.pageHeight);
+    (this as any).pageHeight = document.documentElement.clientHeight;
+    console.log((this as any).pageHeight);
   },
   methods: {
-    login() {
-      this.$refs.form.validate();
+    async login() {
+      (this as any).$refs.form.validate();
 
       //验证码初始化
-      this.btnDisabled = false;
-      clearInterval(this.timer);
-      this.timer = null;
-      this.codeStatus = "获取验证码";
+      (this as any).btnDisabled = false;
+      clearInterval((this as any).timer);
+      (this as any).timer = null;
+      (this as any).codeStatus = "获取验证码";
 
       //发送登录请求
-      if (this.passwordLogin) {
-        var loginParamsByPassword = new Object();
-        loginParamsByPassword.phoneNumber = this.phoneNumber;
-        loginParamsByPassword.password = this.password;
-        JSON.stringify(loginParamsByPassword);
-        console.log("通过密码发送登录请求，参数为：" + loginParamsByPassword);
-        postLoginByPassword(loginParamsByPassword)
-          .then((res) => {
+      if ((this as any).passwordLogin) {
+        console.log(
+          "通过密码发送登录请求，参数为：" + (this as any).loginDataByPwd
+        );
+        await postLoginByPassword((this as any).loginDataByPwd)
+          .then((res: any) => {
             console.log(res);
             if (res.data.status == 0) {
               // 成功登录
               console.log("成功登录！");
-              this.$message.success("登录成功！");
+              (this as any).$message.success("登录成功！");
               //状态控制为登录
-              this.$store.state.isLogin = true;
+              (this as any).$store.state.isLogin = true;
               setToken(res.data.data.token);
-              console.log(getToken())
+              console.log(getToken());
               //跳转至主页面
-              this.$router.push({ path: "/" });
+              (this as any).$router.push({ path: "/" });
             }
           })
           .catch((err) => {
             console.log(err);
           });
-      } else if (this.captchaLogin) {
-        var loginParamsByCaptcha = new Object();
-        loginParamsByCaptcha.phoneNumber = this.phoneNumber;
-        loginParamsByCaptcha.validationCode = this.captcha;
-        JSON.stringify(loginParamsByCaptcha);
-        console.log("通过验证码发送登录请求，参数为：" + loginParamsByCaptcha);
-        postLoginByCaptcha(loginParamsByCaptcha)
-          .then((res) => {
+      } else if ((this as any).captchaLogin) {
+        console.log(
+          "通过验证码发送登录请求，参数为：" + (this as any).loginDataByCaptcha
+        );
+        await postLoginByCaptcha((this as any).loginDataByCaptcha)
+          .then((res: any) => {
             console.log(res.data);
             if (res.data.status == 0) {
               console.log("成功登录！");
               //状态控制为登录
-              this.$store.state.isLogin = true;
+              (this as any).$store.state.isLogin = true;
               setToken(res.data.data.token);
               //跳转至主页面
-              this.$router.push({ path: "/" });
+              (this as any).$router.push({ path: "/" });
             }
           })
           .catch((err) => {
@@ -164,58 +172,56 @@ export default {
           });
       }
     },
-    changePassword() {
-      this.$refs.form.resetValidation();
-    },
-    getCaptcha() {
-      if (this.phoneNumber && this.phoneNumber.length == 11) {
-        var getCaptchaParam =
-          '{"phoneNumber": ' + '"' + this.phoneNumber + '"' + "}";
-        getCaptcha(getCaptchaParam)
-          .then((res) => {
-            console.log(res.data);
-            if (res.data.status == 0) {
-              //验证码成功发送
-              console.log("验证码发送成功");
-              this.$message.success("验证码发送成功！");
-              this.codeStatus = "60s后再次发送";
-              this.btnDisabled = true;
-
-              const TIME_COUNT = 60;
-              if (!this.timer) {
-                this.count = TIME_COUNT;
-                this.btnDisabled = true;
-                this.timer = setInterval(() => {
-                  if (this.count > 0 && this.count <= TIME_COUNT) {
-                    this.count--;
-                    this.codeStatus = this.count + "s后再次发送";
-                  } else {
-                    this.btnDisabled = false;
-                    clearInterval(this.timer);
-                    this.timer = null;
-                    this.codeStatus = "获取验证码";
-                  }
-                }, 1000);
-              }
-            } else {
-              console.log("验证码发送失败，请重试");
-              this.$message.success("验证码发送失败，请重试");
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+    async getCaptchaFunc() {
+      const { phoneNumber } = (this as any).loginDataByCaptcha;
+      if (this.checkPhone(phoneNumber)) {
+        try {
+          await getCaptcha({ phoneNumber });
+          console.log("验证码发送成功");
+          (this as any).$message.success("验证码发送成功！");
+          (this as any).codeStatus = "60s后再次发送";
+          (this as any).btnDisabled = true;
+          const TIME_COUNT = 60;
+          (this as any).countDown(TIME_COUNT);
+        } catch (error) {
+          console.log(error);
+          (this as any).$message.error("验证码发送失败，请重试~");
+        }
       } else {
-        this.$message.error("请输入正确的手机号~");
+        (this as any).$message.error("请输入正确的手机号~");
+      }
+    },
+    countDown(TIME_OUT: number) {
+      (this as any).count = TIME_OUT;
+      (this as any).btnDisabled = true;
+      (this as any).timer = setInterval(() => {
+        if ((this as any).count > 0 && (this as any).count <= TIME_OUT) {
+          (this as any).count--;
+          (this as any).codeStatus = (this as any).count + "s后再次发送";
+        } else {
+          (this as any).btnDisabled = false;
+          clearInterval((this as any).timer);
+          (this as any).timer = null;
+          (this as any).codeStatus = "获取验证码";
+        }
+      }, 1000);
+    },
+    checkPhone(value: string | undefined) {
+      // 这个函数来自于utils的check.ts，但在这条分支上还没有出现该文件，下次改为从utils引用
+      const regex = /^1[0-9]{10,10}$/;
+      if (regex.test(value || "")) {
+        return true;
+      } else {
+        return false;
       }
     },
     changeWayToLogin() {
-      this.passwordLogin = !this.passwordLogin;
-      this.captchaLogin = !this.captchaLogin;
-      if (this.passwordLogin) {
-        this.selectBtnText = "使用验证码登录";
+      (this as any).passwordLogin = !(this as any).passwordLogin;
+      (this as any).captchaLogin = !(this as any).captchaLogin;
+      if ((this as any).passwordLogin) {
+        (this as any).selectBtnText = "使用验证码登录";
       } else {
-        this.selectBtnText = "使用密码登录";
+        (this as any).selectBtnText = "使用密码登录";
       }
     },
   },
