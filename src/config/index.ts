@@ -10,6 +10,9 @@ const URL = {
   getCaptcha: "/login/validation/getValidationCode",
   postLoginByPassword: "/login/password",
   postLoginByCaptcha: "/login/validation/passInfo",
+  getRegisterCaptcha: "/register/getValidationCode",
+  postRegsiter: "/register/passInfo",
+
   // xxx-related
 };
 

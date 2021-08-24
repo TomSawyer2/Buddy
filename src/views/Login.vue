@@ -30,6 +30,11 @@
         required
         v-if="captchaLogin"
       ></v-text-field>
+      <a
+        href="/register"
+        style="display: flex; justify-content: flex-end; text-decoration: none"
+        >注册</a
+      >
 
       <div style="display: flex; justify-content: center">
         <v-btn
@@ -72,7 +77,7 @@
 
 <script>
 import { postLoginByPassword, postLoginByCaptcha, getCaptcha } from "../apis";
-import { setToken, getToken,removeToken } from "../utils/storage";
+import { setToken, getToken, removeToken } from "../utils/storage";
 
 export default {
   data: () => ({
@@ -133,7 +138,7 @@ export default {
               //状态控制为登录
               this.$store.state.isLogin = true;
               setToken(res.data.data.token);
-              console.log(getToken())
+              console.log(getToken());
               //跳转至主页面
               this.$router.push({ path: "/" });
             }
