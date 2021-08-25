@@ -12,13 +12,15 @@ const routes: Array<RouteConfig> = [
     meta: { requiresAuth: true }, // 添加表示需要验证
     children: [
       {
-        path: "/about",
-        name: "About",
+        path: "/personalInformation",
+        name: "personalInformation",
         // route level code-splitting
         // this generates a separate chunk (about.[hash].js) for this route
         // which is lazy-loaded when the route is visited.
         component: () =>
-          import(/* webpackChunkName: "about" */ "../views/About.vue"),
+          import(
+            /* webpackChunkName: "about" */ "../views/personalInformation.vue"
+          ),
       },
       {
         path: "/buddySquare",

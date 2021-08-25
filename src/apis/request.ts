@@ -13,7 +13,7 @@ const Axios = axios.create({
 // 请求拦截
 Axios.interceptors.request.use(
   (config: any) => {
-    config.headers["Authorization"] = getToken(); // getToken
+    config.headers["token"] = getToken(); // getToken
     return config;
   },
   (err: any) => {

@@ -1,5 +1,10 @@
 import axios from "../request";
-import { getCaptchaInfo, LoginInfo } from "@/models";
+import {
+  getCaptchaInfo,
+  getPersonalInformationInfo,
+  LoginInfo,
+  updatePersonalInformationInfo,
+} from "@/models";
 import { URL } from "@/config";
 
 export async function getCaptcha(
@@ -18,4 +23,16 @@ export async function postLoginByCaptcha(
   params: LoginInfo
 ): Promise<Record<string, unknown>> {
   return await axios.post(URL.postLoginByCaptcha, params);
+}
+
+export async function getPersonalInformation(
+  params: getPersonalInformationInfo
+): Promise<Record<string, unknown>> {
+  return await axios.post(URL.getPersonalInformation, params);
+}
+
+export async function updatePersonalInformation(
+  params: updatePersonalInformationInfo
+): Promise<Record<string, unknown>> {
+  return await axios.post(URL.updatePersonalInformation, params);
 }

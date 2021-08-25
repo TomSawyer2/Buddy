@@ -8,6 +8,8 @@ const URL = {
   // back-end
   // user-related
   getCaptcha: "/login/validation/getValidationCode",
+  getPersonalInformation: "/personalSpace/info/show",
+  updatePersonalInformation: "/personalSpace/info/update",
   postLoginByPassword: "/login/password",
   postLoginByCaptcha: "/login/validation/passInfo",
   // xxx-related

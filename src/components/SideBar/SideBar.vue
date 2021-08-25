@@ -1,6 +1,6 @@
 <template>
   <div v-bind:style="{ height: pageHeight + 'px' }">
-    <v-navigation-drawer permanent expand-on-hover>
+    <v-navigation-drawer permanent expand-on-hover absolute>
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar>
@@ -50,7 +50,7 @@ export default Vue.extend({
       pageHeight: 100,
       selectedItem: 0,
       items: [
-        { text: "个人中心", icon: "mdi-home", route: "/about" },
+        { text: "个人中心", icon: "mdi-home", route: "/personalInformation" },
         {
           text: "Buddy广场",
           icon: "mdi-account-multiple",

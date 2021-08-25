@@ -14,3 +14,28 @@ export interface RegisterInfo {
 export interface getCaptchaInfo {
   phoneNumber: string;
 }
+
+export interface getPersonalInformationInfo {
+  phoneNumber: string;
+}
+
+export interface updatePersonalInformationInfo {
+  avatar: string;
+  email: string;
+  phoneNumber: string;
+  sex: string;
+  hobby: string;
+  teamExperience: string;
+  number: string;
+  highSchool: string;
+  field: string;
+  resume: string;
+  isGraduated: boolean;
+  substation: string;
+  notes: string | undefined;
+}
+
+export interface uploadPicInfo {
+  smfile: any;
+  format: string;
+}
