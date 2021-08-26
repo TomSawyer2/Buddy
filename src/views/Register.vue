@@ -116,15 +116,15 @@ export default {
   },
   methods: {
     async getCaptcha() {
-      const { phoneNumber } = this.registerData;
+      const { phoneNumber } = (this as any).registerData;
       if (checkPhone(phoneNumber)) {
         try {
           await getRegisterCaptcha({ phoneNumber });
           Message.success("验证码发送成功！");
-          this.codeStatus = "已发送(60s)";
-          this.btnDisabled = true;
+          (this as any).codeStatus = "已发送(60s)";
+          (this as any).btnDisabled = true;
           const TIME_COUNT = 60;
-          this.countDown(TIME_COUNT);
+          (this as any).countDown(TIME_COUNT);
         } catch (error) {
           console.log(error);
           Message.error("验证码发送失败，请重试(´・ω・`)");
@@ -145,23 +145,26 @@ export default {
     },
     countDown(TIME_OUT: number) {
       let timer = setInterval(() => {
-        if (this.count > 0 && this.count <= TIME_OUT) {
-          this.count--;
-          this.codeStatus = `已发送(${this.count}s)`;
+        if ((this as any).count > 0 && (this as any).count <= TIME_OUT) {
+          (this as any).count--;
+          (this as any).codeStatus = `已发送(${(this as any).count}s)`;
         } else {
           clearInterval(timer);
-          this.btnDisabled = false;
-          this.codeStatus = "获取验证码";
+          (this as any).btnDisabled = false;
+          (this as any).codeStatus = "获取验证码";
         }
       }, 1000);
     },
   },
   mounted() {
-    this.pageHeight = document.documentElement.clientHeight;
+    (this as any).pageHeight = document.documentElement.clientHeight;
   },
   computed: {
     passwordConfirm: function (): boolean | string {
-      return this.registerData.passWord === this.confirmPwd || "密码需一致";
+      return (
+        (this as any).registerData.passWord === (this as any).confirmPwd ||
+        "密码需一致"
+      );
     },
   },
 };
