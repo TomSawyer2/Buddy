@@ -1,9 +1,11 @@
 import axios from "../request";
+
 import { getCaptchaInfo, LoginInfo, RegisterInfo } from "@/models";
+
 import { URL } from "@/config";
 
 export async function getCaptcha(
-  params: LoginInfo
+  params: getCaptchaInfo
 ): Promise<Record<string, unknown>> {
   return await axios.post(URL.getCaptcha, params);
 }
