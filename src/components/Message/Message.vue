@@ -1,9 +1,7 @@
 <template>
   <transition name="message-fade">
     <div class="message" :class="typeClass" role="alert" v-show="visible">
-      <p class="message__content">
-        &nbsp;{{ message }}
-      </p>
+      <p class="message__content">&nbsp;{{ message }}</p>
     </div>
   </transition>
 </template>

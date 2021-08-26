@@ -5,10 +5,7 @@ const MessageConstructor = Vue.extend(Main);
 
 const instances: any = [];
 let seed = 1;
-const Message = function (
-  options: any,
-  typeClass: any
-) {
+const Message = function (options: any, typeClass: any) {
   options = options || {};
   if (typeof options === "string") {
     options = {

@@ -44,4 +44,15 @@ export async function postAvatar(
   return await axios.post("http://175.24.30.102:4000/api/post", params, {
     headers: { "content-type": "multipart/form-data" },
   });
+  
+export async function getRegisterCaptcha(
+  params: getCaptchaInfo
+): Promise<Record<string, unknown>> {
+  return await axios.post(URL.getRegisterCaptcha, params);
+}
+
+export function postRegister(
+  params: RegisterInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.postRegsiter, params);
 }
