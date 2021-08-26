@@ -149,6 +149,7 @@ export default {
               (this as any).$store.state.isLogin = true;
               (this as any).$store.state.avatarSrc = res.data.data.avatar;
               (this as any).$store.state.userName = res.data.data.userName;
+              (this as any).$store.state.phoneNumber = (this as any).loginDataByPwd.phoneNumber;
               setToken(res.data.data.token);
               console.log(getToken());
               //跳转至主页面
@@ -169,6 +170,10 @@ export default {
               console.log("成功登录！");
               //状态控制为登录
               (this as any).$store.state.isLogin = true;
+              (this as any).$store.state.isLogin = true;
+              (this as any).$store.state.avatarSrc = res.data.data.avatar;
+              (this as any).$store.state.userName = res.data.data.userName;
+              (this as any).$store.state.phoneNumber = (this as any).loginDataByCaptcha.phoneNumber;
               setToken(res.data.data.token);
               //跳转至主页面
               (this as any).$router.push({ path: "/" });

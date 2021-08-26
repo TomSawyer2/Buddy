@@ -201,7 +201,6 @@ export default {
   }),
   mounted() {
     (this as any).formData.phoneNumber = (this as any).$store.state.phoneNumber;
-    (this as any).formData.phoneNumber = "15355506072";
     const { phoneNumber } = (this as any).formData;
     getPersonalInformation({ phoneNumber })
       .then((res: any) => {
