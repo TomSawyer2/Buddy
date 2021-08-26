@@ -38,6 +38,11 @@
         required
         v-if="captchaLogin"
       ></v-text-field>
+      <a
+        href="/register"
+        style="display: flex; justify-content: flex-end; text-decoration: none"
+        >注册</a
+      >
 
       <div style="display: flex; justify-content: center">
         <v-btn
