@@ -24,18 +24,18 @@ Axios.interceptors.request.use(
 // 响应拦截
 Axios.interceptors.response.use(
   (res: any) => {
-    const errorCode = res.data.status; // 状态码在哪里具体看后端
+    const errorCode = res.data.status;
     // 错误处理
     switch (errorCode) {
       case ERROR_CODE.LOGIN_FAIL:
-        // todo
         console.log("账号或密码错误，请重试。");
         Message.error("账号或密码错误，请重试。");
+        throw new Error(res.data.msg);
         break;
 
       case ERROR_CODE.CAPTCHA_ERR:
         console.log("验证码错误");
-        Message.error("账号或密码错误，请重试。");
+        Message.error("验证码错误,请重试。");
         break;
 
       case ERROR_CODE.PHONENUMBERNOTREGISTERED:
@@ -43,6 +43,17 @@ Axios.interceptors.response.use(
         Message.error("手机号未注册，请先注册。");
         break;
 
+      case ERROR_CODE.USER_EXISTED:
+        Message.error("用户名已注册！");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.PHONE_EXISTED:
+        Message.error("手机号已注册！");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.CAPTCHA_ERR_REG:
+        Message.error("验证码错误,请重试。");
+        throw new Error(res.data.msg);
       default:
         return res;
     }

@@ -1,17 +1,7 @@
 <template>
-  <div
-    v-bind:style="{ height: pageHeight + 'px' }"
-    style="
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-    "
-  >
-    <!-- <v-card> -->
+  <div v-bind:style="{ height: pageHeight + 'px' }" class="contain">
     <h1>用户注册</h1>
-    <v-form v-model="valid" ref="registerForm" lazy-validation>
+    <v-form v-model="valid">
       <v-text-field
         label="真实姓名"
         v-model="registerData.userName"
@@ -19,7 +9,7 @@
         validate-on-blur
         clearable
       />
-      <div style="display: flex; align-items: baseline">
+      <div class="contain-phone">
         <v-text-field
           label="手机号"
           v-model="registerData.phoneNumber"
@@ -64,9 +54,10 @@
         @click:append="showConfirmPwd = !showConfirmPwd"
         validate-on-blur
       />
-      <div style="justify-content: center; display: flex">
+      <a href="/login" class="link">去登录</a>
+      <div class="btn-reg">
         <v-btn
-          :disabled="valid"
+          :disabled="!valid"
           color="primary"
           @click="register"
           style="width: 30%"
@@ -75,15 +66,13 @@
         </v-btn>
       </div>
     </v-form>
-    <!-- </v-card> -->
   </div>
 </template>
 
 <script lang="ts">
-import { getRegisterCaptcha } from "@/apis";
+import { getRegisterCaptcha, postRegister } from "@/apis";
 import Message from "@/components/Message";
 import { checkPhone } from "@/utils/check";
-import Vue from 'vue'
 export default {
   name: "Register",
   data() {
@@ -97,9 +86,11 @@ export default {
       confirmPwd: "",
       showPwd: false,
       showConfirmPwd: false,
+
       codeStatus: "获取验证码",
       timer: null,
       count: 59, // 倒计时
+
       rules: {
         phoneRules: [
           (v: string | undefined): string | boolean =>
@@ -119,6 +110,7 @@ export default {
       },
       valid: false,
       btnDisabled: false,
+
       pageHeight: 0,
     };
   },
@@ -141,8 +133,15 @@ export default {
         Message.error("请输入正确的电话号码再尝试(´・ω・`)");
       }
     },
-    register() {
-      this.$refs.registerForm.validate();
+    async register() {
+      const registerData = this.registerData;
+      try {
+        await postRegister(registerData);
+        Message.success("注册成功");
+        this.$router.push("/login");
+      } catch (error) {
+        console.log(error);
+      }
     },
     countDown(TIME_OUT: number) {
       let timer = setInterval(() => {
@@ -156,9 +155,6 @@ export default {
         }
       }, 1000);
     },
-    checkConfirm() {
-      return this.registerData.passWord === this.confirmPwd;
-    },
   },
   mounted() {
     this.pageHeight = document.documentElement.clientHeight;
@@ -171,6 +167,25 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.contain {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.contain-phone {
+  display: flex;
+  align-items: baseline;
+}
+.link {
+  display: flex;
+  justify-content: flex-end;
+  text-decoration: none;
+}
+.btn-reg {
+  display: flex;
+  justify-content: center;
+}
 </style>
-
