@@ -100,12 +100,35 @@
         required
       ></v-text-field>
 
-      <v-text-field
+      <!-- <v-text-field
         v-model="formData.field"
         :rules="rules.fieldRules"
         label="技术栈"
         required
-      ></v-text-field>
+      ></v-text-field> -->
+
+      <v-combobox
+        v-model="formData.field"
+        :items="items.fieldItems"
+        :search-input.sync="search"
+        hide-selected
+        hint="最多添加十个标签（若没有对应选项可以直接输入）"
+        label="添加更多标签"
+        multiple
+        persistent-hint
+        small-chips
+        clearable
+      >
+        <template v-slot:no-data>
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title>
+                没有匹配的选项。 按下 <kbd>enter</kbd> 创建新标签。
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </template>
+      </v-combobox>
 
       <v-select
         v-model="formData.substation"
@@ -196,8 +219,17 @@ export default {
         "北京站",
         "海外站",
       ],
+      fieldItems: [
+        "Vue",
+        "React",
+        "Angular",
+        "Java",
+        "Go",
+        "深度学习",
+      ]
     },
     graduated: "",
+    search: null,
   }),
   mounted() {
     (this as any).formData.phoneNumber = (this as any).$store.state.phoneNumber;
@@ -254,7 +286,15 @@ export default {
         });
     },
   },
+  watch: {
+    model (val: any) {
+      if (val.length > 10) {
+        (this as any).$nextTick(() => (this as any).model.pop())
+      }
+    },
+  },
 };
+
 </script>
 
 <style></style>
