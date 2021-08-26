@@ -5,6 +5,7 @@ import {
   LoginInfo,
   updatePersonalInformationInfo,
   postAvatarInfo,
+  RegisterInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -44,7 +45,8 @@ export async function postAvatar(
   return await axios.post("http://175.24.30.102:4000/api/post", params, {
     headers: { "content-type": "multipart/form-data" },
   });
-  
+}
+
 export async function getRegisterCaptcha(
   params: getCaptchaInfo
 ): Promise<Record<string, unknown>> {

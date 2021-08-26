@@ -36,5 +36,5 @@ export interface updatePersonalInformationInfo {
 }
 
 export interface postAvatarInfo {
-  file: object;
+  file: Object;
 }

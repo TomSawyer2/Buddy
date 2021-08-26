@@ -134,11 +134,11 @@ export default {
       }
     },
     async register() {
-      const registerData = this.registerData;
+      const registerData = (this as any).registerData;
       try {
         await postRegister(registerData);
         Message.success("注册成功");
-        this.$router.push("/login");
+        (this as any).$router.push("/login");
       } catch (error) {
         console.log(error);
       }
