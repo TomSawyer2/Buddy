@@ -118,6 +118,7 @@
         persistent-hint
         small-chips
         clearable
+        deletable-chips
       >
         <template v-slot:no-data>
           <v-list-item>
@@ -160,6 +161,8 @@ import {
   getPersonalInformation,
   updatePersonalInformation,
   postAvatar,
+  getFields,
+  addFields,
 } from "../apis";
 export default {
   data: () => ({
@@ -220,12 +223,6 @@ export default {
         "海外站",
       ],
       fieldItems: [
-        "Vue",
-        "React",
-        "Angular",
-        "Java",
-        "Go",
-        "深度学习",
       ]
     },
     graduated: "",
@@ -247,11 +244,13 @@ export default {
         console.log(err);
         (this as any).$message.error("获取个人信息失败，请重试~");
       });
+    (this as any).getAllFields();
   },
   methods: {
     async validate() {
       (this as any).$refs.form.validate();
       console.log((this as any).formData);
+      await (this as any).updateFields();
       if ((this as any).graduated == "是") {
         (this as any).formData.isGraduated = true;
       } else {
@@ -261,12 +260,14 @@ export default {
       try {
         await updatePersonalInformation((this as any).formData);
         console.log("更新成功！");
+        console.log((this as any).items.fieldItems);
         (this as any).$message.success("更新成功！");
         (this as any).$store.state.avatarSrc = (this as any).formData.avatar;
       } catch (error) {
         console.log(error);
         (this as any).$message.error("更新失败，请重试~");
       }
+      (this as any).getAllFields();
     },
     async changeAvatar() {
       let file = new FormData(); //创建form对象
@@ -285,6 +286,44 @@ export default {
           (this as any).$message.error("图片上传失败，请重试~");
         });
     },
+    async updateFields () {
+      // 取出新添加的标签放入newFields
+      var combinedFields = (this as any).items.fieldItems.concat((this as any).formData.field);
+      console.log("Combined array:" + combinedFields);
+      var uniqueFields = Array.from(new Set(combinedFields));
+      console.log("Unique array:" + uniqueFields);
+      var fieldItems = (this as any).items.fieldItems;
+      var _arr1 = uniqueFields.filter(item1 => !fieldItems.includes(item1));
+      var _arr2 = fieldItems.filter(item2 => !uniqueFields.includes(item2));
+      const _arr =_arr1.concat(_arr2)
+      console.log("New fields:" + _arr1);
+      var newFields = _arr1;
+
+      if (newFields.length >= 1) {
+        newFields.forEach((val:any, idx, array) => {
+          console.log(val);
+          var field:any = '{"field": ' + '"' + val + '"' + '}';
+          addFields(field)
+            .then((res : any) => {
+              console.log(res);
+            })
+            .catch((err : any) => {
+              console.log(err);
+              (this as any).$message.error("添加标签失败，请重试~");
+            })
+        })
+      }
+    },
+    async getAllFields() {
+      getFields() 
+        .then((res : any) => {
+          console.log(res);
+          (this as any).items.fieldItems = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        }) 
+    }
   },
   watch: {
     model (val: any) {

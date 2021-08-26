@@ -34,3 +34,7 @@ export interface updatePersonalInformationInfo {
   substation: string;
   notes: string | undefined;
 }
+
+export interface addFieldsInfo {
+  field: string;
+}

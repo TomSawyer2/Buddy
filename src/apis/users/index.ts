@@ -6,6 +6,7 @@ import {
   updatePersonalInformationInfo,
   // postAvatarInfo,
   RegisterInfo,
+  addFieldsInfo
 } from "@/models";
 import { URL } from "@/config";
 
@@ -57,4 +58,15 @@ export function postRegister(
   params: RegisterInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.postRegsiter, params);
+}
+
+export function getFields(
+): Promise<Record<string, unknown>> {
+  return axios.get(URL.getFields);
+}
+
+export function addFields(
+  params: addFieldsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addFields, params);
 }
