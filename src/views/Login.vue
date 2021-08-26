@@ -147,6 +147,8 @@ export default {
               (this as any).$message.success("登录成功！");
               //状态控制为登录
               (this as any).$store.state.isLogin = true;
+              (this as any).$store.state.avatarSrc = res.data.data.avatar;
+              (this as any).$store.state.userName = res.data.data.userName;
               setToken(res.data.data.token);
               console.log(getToken());
               //跳转至主页面

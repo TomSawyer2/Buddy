@@ -8,6 +8,8 @@ const URL = {
   // back-end
   // user-related
   getCaptcha: "/login/validation/getValidationCode",
+  getPersonalInformation: "/personalSpace/info/show",
+  updatePersonalInformation: "/personalSpace/info/update",
   postLoginByPassword: "/login/password",
   postLoginByCaptcha: "/login/validation/passInfo",
   getRegisterCaptcha: "/register/getValidationCode",
@@ -18,7 +20,7 @@ const URL = {
 
 const ERROR_CODE = {
   LOGIN_FAIL: 2,
-  PHONENUMBERNOTREGISTERED: 4, //手机号未注册
+  PHONENUMBERNOTREGISTERED: 8, //手机号未注册
   CAPTCHA_ERR: 19,
   CAPTCHA_ERR_REG: 14,
   USER_EXISTED: 12,
