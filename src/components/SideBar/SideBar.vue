@@ -50,14 +50,14 @@ export default Vue.extend({
       pageHeight: 100,
       selectedItem: 0,
       items: [
-        { text: "个人中心", icon: "mdi-folder", route: "/about" },
+        { text: "个人中心", icon: "mdi-home", route: "/about" },
         {
           text: "Buddy广场",
           icon: "mdi-account-multiple",
           route: "/buddySquare",
         },
-        { text: "群组广场", icon: "mdi-star", route: "/teamSquare" },
-        { text: "登录/退出", icon: "mdi-history", route: "/login" },
+        { text: "群组广场", icon: "mdi-vector-square", route: "/teamSquare" },
+        { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
       ],
     };

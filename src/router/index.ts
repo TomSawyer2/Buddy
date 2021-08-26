@@ -6,33 +6,36 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   {
-    path: "/home",
+    path: "/",
     name: "Home",
     component: Home,
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+    meta: { requiresAuth: true }, // 添加表示需要验证
+    children: [
+      {
+        path: "/about",
+        name: "About",
+        // route level code-splitting
+        // this generates a separate chunk (about.[hash].js) for this route
+        // which is lazy-loaded when the route is visited.
+        component: () =>
+          import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      },
+      {
+        path: "/buddySquare",
+        name: "buddySquare",
+        component: () => import("../views/buddySquare.vue"),
+      },
+      {
+        path: "/teamSquare",
+        name: "teamSquare",
+        component: () => import("../views/teamSquare.vue"),
+      },
+    ],
   },
   {
     path: "/login",
     name: "Login",
     component: () => import("../views/Login.vue"),
-  },
-  {
-    path: "/buddySquare",
-    name: "buddySquare",
-    component: () => import("../views/buddySquare.vue"),
-  },
-  {
-    path: "/teamSquare",
-    name: "teamSquare",
-    component: () => import("../views/teamSquare.vue"),
   },
 ];
 

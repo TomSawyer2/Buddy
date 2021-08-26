@@ -1,4 +1,4 @@
-export const baseURL = "";
+export const baseURL = "http://39.101.183.162:18082";
 export const TIMEOUT = 5000;
 export const CONTENT_TYPE = "application/json";
 
@@ -7,12 +7,16 @@ const URL = {
 
   // back-end
   // user-related
-  postLogin: "", // 随便写的
+  getCaptcha: "/login/validation/getValidationCode",
+  postLoginByPassword: "/login/password",
+  postLoginByCaptcha: "/login/validation/passInfo",
   // xxx-related
 };
 
 const ERROR_CODE = {
-  LOGIN_FAIL: -1,
+  LOGIN_FAIL: 2,
+  PHONENUMBERNOTREGISTERED: 4, //手机号未注册
+  CAPTCHA_ERR: 19,
 };
 
 export { URL, ERROR_CODE };

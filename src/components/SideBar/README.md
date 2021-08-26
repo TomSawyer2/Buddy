@@ -1,2 +1,2 @@
 # SideBar
-这里是介绍
+SideBar为侧边栏，登录后作为Home组件。
