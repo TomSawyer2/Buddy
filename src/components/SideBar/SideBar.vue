@@ -4,16 +4,16 @@
       <v-list>
         <v-list-item class="px-2">
           <v-list-item-avatar>
-            <v-img
-              src="https://upload-bbs.mihoyo.com/upload/2021/08/17/184202986/42f7d52e8eeb292a9e7555b316c0b85c_8496671900714316037.jpg"
-            ></v-img>
+            <v-img v-bind:src="avatarSrc"></v-img>
           </v-list-item-avatar>
         </v-list-item>
 
         <v-list-item link>
           <v-list-item-content>
-            <v-list-item-title class="text-h6"> username </v-list-item-title>
-            <v-list-item-subtitle>email_address</v-list-item-subtitle>
+            <v-list-item-title class="text-h6">
+              {{ this.userName }}
+            </v-list-item-title>
+            <!-- <v-list-item-subtitle>email_address</v-list-item-subtitle> -->
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -60,12 +60,26 @@ export default Vue.extend({
         { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
       ],
+      avatarSrc: "",
+      userName: "",
     };
   },
   mounted() {
     // 自动调节组件高度
     this.pageHeight = document.documentElement.clientHeight;
     console.log(this.pageHeight);
+    this.avatarSrc = this.$store.state.avatarSrc;
+    this.userName = this.$store.state.userName;
+  },
+  computed: {
+    monitor() {
+      return this.$store.state.avatarSrc;
+    },
+  },
+  watch: {
+    monitor() {
+      this.avatarSrc = this.$store.state.avatarSrc;
+    },
   },
 });
 </script>

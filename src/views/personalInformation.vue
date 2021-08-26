@@ -18,13 +18,13 @@
       <div style="display: flex; flex-direction: row; align-items: center">
         <v-avatar size="100"><img v-bind:src="formData.avatar" /></v-avatar>
         <v-file-input
-          accept="image/png, image/jpeg, image/bmp"
+          accept="image/png, image/jpeg, image/bmp, image/jfif"
           placeholder="选择图片"
           prepend-icon="mdi-camera"
           label="更换头像"
           class="ml-5"
           style="width: 20%"
-          v-model="avatarFile"
+          v-model="updateFile.file"
           @change="changeAvatar()"
         ></v-file-input>
       </div>
@@ -43,21 +43,24 @@
         required
       ></v-text-field>
 
-      <v-select
-        v-model="formData.sex"
-        :items="items.sexItems"
-        :rules="[(v) => !!v || '请选择您的性别~']"
-        label="性别"
-        required
-      ></v-select>
-      <!-- <v-select
-          v-model="formData.selectIdentity"
-          :items="items.identityItems"
-          :rules="[(v) => !!v || '请选择您目前的身份~']"
-          label="身份"
+      <div class="d-flex justify-space-between">
+        <v-select
+          v-model="formData.sex"
+          :items="items.sexItems"
+          :rules="[(v) => !!v || '请选择您的性别~']"
+          label="性别"
+          required
+          class="pr-2"
+        ></v-select>
+        <v-select
+          v-model="graduated"
+          :items="items.isGraduatedItems"
+          :rules="[(v) => !!v || '请选择您是否出站~']"
+          label="是否出站"
           required
           class="pl-2"
-        ></v-select> -->
+        ></v-select>
+      </div>
 
       <div class="d-flex justify-space-between">
         <v-text-field
@@ -105,14 +108,6 @@
       ></v-text-field>
 
       <v-select
-        v-model="graduated"
-        :items="items.isGraduatedItems"
-        :rules="[(v) => !!v || '请选择您是否出站~']"
-        label="是否出站"
-        required
-      ></v-select>
-
-      <v-select
         v-model="formData.substation"
         v-if="graduated == '是' ? true : false"
         :items="items.substationItems"
@@ -138,17 +133,22 @@
 </template>
 
 <script lang="ts">
-import { getPersonalInformation, updatePersonalInformation } from "../apis";
+import {
+  getPersonalInformation,
+  updatePersonalInformation,
+  postAvatar,
+} from "../apis";
 export default {
   data: () => ({
     valid: true,
-    avatarFile: [],
+    updateFile: {
+      file: [],
+    },
     formData: {
       avatar: "",
       email: "",
       phoneNumber: "",
       sex: "",
-      // selectIdentity: "",
       hobby: "",
       teamExperience: "",
       number: "",
@@ -158,7 +158,6 @@ export default {
       isGraduated: false,
       substation: "",
       notes: "",
-      file: "",
     },
 
     rules: {
@@ -198,10 +197,7 @@ export default {
         "海外站",
       ],
     },
-    uploadPicParams: {
-      smfile: "",
-      format: "json",
-    },
+    graduated: "",
   }),
   mounted() {
     (this as any).formData.phoneNumber = (this as any).$store.state.phoneNumber;
@@ -210,6 +206,11 @@ export default {
     getPersonalInformation({ phoneNumber })
       .then((res: any) => {
         (this as any).formData = res.data.data;
+        if (res.data.data.isGraduated) {
+          (this as any).graduated = "是";
+        } else {
+          (this as any).graduated = "否";
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -222,27 +223,39 @@ export default {
       console.log((this as any).formData);
       if ((this as any).graduated == "是") {
         (this as any).formData.isGraduated = true;
+      } else {
+        (this as any).formData.isGraduated = false;
+        (this as any).formData.substation = "";
       }
       try {
-        // (this as any).formData.avatar = "https://upload-bbs.mihoyo.com/upload/2021/08/17/184202986/42f7d52e8eeb292a9e7555b316c0b85c_8496671900714316037.jpg"
         await updatePersonalInformation((this as any).formData);
         console.log("更新成功！");
         (this as any).$message.success("更新成功！");
+        (this as any).$store.state.avatarSrc = (this as any).formData.avatar;
       } catch (error) {
         console.log(error);
         (this as any).$message.error("更新失败，请重试~");
       }
     },
     async changeAvatar() {
-      console.log(1);
+      let file = new FormData(); //创建form对象
+      file.append("pic", (this as any).updateFile.file); //通过append向form对象添加数据
+      console.log(file.get("pic"));
+      await postAvatar(file)
+        .then((res: any) => {
+          console.log(res);
+          if (res.data.status == "ok") {
+            console.log(res.data.link);
+            (this as any).formData.avatar = res.data.link;
+          }
+        })
+        .catch((err: any) => {
+          console.log(err);
+          (this as any).$message.error("图片上传失败，请重试~");
+        });
     },
   },
 };
 </script>
 
-<style>
-.Btn {
-  display: flex;
-  justify-content: center;
-}
-</style>
+<style></style>

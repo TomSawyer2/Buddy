@@ -35,7 +35,6 @@ export interface updatePersonalInformationInfo {
   notes: string | undefined;
 }
 
-export interface uploadPicInfo {
-  smfile: any;
-  format: string;
+export interface postAvatarInfo {
+  file: object;
 }
