@@ -34,7 +34,3 @@ export interface updatePersonalInformationInfo {
   substation: string;
   notes: string | undefined;
 }
-
-export interface postAvatarInfo {
-  file: Object;
-}

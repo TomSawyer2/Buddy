@@ -4,7 +4,7 @@ import {
   getPersonalInformationInfo,
   LoginInfo,
   updatePersonalInformationInfo,
-  postAvatarInfo,
+  // postAvatarInfo,
   RegisterInfo,
 } from "@/models";
 import { URL } from "@/config";
@@ -40,7 +40,7 @@ export async function updatePersonalInformation(
 }
 
 export async function postAvatar(
-  params: postAvatarInfo
+  params: FormData
 ): Promise<Record<string, unknown>> {
   return await axios.post("http://175.24.30.102:4000/api/post", params, {
     headers: { "content-type": "multipart/form-data" },
