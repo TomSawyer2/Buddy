@@ -6,8 +6,10 @@
 </template>
 
 <script lang="ts">
+import Message from "@/components/Message";
+import { getToken } from "@/utils/storage";
 import Vue from "vue";
-import SideBar from "../components/SideBar/SideBar.vue";
+import SideBar from "@/components/SideBar/SideBar.vue";
 
 export default Vue.extend({
   name: "Home",
@@ -15,10 +17,19 @@ export default Vue.extend({
     SideBar,
   },
   mounted() {
-    console.log(this.$store.state.isLogin);
-    if (!this.$store.state.isLogin) {
+    if (getToken().length === 0) {
       this.$router.push({ path: "/login" });
     }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.path !== "/login") {
+        if (getToken().length === 0) {
+          Message.error("未登录！");
+          this.$router.push({ path: "/login" });
+        }
+      }
+    },
   },
 });
 </script>
