@@ -44,3 +44,20 @@ export interface getSentRequestsInfo {
   phoneNumber: string;
   pageNo: number;
 }
+
+export interface acceptBuddyInfo {
+  phoneNumber: string;
+  studentPhoneNumber: string;
+}
+
+export interface refuseBuddyInfo {
+  phoneNumber: string;
+  studentPhoneNumber: string;
+}
+
+export interface postSendBuddyRequestInfo {
+  phoneNumber: string;
+  teacherName: string;
+  teacherPhoneNumber: string;
+  applyReason: string;  
+}

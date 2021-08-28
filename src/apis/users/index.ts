@@ -8,6 +8,9 @@ import {
   RegisterInfo,
   getReceivedRequestsInfo,
   getSentRequestsInfo,
+  acceptBuddyInfo,
+  refuseBuddyInfo,
+  postSendBuddyRequestInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -71,4 +74,22 @@ export function getSentRequests(
   params: getSentRequestsInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.getSentRequests, params);
+}
+
+export function acceptBuddy(
+  params: acceptBuddyInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.acceptBuddy, params);
+}
+
+export function refuseBuddy(
+  params: refuseBuddyInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.refuseBuddy, params);
+}
+
+export function postSendBuddyRequest(
+  params: postSendBuddyRequestInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.postSendBuddyRequest, params);
 }

@@ -7,9 +7,12 @@ const URL = {
 
   // back-end
   // user-related
+  acceptBuddy: "/requests/pass",
+  refuseBuddy: "/requests/reject",
   getCaptcha: "/login/validation/getValidationCode",
   getPersonalInformation: "/personalSpace/info/show",
   getReceivedRequests: "/requests/received",
+  postSendBuddyRequest: "/requests/send",
   getSentRequests: "/requests/sent",
   updatePersonalInformation: "/personalSpace/info/update",
   postLoginByPassword: "/login/password",

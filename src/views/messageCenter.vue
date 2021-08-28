@@ -11,7 +11,7 @@
     <v-col
       cols="12"
       class="mb-2"
-      style="position: absolute; right: 0; top: 0; width: auto; height: auto"
+      style="position: fixed; right: 0; top: 0; width: auto; height: auto; z-index: 999;"
     >
       <v-btn-toggle v-model="icon" borderless shaped mandatory>
         <v-btn value="received" @click="changeToReceive">
@@ -20,6 +20,7 @@
             color="green"
             :content="totalReceivedNum"
             :value="totalReceivedNum"
+            style="z-index:1000;"
           >
             <v-icon right> mdi-download </v-icon>
           </v-badge>
@@ -31,6 +32,7 @@
             color="green"
             :content="totalSentNum"
             :value="totalSentNum"
+            style="z-index:1000;"
           >
             <v-icon right> mdi-upload </v-icon>
           </v-badge>
@@ -43,7 +45,7 @@
           <!-- <h3>您目前收到了{{ totalReceivedNum }}份请求：</h3> -->
           <v-col v-for="(item, i) in receivedItems" :key="i" cols="12" class="mt-5">
             <v-hover v-slot="{ hover }" open-delay="100">
-              <v-card color="#FFFFFF" :elevation="hover ? 12 : 2">
+              <v-card :elevation="hover ? 12 : 2">
                 <div class="d-flex flex-no-wrap justify-space-between">
                   <div>
                     <v-card-title
@@ -88,28 +90,31 @@
                           备注：{{ item.notes ? item.notes : "暂无" }}
                         </div>
                       </v-row>
+                      <v-row>
+                        <h3 class="text--secondary ms-3 mr-5 mt-2">
+                          理由：{{ item.applyReason ? item.applyReason : "暂无" }}
+                        </h3>
+                      </v-row>
                     </v-card-text>
-                    <v-divider class="ml-4 mt-2"></v-divider>
+                    <v-divider class="ml-4"></v-divider>
                     <v-card-text v-if="item.field.length - 1">
                       <v-row>
-                        <v-sheet class="ml-4 mx-auto">
+                        <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <div>
-                            <v-chip-group active-class="primary--text" column>
-                              <v-chip v-for="tag in item.field" :key="tag">
-                                {{ tag }}
-                              </v-chip>
-                            </v-chip-group>
+                            <v-chip v-for="tag in item.field" :key="tag" class="mr-1">
+                              {{ tag }}
+                            </v-chip>
                           </div>
                         </v-sheet>
                       </v-row>
                     </v-card-text>
-                    <v-row>
+                    <v-row v-if="item.status == 0">
                       <v-col>
                         <v-card-actions>
-                          <v-btn class="ml-2" outlined rounded small>
+                          <v-btn class="ml-2" outlined rounded small color="success" @click="acceptBuddyFunc(item)">
                             接受
                           </v-btn>
-                          <v-btn class="" outlined rounded small> 拒绝 </v-btn>
+                          <v-btn outlined rounded small color="error" @click="refuseBuddyFunc(item)"> 拒绝 </v-btn>
                         </v-card-actions>
                       </v-col>
                     </v-row>
@@ -177,23 +182,74 @@
                         </div>
                       </v-row>
                     </v-card-text>
-                    <v-divider class="ml-4 mt-2"></v-divider>
-                    <v-card-text v-if="item.field.length - 1">
-                      <v-row>
-                        <v-sheet class="ml-4 mx-auto">
-                          <div>
-                            <v-chip-group active-class="primary--text" column>
-                              <v-chip v-for="tag in item.field" :key="tag">
-                                {{ tag }}
-                              </v-chip>
-                            </v-chip-group>
-                          </div>
-                        </v-sheet>
-                      </v-row>
-                    </v-card-text>
-                    <div class="ml-4 mt-2 mb-2 text--disabled">
+                    <v-divider class="ml-4"></v-divider>
+                    <v-row v-if="item.field.length - 1">
+                      <v-sheet class="ml-4 mx-auto my-auto">
+                        <v-chip-group active-class="primary--text" column>
+                          <v-chip v-for="tag in item.field" :key="tag">
+                            {{ tag }}
+                          </v-chip>
+                        </v-chip-group>
+                      </v-sheet>
+                    </v-row>
+                    <v-row class="ml-4 mt-2 mb-2 text--disabled">
                       <h4>{{ buddyStatus[item.status] }}</h4>
-                    </div>
+                      <!-- <v-btn style="right:0;width:auto;height:auto;" class="ml-4">修改理由</v-btn> -->
+                      <v-btn
+                            dark
+                            class="ml-4"
+                            style="right:0;width:auto;height:auto;"
+                            @click.stop="reasonDialog = true"
+                      >
+                        修改理由
+                      </v-btn>
+                      <v-dialog
+                        v-model="reasonDialog"
+                        persistent
+                        max-width="600px"
+                        style="z-index: 1001;"
+                      >
+                        <v-card>
+                          <v-card-title>
+                            <span class="text-h5 mt-4 ml-2">修改申请理由</span>
+                          </v-card-title>
+                          <v-card-text>
+                            <v-container class="mt-5">
+                              <v-row>
+                                <v-col>
+                                  <v-text-field
+                                    label="填写申请的理由"
+                                    clearable
+                                    :value="item.applyReason"
+                                    v-model="item.applyReason"
+                                  >
+                                  </v-text-field>
+                                </v-col>
+                              </v-row>
+                            </v-container>
+                          </v-card-text>
+                          <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="reasonDialog = false"
+                              class="mb-6"
+                            >
+                              关闭
+                            </v-btn>
+                            <v-btn
+                              color="blue darken-1"
+                              text
+                              @click="saveReason(item)"
+                              class="mb-6 mr-5"
+                            >
+                              保存
+                            </v-btn>
+                          </v-card-actions>
+                        </v-card>
+                      </v-dialog>
+                    </v-row>
                   </div>
                   <v-avatar class="ma-3" size="125">
                     <v-img
@@ -223,7 +279,7 @@
 </template>
 
 <script lang="ts">
-import { getReceivedRequests, getSentRequests } from "../apis";
+import { getReceivedRequests, getSentRequests, acceptBuddy, refuseBuddy, postSendBuddyRequest } from "../apis";
 export default {
   data: () => ({
     icon: "",//不加会报错
@@ -240,6 +296,21 @@ export default {
       phoneNumber: "",
       pageNo: 1,
     },
+    acceptBuddyParams: {
+      phoneNumber: "",
+      studentPhoneNumber: "",
+    },
+    refuseBuddyParams: {
+      phoneNumber: "",
+      studentPhoneNumber: "",
+    },
+    updateReasonParams: {
+      phoneNumber: "",
+      teacherName: "",
+      teacherPhoneNumber: "",
+      applyReason: "",
+    },
+    reasonDialog: false,
     receivedItems: [],
     sentItems: [],
     noReceivedRequests: 0, // 0代表有请求
@@ -314,6 +385,52 @@ export default {
       .catch((err: any) => {
         console.log(err);
       });
+    },
+    async acceptBuddyFunc (item: any) {
+      console.log("同意了以下小队员的申请：")
+      console.log(item);
+      item.status = 1;
+      (this as any).acceptBuddyParams.phoneNumber = (this as any).$store.state.phoneNumber;
+      (this as any).acceptBuddyParams.studentPhoneNumber = item.studentPhoneNumber;
+      try {
+        await acceptBuddy ((this as any).acceptBuddyParams);
+        (this as any).$message.success("已成功确认" + item.studentName + "为您的Buddy~");
+      } catch (err) {
+        console.log(err);
+        (this as any).$message.error("确认时发生了一些错误，请重试~");
+      }
+    },
+    async refuseBuddyFunc (item: any) {
+      console.log("拒绝了以下小队员的申请：");
+      console.log(item);
+      item.status = 2;
+      (this as any).refuseBuddyParams.phoneNumber = (this as any).$store.state.phoneNumber;
+      (this as any).refuseBuddyParams.studentPhoneNumber = item.studentPhoneNumber;
+      try {
+        await refuseBuddy ((this as any).refuseBuddyParams);
+        (this as any).$message.error("已拒绝" + item.studentName);
+      } catch (err) {
+        console.log(err);
+        (this as any).$message.error("确认时发生了一些错误，请重试~");
+      }
+    },
+    async saveReason (item: any) {
+      // 这个函数是用来修改理由的
+      (this as any).reasonDialog = false;
+      console.log(item);
+      (this as any).updateReasonParams.phoneNumber = (this as any).$store.state.phoneNumber;
+      (this as any).updateReasonParams.teacherName = item.teacherName;
+      (this as any).updateReasonParams.teacherPhoneNumber = item.teacherPhoneNumber;
+      (this as any).updateReasonParams.applyReason = item.applyReason;
+      try {
+        await postSendBuddyRequest((this as any).updateReasonParams);
+        console.log("修改理由成功");
+        (this as any).$message.success("修改理由成功！");
+        // (this as any).getSentRequestsFunc ();
+      } catch (err) {
+        console.log("修改理由失败");
+        (this as any).$message.error("修改理由失败，请重试~");
+      }
     }
   },
 };
