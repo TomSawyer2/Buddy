@@ -28,12 +28,23 @@
           @change="changeAvatar()"
         ></v-file-input>
       </div>
+      
+      <v-file-input
+        accept="image/png, image/jpeg, image/bmp, image/jfif"
+        placeholder="选择图片"
+        prepend-icon="mdi-qrcode"
+        label="上传微信二维码"
+        class="pt-10"
+        style="width: 100%"
+        v-model="updateQRCodeFile.file"
+        @change="updateQRCode()"
+      ></v-file-input>
+
       <v-text-field
         v-model="formData.phoneNumber"
         :rules="rules.phoneNumberRules"
         label="电话"
         required
-        class="pt-10"
       ></v-text-field>
 
       <v-text-field
@@ -161,6 +172,7 @@ import {
   getPersonalInformation,
   updatePersonalInformation,
   postAvatar,
+  postQRCode,
   getFields,
   addFields,
 } from "../apis";
@@ -168,6 +180,9 @@ export default {
   data: () => ({
     valid: true,
     updateFile: {
+      file: [],
+    },
+    updateQRCodeFile: {
       file: [],
     },
     formData: {
@@ -270,21 +285,56 @@ export default {
       (this as any).getAllFields();
     },
     async changeAvatar() {
-      let file = new FormData(); //创建form对象
-      file.append("pic", (this as any).updateFile.file); //通过append向form对象添加数据
-      console.log(file.get("pic"));
-      await postAvatar(file)
-        .then((res: any) => {
-          console.log(res);
-          if (res.data.status == "ok") {
-            console.log(res.data.link);
-            (this as any).formData.avatar = res.data.link;
-          }
-        })
-        .catch((err: any) => {
-          console.log(err);
-          (this as any).$message.error("图片上传失败，请重试~");
-        });
+      if ((this as any).updateFile.file) {
+        console.log("文件大小：" + (this as any).updateFile.file.size);
+        if ((this as any).updateFile.file.size / 1024 > 1024 ) {
+          (this as any).$message.error("请上传大小小于1M的图片~");
+          console.log("上传文件过大");
+          (this as any).updateFile.file = [];
+        } else {
+          let file = new FormData(); //创建form对象
+          file.append("pic", (this as any).updateFile.file); //通过append向form对象添加数据
+          console.log(file.get("pic"));
+          await postAvatar(file)
+            .then((res: any) => {
+              console.log(res);
+              if (res.data.status == "ok") {
+                console.log(res.data.link);
+                (this as any).formData.avatar = res.data.link;
+              }
+            })
+            .catch((err: any) => {
+              console.log(err);
+              (this as any).$message.error("图片上传失败，请重试~");
+            });
+        }
+      }
+    },
+    async updateQRCode() {
+      if ((this as any).updateQRCodeFile.file) {
+        console.log("文件大小：" + (this as any).updateQRCodeFile.file.size);
+        if ((this as any).updateQRCodeFile.file.size / 1024 > 1024 ) {
+          (this as any).$message.error("请上传大小小于1M的图片~");
+          console.log("上传文件过大");
+          (this as any).updateQRCodeFile.file = [];
+        } else {
+          let file = new FormData(); //创建form对象
+          file.append("pic", (this as any).updateQRCodeFile.file); //通过append向form对象添加数据
+          console.log(file.get("pic"));
+          await postQRCode(file)
+            .then((res: any) => {
+              console.log(res);
+              if (res.data.status == "ok") {
+                console.log(res.data.link);
+                // (this as any).formData.QRCode = res.data.link;
+              }
+            })
+            .catch((err: any) => {
+              console.log(err);
+              (this as any).$message.error("图片上传失败，请重试~");
+            });
+        }
+      }
     },
     async updateFields () {
       // 取出新添加的标签放入newFields
