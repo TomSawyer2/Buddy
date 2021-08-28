@@ -33,6 +33,7 @@ export interface updatePersonalInformationInfo {
   isGraduated: boolean;
   substation: string;
   notes: string | undefined;
+  weChatPic: string;
 }
 
 export interface addFieldsInfo {

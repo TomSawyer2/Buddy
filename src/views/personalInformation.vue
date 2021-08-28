@@ -199,6 +199,7 @@ export default {
       isGraduated: false,
       substation: "",
       notes: "",
+      weChatPic: "",
     },
 
     rules: {
@@ -326,7 +327,7 @@ export default {
               console.log(res);
               if (res.data.status == "ok") {
                 console.log(res.data.link);
-                // (this as any).formData.QRCode = res.data.link;
+                (this as any).formData.weChatPic = res.data.link;
               }
             })
             .catch((err: any) => {
