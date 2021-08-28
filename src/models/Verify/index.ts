@@ -34,3 +34,13 @@ export interface updatePersonalInformationInfo {
   substation: string;
   notes: string | undefined;
 }
+
+export interface getReceivedRequestsInfo {
+  phoneNumber: string;
+  pageNo: number;
+}
+
+export interface getSentRequestsInfo {
+  phoneNumber: string;
+  pageNo: number;
+}

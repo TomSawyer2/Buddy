@@ -6,6 +6,8 @@ import {
   updatePersonalInformationInfo,
   // postAvatarInfo,
   RegisterInfo,
+  getReceivedRequestsInfo,
+  getSentRequestsInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -57,4 +59,16 @@ export function postRegister(
   params: RegisterInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.postRegsiter, params);
+}
+
+export function getReceivedRequests(
+  params: getReceivedRequestsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.getReceivedRequests, params);
+}
+
+export function getSentRequests(
+  params: getSentRequestsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.getSentRequests, params);
 }

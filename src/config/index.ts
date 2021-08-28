@@ -9,6 +9,8 @@ const URL = {
   // user-related
   getCaptcha: "/login/validation/getValidationCode",
   getPersonalInformation: "/personalSpace/info/show",
+  getReceivedRequests: "/requests/received",
+  getSentRequests: "/requests/sent",
   updatePersonalInformation: "/personalSpace/info/update",
   postLoginByPassword: "/login/password",
   postLoginByCaptcha: "/login/validation/passInfo",
@@ -20,6 +22,7 @@ const URL = {
 
 const ERROR_CODE = {
   LOGIN_FAIL: 2,
+  TOKEN_FAILED: 7,//token有问题
   PHONENUMBERNOTREGISTERED: 8, //手机号未注册
   CAPTCHA_ERR: 19,
   CAPTCHA_ERR_REG: 14,
