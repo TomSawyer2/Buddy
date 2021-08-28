@@ -21,6 +21,7 @@ export default Vue.extend({
       this.$router.push({ path: "/login" });
     }
   },
+  methods: {},
   watch: {
     $route(to, from) {
       if (to.path !== "/login") {

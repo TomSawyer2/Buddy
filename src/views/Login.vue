@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { postLoginByPassword, postLoginByCaptcha, getCaptcha } from "../apis";
-import { setToken, getToken, removeToken } from "../utils/storage";
+import { setToken, getToken, removeToken, setPhone } from "../utils/storage";
 
 export default {
   data: () => ({
@@ -151,6 +151,7 @@ export default {
               (this as any).$store.state.userName = res.data.data.userName;
               (this as any).$store.state.phoneNumber = (this as any).loginDataByPwd.phoneNumber;
               setToken(res.data.data.token);
+              setPhone(this.loginDataByPwd.phoneNumber);
               console.log(getToken());
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
@@ -175,6 +176,7 @@ export default {
               (this as any).$store.state.userName = res.data.data.userName;
               (this as any).$store.state.phoneNumber = (this as any).loginDataByCaptcha.phoneNumber;
               setToken(res.data.data.token);
+              setPhone(this.loginDataByCaptcha.phoneNumber);
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
             }
