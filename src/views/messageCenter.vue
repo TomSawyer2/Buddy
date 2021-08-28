@@ -192,7 +192,7 @@
                       </v-row>
                     </v-card-text>
                     <div class="ml-4 mt-2 mb-2 text--disabled">
-                      <h4>已被接受！ 被拒绝力 老队员还未选择</h4>
+                      <h4>{{ buddyStatus[item.status] }}</h4>
                     </div>
                   </div>
                   <v-avatar class="ma-3" size="125">
@@ -227,6 +227,11 @@ import { getReceivedRequests, getSentRequests } from "../apis";
 export default {
   data: () => ({
     icon: "",//不加会报错
+    buddyStatus: [
+      "审核中",
+      "老队员已接受申请~",
+      "老队员拒绝了申请~"
+    ],
     getReceivedRequestsParams: {
       phoneNumber: "",
       pageNo: 1,
