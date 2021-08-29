@@ -6,6 +6,7 @@ import {
   updatePersonalInformationInfo,
   // postAvatarInfo,
   RegisterInfo,
+  PhoneInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -57,4 +58,8 @@ export function postRegister(
   params: RegisterInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.postRegsiter, params);
+}
+
+export function getUserDetailByPhone(params:PhoneInfo) {
+  return axios.post(URL.getUserDetailByPhone, params);
 }

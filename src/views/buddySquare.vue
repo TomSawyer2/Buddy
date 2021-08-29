@@ -1,19 +1,23 @@
 <template>
   <div style="margin-left: 56px; flex: 1">
     <h1 class="search-container">这里是搜索框</h1>
-    <v-divider style="margin-top: 52px; position: fixed"></v-divider>
+    <v-divider
+      style="margin-top: 52px; position: fixed; width: 100%"
+    ></v-divider>
 
-    <div style="margin-top: 56px; margin-left: 20px">
+    <div style="margin: 56px 20px 0 20px">
       <BuddyList
         v-for="(item, index) in userList"
         :key="index"
         :item="item"
         :cardWidth="pageWidth - 90"
         @add="onAdd"
+        @todetail="toDetail"
       />
       <p v-if="totalPage === pageNo" class="info-bottom">滑到底啦～</p>
       <p v-else class="info-bottom">加载中...</p>
     </div>
+
     <v-dialog
       v-model="isDialogShow"
       persistent
@@ -28,22 +32,45 @@
           v-model="currentApllyInfo.applyReason"
           required
         ></v-textarea>
+        <div
+          v-if="isErrorShow && currentApllyInfo.applyReason.length <= 0"
+          style="color: red"
+        >
+          理由不能为空哦～
+        </div>
         <div style="display: flex; justify-content: space-evenly">
           <v-btn color="normal" @click="handleCancle"> 取消 </v-btn>
           <v-btn color="primary" @click="handleAdd"> 提交 </v-btn>
         </div>
       </v-card>
     </v-dialog>
+
+    <v-dialog
+      v-model="isDetailShow"
+      transition="dialog-bottom-transition"
+      style="z-index: 10001"
+    >
+      <BuddyDetail
+        :userInfo="buddyDetail"
+        :isLoading="isDetailLoading"
+        @add="onAdd"
+      ></BuddyDetail>
+    </v-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { getAllUsersByPage, postSendBuddyRequest } from "@/apis";
+import {
+  getAllUsersByPage,
+  getUserDetailByPhone,
+  postSendBuddyRequest,
+} from "@/apis";
 import BuddyList from "@/components/BuddyList/BuddyList.vue";
+import BuddyDetail from "@/components/BuddyDetail/BuddyDetail.vue";
 import Message from "@/components/Message";
 import { getPhone } from "@/utils/storage";
 export default {
-  components: { BuddyList },
+  components: { BuddyList, BuddyDetail },
   data: () => ({
     pageHeight: document.documentElement.clientHeight,
     pageWidth: document.documentElement.clientWidth,
@@ -54,28 +81,32 @@ export default {
       applyReason: "",
       phoneNumber: "",
       teacherPhoneNumber: "",
-      teacherName: "",
     },
+    buddyDetail: {},
     isLoading: false,
     isDialogShow: false,
+    isDetailShow: false,
+    isDetailLoading: false,
+    isErrorShow: false,
   }),
 
   methods: {
-    onAdd(teacherPhoneNumber: string, teacherName: string) {
-      this.isDialogShow = true;
-      this.currentApllyInfo.teacherPhoneNumber = teacherPhoneNumber;
-      this.currentApllyInfo.teacherName = teacherName;
+    onAdd(teacherPhoneNumber: string) {
+      (this as any).isDialogShow = true;
+      (this as any).currentApllyInfo.teacherPhoneNumber = teacherPhoneNumber;
     },
     handleCancle() {
-      this.isDialogShow = false;
-      this.currentApllyInfo.applyReason = "";
+      (this as any).isDialogShow = false;
+      (this as any).isErrorShow = false;
+      (this as any).currentApllyInfo.applyReason = "";
     },
     async handleAdd() {
-      if (this.currentApllyInfo.applyReason.length > 0) {
+      (this as any).isErrorShow = true;
+      if ((this as any).currentApllyInfo.applyReason.length > 0) {
         try {
-          let res = await postSendBuddyRequest(this.currentApllyInfo);
+          let res = await postSendBuddyRequest((this as any).currentApllyInfo);
           Message.success("发送成功！");
-          this.handleCancle();
+          (this as any).handleCancle();
         } catch (error) {
           console.log(error);
         }
@@ -86,13 +117,12 @@ export default {
     async getUserList(pageNo: number) {
       const res = (await getAllUsersByPage({ pageNo })).data.data;
       res.studentsInfo.map((user: any) => {
-        if (user.phoneNumber !== this.currentApllyInfo.phoneNumber) {
+        if (user.phoneNumber !== (this as any).currentApllyInfo.phoneNumber) {
           user.field = user.field.length > 0 ? user.field.split(";") : [];
-          this.userList.push(user);
+          (this as any).userList.push(user);
         }
       });
-      this.totalPage = res.totalPage;
-      console.log(this.userList);
+      (this as any).totalPage = res.totalPage;
     },
     async scrollEvent() {
       // 距离底部20px时加载一次
@@ -102,28 +132,42 @@ export default {
           window.innerHeight <=
         20;
       if (
-        this.pageNo < this.totalPage &&
-        this.isLoading == false &&
+        (this as any).pageNo < (this as any).totalPage &&
+        (this as any).isLoading == false &&
         bottomOfWindow
       ) {
-        this.isLoading = true;
-        this.pageNo++;
-        this.getUserList(this.pageNo);
-        this.isLoading = false;
+        (this as any).isLoading = true;
+        (this as any).pageNo++;
+        (this as any).getUserList((this as any).pageNo);
+        (this as any).isLoading = false;
+      }
+    },
+    async toDetail(teacherPhone: string) {
+      (this as any).isDetailLoading = true;
+      (this as any).isDetailShow = true;
+      try {
+        let res = (await getUserDetailByPhone({ phoneNumber: teacherPhone }))
+          .data.data;
+        res.field = res.field.length > 0 ? res.field.split(";") : [];
+        res.hobby = res.hobby.length > 0 ? res.hobby.split(" ") : [];
+        (this as any).buddyDetail = res;
+        (this as any).isDetailLoading = false;
+      } catch (error) {
+        console.log(error);
       }
     },
   },
   async mounted() {
-    window.addEventListener("scroll", this.scrollEvent);
-    this.currentApllyInfo.phoneNumber = getPhone();
+    window.addEventListener("scroll", (this as any).scrollEvent);
+    (this as any).currentApllyInfo.phoneNumber = getPhone();
     try {
-      this.getUserList(1);
+      (this as any).getUserList(1);
     } catch (error) {
       console.log(error);
     }
   },
-  destroyed() {
-    window.removeEventListener("scroll", this.scrollEvent);
+  beforeDestroy() {
+    window.removeEventListener("scroll", (this as any).scrollEvent, true);
   },
 };
 </script>

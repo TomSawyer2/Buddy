@@ -151,7 +151,7 @@ export default {
               (this as any).$store.state.userName = res.data.data.userName;
               (this as any).$store.state.phoneNumber = (this as any).loginDataByPwd.phoneNumber;
               setToken(res.data.data.token);
-              setPhone(this.loginDataByPwd.phoneNumber);
+              setPhone((this as any).loginDataByPwd.phoneNumber);
               console.log(getToken());
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
@@ -176,7 +176,7 @@ export default {
               (this as any).$store.state.userName = res.data.data.userName;
               (this as any).$store.state.phoneNumber = (this as any).loginDataByCaptcha.phoneNumber;
               setToken(res.data.data.token);
-              setPhone(this.loginDataByCaptcha.phoneNumber);
+              setPhone((this as any).loginDataByCaptcha.phoneNumber);
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
             }
@@ -188,7 +188,7 @@ export default {
     },
     async getCaptchaFunc() {
       const { phoneNumber } = (this as any).loginDataByCaptcha;
-      if (this.checkPhone(phoneNumber)) {
+      if ((this as any).checkPhone(phoneNumber)) {
         try {
           await getCaptcha({ phoneNumber });
           console.log("验证码发送成功");

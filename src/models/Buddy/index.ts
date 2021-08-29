@@ -4,7 +4,10 @@ export interface PageInfo {
 
 export interface SendRequestInfo {
   phoneNumber: string;
-  teacherName: string;
   teacherPhoneNumber: string;
   applyReason: string;
+}
+
+export interface PhoneInfo {
+  phoneNumber: string;
 }
