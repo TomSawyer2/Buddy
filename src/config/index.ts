@@ -21,6 +21,8 @@ const URL = {
   getUserDetailByPhone: "/index/studentDetail",
   getOldUserDetailByPhone: "/index/teacherDetail",
   postSendBuddyRequest: "/requests/send",
+
+  getAllFields: "/fields/all",
 };
 
 const ERROR_CODE = {

@@ -1,11 +1,16 @@
 <template>
-  <div style="margin-left: 56px; flex: 1">
-    <h1 class="search-container">这里是搜索框</h1>
-    <v-divider
-      style="margin-top: 52px; position: fixed; width: 100%"
-    ></v-divider>
+  <div class="buddy-container">
+    <div
+      class="search-container"
+    >
+    
+      <BuddySearch></BuddySearch>
+      <v-divider
+        style="margin-top: 2px; position: fixed; width: 100%; margin-left: -10px"
+      ></v-divider>
+    </div>
 
-    <div style="margin: 56px 20px 0 20px">
+    <div style="margin: 140px 20px 0 20px">
       <BuddyList
         v-for="(item, index) in userList"
         :key="index"
@@ -54,23 +59,25 @@
         :userInfo="buddyDetail"
         :isLoading="isDetailLoading"
         @add="onAdd"
-      ></BuddyDetail>
+      />
     </v-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import {
+  getAllOldUsersByPage,
   getAllUsersByPage,
   getUserDetailByPhone,
   postSendBuddyRequest,
 } from "@/apis";
 import BuddyList from "@/components/BuddyList/BuddyList.vue";
 import BuddyDetail from "@/components/BuddyDetail/BuddyDetail.vue";
+import BuddySearch from "@/components/BuddySearch/BuddySearch.vue";
 import Message from "@/components/Message";
 import { getPhone } from "@/utils/storage";
 export default {
-  components: { BuddyList, BuddyDetail },
+  components: { BuddyList, BuddyDetail, BuddySearch },
   data: () => ({
     pageHeight: document.documentElement.clientHeight,
     pageWidth: document.documentElement.clientWidth,
@@ -95,11 +102,13 @@ export default {
       (this as any).isDialogShow = true;
       (this as any).currentApllyInfo.teacherPhoneNumber = teacherPhoneNumber;
     },
+
     handleCancle() {
       (this as any).isDialogShow = false;
       (this as any).isErrorShow = false;
       (this as any).currentApllyInfo.applyReason = "";
     },
+
     async handleAdd() {
       (this as any).isErrorShow = true;
       if ((this as any).currentApllyInfo.applyReason.length > 0) {
@@ -114,6 +123,7 @@ export default {
         Message.error("申请理由不能为空～"); // 由于前端做了验证，所以就没有对后端的返回做提示。
       }
     },
+
     async getUserList(pageNo: number) {
       const res = (await getAllUsersByPage({ pageNo })).data.data;
       res.studentsInfo.map((user: any) => {
@@ -124,6 +134,7 @@ export default {
       });
       (this as any).totalPage = res.totalPage;
     },
+
     async scrollEvent() {
       // 距离底部20px时加载一次
       let bottomOfWindow =
@@ -142,6 +153,7 @@ export default {
         (this as any).isLoading = false;
       }
     },
+
     async toDetail(teacherPhone: string) {
       (this as any).isDetailLoading = true;
       (this as any).isDetailShow = true;
@@ -157,6 +169,7 @@ export default {
       }
     },
   },
+
   async mounted() {
     window.addEventListener("scroll", (this as any).scrollEvent);
     (this as any).currentApllyInfo.phoneNumber = getPhone();
@@ -166,6 +179,7 @@ export default {
       console.log(error);
     }
   },
+
   beforeDestroy() {
     window.removeEventListener("scroll", (this as any).scrollEvent, true);
   },
@@ -173,12 +187,19 @@ export default {
 </script>
 
 <style scoped>
+.buddy-container {
+  margin-left: 56px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .search-container {
-  height: 50px;
+  /* height: 50px; */
   position: fixed;
   width: 100%;
   background: white;
   z-index: 999;
+  margin: 0 10px 0 10px;
 }
 .info-bottom {
   text-align: center;

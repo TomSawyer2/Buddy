@@ -13,3 +13,7 @@ export function getAllOldUsersByPage(params:PageInfo) {
 export function postSendBuddyRequest(params:SendRequestInfo) {
   return axios.post(URL.postSendBuddyRequest, params);
 }
+
+export function getAllFields() {
+  return axios.get(URL.getAllFields);
+}
