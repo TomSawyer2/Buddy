@@ -60,7 +60,7 @@ export interface postSendBuddyRequestInfo {
   phoneNumber: string;
   teacherName: string;
   teacherPhoneNumber: string;
-  applyReason: string;  
+  applyReason: string;
 }
 
 export interface addFieldsInfo {

@@ -85,8 +85,14 @@
 
 <script lang="ts">
 import { postLoginByPassword, postLoginByCaptcha, getCaptcha } from "../apis";
-import { setToken, getToken, removeToken, setPhone } from "../utils/storage";
-
+import {
+  setToken,
+  getToken,
+  removeToken,
+  setPhone,
+  setAvatarSrc,
+  setUserName,
+} from "../utils/storage";
 export default {
   data: () => ({
     valid: true,
@@ -146,14 +152,10 @@ export default {
               console.log("成功登录！");
               (this as any).$message.success("登录成功！");
               //状态控制为登录
-              (this as any).$store.state.isLogin = true;
-              (this as any).$store.state.avatarSrc = res.data.data.avatar;
-              (this as any).$store.state.userName = res.data.data.userName;
-              (this as any).$store.state.phoneNumber = (
-                this as any
-              ).loginDataByPwd.phoneNumber;
-              setToken(res.data.data.token);
+              setAvatarSrc(res.data.data.avatar);
+              setUserName(res.data.data.userName);
               setPhone((this as any).loginDataByPwd.phoneNumber);
+              setToken(res.data.data.token);
               console.log(getToken());
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
@@ -172,15 +174,10 @@ export default {
             if (res.data.status == 0) {
               console.log("成功登录！");
               //状态控制为登录
-              (this as any).$store.state.isLogin = true;
-              (this as any).$store.state.isLogin = true;
-              (this as any).$store.state.avatarSrc = res.data.data.avatar;
-              (this as any).$store.state.userName = res.data.data.userName;
-              (this as any).$store.state.phoneNumber = (
-                this as any
-              ).loginDataByCaptcha.phoneNumber;
-              setToken(res.data.data.token);
+              setAvatarSrc(res.data.data.avatar);
+              setUserName(res.data.data.userName);
               setPhone((this as any).loginDataByCaptcha.phoneNumber);
+              setToken(res.data.data.token);
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
             }

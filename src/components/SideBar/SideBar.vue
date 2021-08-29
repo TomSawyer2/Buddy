@@ -53,6 +53,7 @@
 
 <script>
 import Vue from "vue";
+import { getPhone, getAvatarSrc, getUserName } from "@/utils/storage";
 export default Vue.extend({
   name: "SideBar",
   data() {
@@ -109,8 +110,8 @@ export default Vue.extend({
     // 自动调节组件高度
     this.pageHeight = document.documentElement.clientHeight;
     console.log(this.pageHeight);
-    this.avatarSrc = this.$store.state.avatarSrc;
-    this.userName = this.$store.state.userName;
+    this.avatarSrc = getAvatarSrc();
+    this.userName = getUserName();
   },
   computed: {
     monitor() {

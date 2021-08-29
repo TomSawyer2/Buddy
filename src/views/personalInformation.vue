@@ -28,7 +28,7 @@
           @change="changeAvatar()"
         ></v-file-input>
       </div>
-      
+
       <v-file-input
         accept="image/png, image/jpeg, image/bmp, image/jfif"
         placeholder="选择图片"
@@ -184,6 +184,15 @@ import {
   getFields,
   addFields,
 } from "../apis";
+import {
+  setToken,
+  getToken,
+  removeToken,
+  getPhone,
+  getAvatarSrc,
+  getUserName,
+  setAvatarSrc,
+} from "../utils/storage";
 export default {
   data: () => ({
     valid: true,
@@ -254,17 +263,16 @@ export default {
         "导师",
         "顾问",
         "临时",
-        "其他"
+        "其他",
       ],
-      fieldItems: [
-      ],
+      fieldItems: [],
     },
     graduated: "",
     identityString: "",
     search: null,
   }),
   mounted() {
-    (this as any).formData.phoneNumber = (this as any).$store.state.phoneNumber;
+    (this as any).formData.phoneNumber = getPhone();
     const { phoneNumber } = (this as any).formData;
     getPersonalInformation({ phoneNumber })
       .then((res: any) => {
@@ -288,7 +296,7 @@ export default {
         console.log("更新成功！");
         console.log((this as any).items.fieldItems);
         (this as any).$message.success("更新成功！");
-        (this as any).$store.state.avatarSrc = (this as any).formData.avatar;
+        setAvatarSrc((this as any).formData.avatar);
       } catch (error) {
         console.log(error);
         (this as any).$message.error("更新失败，请重试~");
@@ -298,7 +306,7 @@ export default {
     async changeAvatar() {
       if ((this as any).updateFile.file) {
         console.log("文件大小：" + (this as any).updateFile.file.size);
-        if ((this as any).updateFile.file.size / 1024 > 1024 ) {
+        if ((this as any).updateFile.file.size / 1024 > 1024) {
           (this as any).$message.error("请上传大小小于1M的图片~");
           console.log("上传文件过大");
           (this as any).updateFile.file = [];
@@ -312,6 +320,8 @@ export default {
               if (res.data.status == "ok") {
                 console.log(res.data.link);
                 (this as any).formData.avatar = res.data.link;
+                (this as any).$store.state.avatarSrc = res.data.link;
+                setAvatarSrc(res.data.link);
               }
             })
             .catch((err: any) => {
@@ -324,7 +334,7 @@ export default {
     async updateQRCode() {
       if ((this as any).updateQRCodeFile.file) {
         console.log("文件大小：" + (this as any).updateQRCodeFile.file.size);
-        if ((this as any).updateQRCodeFile.file.size / 1024 > 1024 ) {
+        if ((this as any).updateQRCodeFile.file.size / 1024 > 1024) {
           (this as any).$message.error("请上传大小小于1M的图片~");
           console.log("上传文件过大");
           (this as any).updateQRCodeFile.file = [];
@@ -347,45 +357,47 @@ export default {
         }
       }
     },
-    async updateFields () {
+    async updateFields() {
       // 取出新添加的标签放入newFields
-      var combinedFields = (this as any).items.fieldItems.concat((this as any).formData.field);
+      var combinedFields = (this as any).items.fieldItems.concat(
+        (this as any).formData.field
+      );
       console.log("Combined array:" + combinedFields);
       var uniqueFields = Array.from(new Set(combinedFields));
       console.log("Unique array:" + uniqueFields);
       var fieldItems = (this as any).items.fieldItems;
-      var _arr1 = uniqueFields.filter(item1 => !fieldItems.includes(item1));
-      var _arr2 = fieldItems.filter(item2 => !uniqueFields.includes(item2));
-      const _arr =_arr1.concat(_arr2)
+      var _arr1 = uniqueFields.filter((item1) => !fieldItems.includes(item1));
+      var _arr2 = fieldItems.filter((item2) => !uniqueFields.includes(item2));
+      const _arr = _arr1.concat(_arr2);
       console.log("New fields:" + _arr1);
       var newFields = _arr1;
 
       if (newFields.length >= 1) {
-        newFields.forEach((val:any, idx, array) => {
+        newFields.forEach((val: any, idx, array) => {
           console.log(val);
-          var field:any = '{"field": ' + '"' + val + '"' + '}';
+          var field: any = '{"field": ' + '"' + val + '"' + "}";
           addFields(field)
-            .then((res : any) => {
+            .then((res: any) => {
               console.log(res);
             })
-            .catch((err : any) => {
+            .catch((err: any) => {
               console.log(err);
               (this as any).$message.error("添加标签失败，请重试~");
-            })
-        })
+            });
+        });
       }
     },
     async getAllFields() {
-      getFields() 
-        .then((res : any) => {
+      getFields()
+        .then((res: any) => {
           console.log(res);
           (this as any).items.fieldItems = res.data.data;
         })
         .catch((err) => {
           console.log(err);
-        }) 
+        });
     },
-    tranformAfterGet (data : any) {
+    tranformAfterGet(data: any) {
       if (data.isGraduated) {
         (this as any).graduated = "是";
       } else {
@@ -415,14 +427,14 @@ export default {
           break;
       }
     },
-    transformBeforeUpdate () {
+    transformBeforeUpdate() {
       if ((this as any).graduated == "是") {
         (this as any).formData.isGraduated = true;
       } else {
         (this as any).formData.isGraduated = false;
         (this as any).formData.substation = "";
       }
-      switch ((this as any).identityString){
+      switch ((this as any).identityString) {
         case "在站":
           (this as any).formData.identity = 0;
           break;
@@ -444,19 +456,17 @@ export default {
         case "其他":
           (this as any).formData.identity = 6;
           break;
-        
       }
-    }
+    },
   },
   watch: {
-    model (val: any) {
+    model(val: any) {
       if (val.length > 10) {
-        (this as any).$nextTick(() => (this as any).model.pop())
+        (this as any).$nextTick(() => (this as any).model.pop());
       }
     },
   },
 };
-
 </script>
 
 <style></style>

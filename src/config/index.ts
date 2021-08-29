@@ -33,7 +33,7 @@ const URL = {
 
 const ERROR_CODE = {
   LOGIN_FAIL: 2,
-  TOKEN_FAILED: 7,//token有问题
+  TOKEN_FAILED: 7, //token有问题
   PHONENUMBERNOTREGISTERED: 8, //手机号未注册
   CAPTCHA_ERR: 19,
   CAPTCHA_ERR_REG: 14,

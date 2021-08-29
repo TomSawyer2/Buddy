@@ -11,7 +11,14 @@
     <v-col
       cols="12"
       class="mb-2"
-      style="position: fixed; right: 0; top: 0; width: auto; height: auto; z-index: 999;"
+      style="
+        position: fixed;
+        right: 0;
+        top: 0;
+        width: auto;
+        height: auto;
+        z-index: 999;
+      "
     >
       <v-btn-toggle v-model="icon" borderless shaped mandatory>
         <v-btn value="received" @click="changeToReceive">
@@ -20,7 +27,7 @@
             color="green"
             :content="totalReceivedNum"
             :value="totalReceivedNum"
-            style="z-index:1000;"
+            style="z-index: 1000"
           >
             <v-icon right> mdi-download </v-icon>
           </v-badge>
@@ -32,27 +39,41 @@
             color="green"
             :content="totalSentNum"
             :value="totalSentNum"
-            style="z-index:1000;"
+            style="z-index: 1000"
           >
             <v-icon right> mdi-upload </v-icon>
           </v-badge>
         </v-btn>
       </v-btn-toggle>
     </v-col>
-    <v-container class="mt-13 mb-3" v-if="noReceivedRequests == 0 && received == 1">
+    <v-container
+      class="mt-13 mb-3"
+      v-if="noReceivedRequests == 0 && received == 1"
+    >
       <v-row dense>
         <div v-if="received">
           <!-- <h3>您目前收到了{{ totalReceivedNum }}份请求：</h3> -->
-          <v-col v-for="(item, i) in receivedItems" :key="i" cols="12" class="mt-5">
+          <v-col
+            v-for="(item, i) in receivedItems"
+            :key="i"
+            cols="12"
+            class="mt-5"
+          >
             <v-hover v-slot="{ hover }" open-delay="100">
-              <v-card :elevation="hover ? 12 : 2" outlined v-if="(acceptNumber < 3) || (acceptNumber == 3 && item.status == 1)">
+              <v-card
+                :elevation="hover ? 12 : 2"
+                outlined
+                v-if="
+                  acceptNumber < 3 || (acceptNumber == 3 && item.status == 1)
+                "
+              >
                 <div class="d-flex flex-no-wrap justify-space-between">
                   <div>
                     <v-card-title
                       class="text-h5"
                       v-text="item.studentName"
                     ></v-card-title>
-                    
+
                     <v-card-subtitle
                       v-text="item.studentPhoneNumber"
                     ></v-card-subtitle>
@@ -92,16 +113,22 @@
                       </v-row>
                       <v-row>
                         <h3 class="text--secondary ms-3 mr-5 mt-2">
-                          理由：{{ item.applyReason ? item.applyReason : "暂无" }}
+                          理由：{{
+                            item.applyReason ? item.applyReason : "暂无"
+                          }}
                         </h3>
                       </v-row>
                     </v-card-text>
-                    <v-divider class="ml-4"></v-divider>
+                    <v-divider class="ml-4" v-if="item.field.length - 1"></v-divider>
                     <v-card-text v-if="item.field.length - 1">
                       <v-row>
                         <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <div>
-                            <v-chip v-for="tag in item.field" :key="tag" class="mr-1">
+                            <v-chip
+                              v-for="tag in item.field"
+                              :key="tag"
+                              class="mr-1"
+                            >
                               {{ tag }}
                             </v-chip>
                           </div>
@@ -111,13 +138,17 @@
                     <v-row v-if="item.status == 0 && acceptNumber < 3">
                       <v-col>
                         <v-card-actions>
-                          <v-btn class="ml-2" outlined rounded small color="success" @click="snackbar = true">
+                          <v-btn
+                            class="ml-2"
+                            outlined
+                            rounded
+                            small
+                            color="success"
+                            @click="snackbar = true"
+                          >
                             接受
                           </v-btn>
-                          <v-snackbar
-                            v-model="snackbar"
-                            :timeout="timeout"
-                          >
+                          <v-snackbar v-model="snackbar" :timeout="timeout">
                             您确定接受该请求？（超过2秒自动关闭）
                             <template v-slot:action="{ attrs }">
                               <v-btn
@@ -130,29 +161,63 @@
                               </v-btn>
                             </template>
                           </v-snackbar>
-                          <v-btn outlined rounded small color="error" @click="refuseBuddyFunc(item)"> 拒绝 </v-btn>
+                          <v-btn
+                            outlined
+                            rounded
+                            small
+                            color="error"
+                            @click="refuseBuddyFunc(item)"
+                          >
+                            拒绝
+                          </v-btn>
                         </v-card-actions>
                       </v-col>
                     </v-row>
                   </div>
                   <v-avatar class="ma-3" size="125">
-                    <v-img
-                      v-bind:src="item.avatar"
-                    ></v-img>
+                    <v-img v-bind:src="item.avatar"></v-img>
                   </v-avatar>
-                  <v-icon class="d-flex flex-no-wrap justify-space-between align-center" color="#81C784" v-if="item.status == 1">
+                  <v-icon
+                    class="
+                      d-flex
+                      flex-no-wrap
+                      justify-space-between
+                      align-center
+                    "
+                    color="#81C784"
+                    v-if="item.status == 1"
+                  >
                     mdi-check
                   </v-icon>
-                  <v-icon class="d-flex flex-no-wrap justify-space-between align-center" color="#FFFFFF" v-if="item.status == 0">
+                  <v-icon
+                    class="
+                      d-flex
+                      flex-no-wrap
+                      justify-space-between
+                      align-center
+                    "
+                    color="#FFFFFF"
+                    v-if="item.status == 0"
+                  >
                     mdi-check
                   </v-icon>
-                  <v-icon class="d-flex flex-no-wrap justify-space-between align-center" color="#C62828" v-if="item.status == 2">
+                  <v-icon
+                    class="
+                      d-flex
+                      flex-no-wrap
+                      justify-space-between
+                      align-center
+                    "
+                    color="#C62828"
+                    v-if="item.status == 2"
+                  >
                     mdi-close
                   </v-icon>
                 </div>
               </v-card>
             </v-hover>
           </v-col>
+          <p class="d-flex flex-no-wrap justify-center text--secondary mt-5">我是有底线的(/▽＼)</p>
         </div>
       </v-row>
     </v-container>
@@ -224,7 +289,7 @@
                         <v-btn
                           dark
                           class="ml-4"
-                          style="right:0;width:auto;height:auto;"
+                          style="right: 0; width: auto; height: auto"
                           @click.stop="reasonDialog = true"
                         >
                           修改理由
@@ -233,11 +298,13 @@
                           v-model="reasonDialog"
                           persistent
                           max-width="600px"
-                          style="z-index: 1001;"
+                          style="z-index: 1001"
                         >
                           <v-card>
                             <v-card-title>
-                              <span class="text-h5 mt-4 ml-2">修改申请理由</span>
+                              <span class="text-h5 mt-4 ml-2"
+                                >修改申请理由</span
+                              >
                             </v-card-title>
                             <v-card-text>
                               <v-container class="mt-5">
@@ -277,21 +344,24 @@
                         </v-dialog>
                       </div>
                       <div v-if="item.status == 1">
-                        <v-btn style="right:0;width:auto;height:auto;" class="ml-4" @click="pushToWeChatPic(item)">
+                        <v-btn
+                          style="right: 0; width: auto; height: auto"
+                          class="ml-4"
+                          @click="pushToWeChatPic(item)"
+                        >
                           查看老队员二维码
                         </v-btn>
                       </div>
                     </v-row>
                   </div>
                   <v-avatar class="ma-3" size="125">
-                    <v-img
-                      v-bind:src="item.avatar"
-                    ></v-img>
+                    <v-img v-bind:src="item.avatar"></v-img>
                   </v-avatar>
                 </div>
               </v-card>
             </v-hover>
           </v-col>
+          <p class="d-flex flex-no-wrap justify-center text--secondary mt-5">我是有底线的(/▽＼)</p>
         </div>
       </v-row>
     </v-container>
@@ -311,15 +381,25 @@
 </template>
 
 <script lang="ts">
-import { getReceivedRequests, getSentRequests, acceptBuddy, refuseBuddy, postSendBuddyRequest } from "../apis";
+import {
+  getReceivedRequests,
+  getSentRequests,
+  acceptBuddy,
+  refuseBuddy,
+  postSendBuddyRequest,
+} from "../apis";
+import {
+  setToken,
+  getToken,
+  removeToken,
+  getPhone,
+  getAvatarSrc,
+  getUserName,
+} from "@/utils/storage";
 export default {
   data: () => ({
-    icon: "",//不加会报错
-    buddyStatus: [
-      "审核中",
-      "老队员已接受申请~",
-      "老队员拒绝了申请~"
-    ],
+    icon: "", //不加会报错
+    buddyStatus: ["审核中", "老队员已接受申请~", "老队员拒绝了申请~"],
     getReceivedRequestsParams: {
       phoneNumber: "",
       pageNo: 1,
@@ -365,114 +445,136 @@ export default {
     changeToSent() {
       (this as any).received = 0;
     },
-    async getReceivedRequestsFunc () {
-      (this as any).getReceivedRequestsParams.phoneNumber = (this as any).$store.state.phoneNumber;
+    async getReceivedRequestsFunc() {
+      (this as any).getReceivedRequestsParams.phoneNumber = getPhone();
       await getReceivedRequests((this as any).getReceivedRequestsParams)
-      .then((res: any) => {
-        const data = res.data.data;
-        (this as any).receivedItems = (this as any).receivedItems.concat(data.requestInfo);
-        if ((this as any).acceptNumber != data.acceptNum) {
-          (this as any).acceptNumber = data.acceptNum;
-        }
-        console.log("已接收了" + (this as any).acceptNumber + "位小队员");
-        console.log((this as any).receivedItems);
-        //如果数据不止一页则参数+1继续请求数据直到总数与本地数组总数相同
-        console.log("当前本地的数量：" + (this as any).receivedItems.length);
-        console.log("当前后台的数量：" + data.totalNum);
-        if ((this as any).receivedItems.length != data.totalNum) {
-          (this as any).getReceivedRequestsParams.pageNo ++;
-          console.log("继续请求，当前请求第" + (this as any).getReceivedRequestsParams.pageNo + "页");
-          getReceivedRequests((this as any).getReceivedRequestsParams);
-        }
-        (this as any).totalReceivedNum = data.totalNum;
-        if (data.totalNum == 0) {
-          console.log("暂无收到的请求。");
-          (this as any).noReceivedRequests = 1;
-        } else {
-          console.log("有收到的请求。");
-          (this as any).noReceivedRequests = 0;
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
+        .then((res: any) => {
+          const data = res.data.data;
+          (this as any).receivedItems = (this as any).receivedItems.concat(
+            data.requestInfo
+          );
+          if ((this as any).acceptNumber != data.acceptNum) {
+            (this as any).acceptNumber = data.acceptNum;
+          }
+          console.log("已接收了" + (this as any).acceptNumber + "位小队员");
+          console.log((this as any).receivedItems);
+          //如果数据不止一页则参数+1继续请求数据直到总数与本地数组总数相同
+          console.log("当前本地的数量：" + (this as any).receivedItems.length);
+          console.log("当前后台的数量：" + data.totalNum);
+          if ((this as any).receivedItems.length != data.totalNum) {
+            (this as any).getReceivedRequestsParams.pageNo++;
+            console.log(
+              "继续请求，当前请求第" +
+                (this as any).getReceivedRequestsParams.pageNo +
+                "页"
+            );
+            getReceivedRequests((this as any).getReceivedRequestsParams);
+          }
+          (this as any).totalReceivedNum = data.totalNum;
+          if (data.totalNum == 0) {
+            console.log("暂无收到的请求。");
+            (this as any).noReceivedRequests = 1;
+          } else {
+            console.log("有收到的请求。");
+            (this as any).noReceivedRequests = 0;
+          }
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
     },
-    async getSentRequestsFunc () {
-      (this as any).getSentRequestsParams.phoneNumber = (this as any).$store.state.phoneNumber;
+    async getSentRequestsFunc() {
+      (this as any).getSentRequestsParams.phoneNumber = getPhone();
       await getSentRequests((this as any).getSentRequestsParams)
-      .then((res: any) => {
-        const data = res.data.data;
-        (this as any).sentItems = (this as any).sentItems.concat(data.requestInfo);
-        console.log((this as any).sentItems);
-        //如果数据不止一页则参数+1继续请求数据直到总数与本地数组总数相同
-        console.log("当前本地的数量：" + (this as any).sentItems.length);
-        console.log("当前后台的数量：" + data.totalNum);
-        if ((this as any).sentItems.length != data.totalNum) {
-          (this as any).getSentRequestsParams.pageNo ++;
-          console.log("继续请求，当前请求第" + (this as any).getSentRequestsParams.pageNo + "页");
-          getSentRequests((this as any).getSentRequestsParams);
-        }
-        (this as any).totalSentNum = data.totalNum;
-        if (data.totalNum == 0) {
-          console.log("暂无发送的请求。");
-          (this as any).noSentRequests = 1;
-        } else {
-          console.log("有已发送的请求。");
-          (this as any).noSentRequests = 0;
-        }
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
+        .then((res: any) => {
+          const data = res.data.data;
+          (this as any).sentItems = (this as any).sentItems.concat(
+            data.requestInfo
+          );
+          console.log((this as any).sentItems);
+          //如果数据不止一页则参数+1继续请求数据直到总数与本地数组总数相同
+          console.log("当前本地的数量：" + (this as any).sentItems.length);
+          console.log("当前后台的数量：" + data.totalNum);
+          if ((this as any).sentItems.length != data.totalNum) {
+            (this as any).getSentRequestsParams.pageNo++;
+            console.log(
+              "继续请求，当前请求第" +
+                (this as any).getSentRequestsParams.pageNo +
+                "页"
+            );
+            getSentRequests((this as any).getSentRequestsParams);
+          }
+          (this as any).totalSentNum = data.totalNum;
+          if (data.totalNum == 0) {
+            console.log("暂无发送的请求。");
+            (this as any).noSentRequests = 1;
+          } else {
+            console.log("有已发送的请求。");
+            (this as any).noSentRequests = 0;
+          }
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
     },
-    async acceptBuddyFunc (item: any) {
+    async acceptBuddyFunc(item: any) {
       // if ((this as any).acceptNumber == 3) {
       //   (this as any).$message.error("您可接收的小队员已满~");
       //   return;
       // } else {
-        (this as any).snackbar = false;
-        console.log("同意了以下小队员的申请：")
-        console.log(item);
-        item.status = 1;
-        (this as any).acceptBuddyParams.phoneNumber = (this as any).$store.state.phoneNumber;
-        (this as any).acceptBuddyParams.studentPhoneNumber = item.studentPhoneNumber;
-        try {
-          await acceptBuddy ((this as any).acceptBuddyParams);
-          (this as any).$message.success("已成功确认" + item.studentName + "为您的Buddy~");
-          (this as any).acceptNumber ++;
-          if ((this as any).acceptNumber == 3) {
-            (this as any).$message.success("您可接收的小队员已满~");
-          } else {
-            (this as any).$message.success("您已接收了" + (this as any).acceptNumber + "位小队员，还可接收" + (3-(this as any).acceptNumber) + "位小队员");
-          }
-        } catch (err) {
-          console.log(err);
-          (this as any).$message.error("确认时发生了一些错误，请重试~");
+      (this as any).snackbar = false;
+      console.log("同意了以下小队员的申请：");
+      console.log(item);
+      item.status = 1;
+      (this as any).acceptBuddyParams.phoneNumber = getPhone();
+      (this as any).acceptBuddyParams.studentPhoneNumber =
+        item.studentPhoneNumber;
+      try {
+        await acceptBuddy((this as any).acceptBuddyParams);
+        (this as any).$message.success(
+          "已成功确认" + item.studentName + "为您的Buddy~"
+        );
+        (this as any).acceptNumber++;
+        if ((this as any).acceptNumber == 3) {
+          (this as any).$message.success("您可接收的小队员已满~");
+        } else {
+          (this as any).$message.success(
+            "您已接收了" +
+              (this as any).acceptNumber +
+              "位小队员，还可接收" +
+              (3 - (this as any).acceptNumber) +
+              "位小队员"
+          );
         }
+      } catch (err) {
+        console.log(err);
+        (this as any).$message.error("确认时发生了一些错误，请重试~");
+      }
       // }
-      
     },
-    async refuseBuddyFunc (item: any) {
+    async refuseBuddyFunc(item: any) {
       console.log("拒绝了以下小队员的申请：");
       console.log(item);
       item.status = 2;
-      (this as any).refuseBuddyParams.phoneNumber = (this as any).$store.state.phoneNumber;
-      (this as any).refuseBuddyParams.studentPhoneNumber = item.studentPhoneNumber;
+      (this as any).refuseBuddyParams.phoneNumber = getPhone();
+      (this as any).refuseBuddyParams.studentPhoneNumber =
+        item.studentPhoneNumber;
       try {
-        await refuseBuddy ((this as any).refuseBuddyParams);
+        await refuseBuddy((this as any).refuseBuddyParams);
         (this as any).$message.error("已拒绝" + item.studentName);
       } catch (err) {
         console.log(err);
         (this as any).$message.error("确认时发生了一些错误，请重试~");
       }
     },
-    async saveReason (item: any) {
+    async saveReason(item: any) {
       // 这个函数是用来修改理由的
       (this as any).reasonDialog = false;
       console.log(item);
-      (this as any).updateReasonParams.phoneNumber = (this as any).$store.state.phoneNumber;
+      (this as any).updateReasonParams.phoneNumber = getPhone();
       (this as any).updateReasonParams.teacherName = item.teacherName;
-      (this as any).updateReasonParams.teacherPhoneNumber = item.teacherPhoneNumber;
+      (this as any).updateReasonParams.teacherPhoneNumber =
+        item.teacherPhoneNumber;
       (this as any).updateReasonParams.applyReason = item.applyReason;
       try {
         await postSendBuddyRequest((this as any).updateReasonParams);
@@ -484,21 +586,29 @@ export default {
         (this as any).$message.error("修改理由失败，请重试~");
       }
     },
-    pushToWeChatPic (item: any) {
-      window.open(item.weChatPic,'_blank');
-    }
+    pushToWeChatPic(item: any) {
+      window.open(item.weChatPic, "_blank");
+    },
   },
-  watch:{
-    acceptNumber:function(newVal: any,oldVal: any){
-      console.log(newVal)
+  watch: {
+    acceptNumber: function (newVal: any, oldVal: any) {
+      console.log(newVal);
       if (newVal == 3) {
         (this as any).$message.success("您可接收的小队员已满~");
       } else if (newVal == 2) {
-        (this as any).$message.error("若您再接收一名小队员，审核中的小队员将被自动拒绝");
+        (this as any).$message.error(
+          "若您再接收一名小队员，审核中的小队员将被自动拒绝"
+        );
       } else {
-        (this as any).$message.success("您已接收了" + (this as any).acceptNumber + "位小队员，还可接收" + (3-(this as any).acceptNumber) + "位小队员");
+        (this as any).$message.success(
+          "您已接收了" +
+            (this as any).acceptNumber +
+            "位小队员，还可接收" +
+            (3 - (this as any).acceptNumber) +
+            "位小队员"
+        );
       }
     },
-  }
+  },
 };
 </script>

@@ -58,7 +58,7 @@ Axios.interceptors.response.use(
       case ERROR_CODE.TOKEN_FAILED:
         Message.error("登录状态异常,请重新登录。");
         throw new Error(res.data.msg);
-        
+
       default:
         return res;
     }

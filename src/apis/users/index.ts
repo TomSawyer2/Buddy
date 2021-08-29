@@ -98,14 +98,7 @@ export function refuseBuddy(
   return axios.post(URL.refuseBuddy, params);
 }
 
-export function postSendBuddyRequest(
-  params: postSendBuddyRequestInfo
-): Promise<Record<string, unknown>> {
-  return axios.post(URL.postSendBuddyRequest, params);
-}
-
-export function getFields(
-): Promise<Record<string, unknown>> {
+export function getFields(): Promise<Record<string, unknown>> {
   return axios.get(URL.getFields);
 }
 
@@ -114,6 +107,6 @@ export function addFields(
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.addFields, params);
 }
-export function getUserDetailByPhone(params:PhoneInfo) {
+export function getUserDetailByPhone(params: PhoneInfo) {
   return axios.post(URL.getUserDetailByPhone, params);
 }
