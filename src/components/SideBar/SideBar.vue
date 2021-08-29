@@ -56,7 +56,11 @@ export default Vue.extend({
           icon: "mdi-account-multiple",
           route: "/buddySquare",
         },
-        { text: "群组广场", icon: "mdi-vector-square", route: "/teamSquare" },
+        {
+          text: "消息中心",
+          icon: "mdi-vector-square",
+          route: "/messageCenter",
+        },
         { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
       ],

@@ -28,9 +28,9 @@ const routes: Array<RouteConfig> = [
         component: () => import("../views/buddySquare.vue"),
       },
       {
-        path: "/teamSquare",
-        name: "teamSquare",
-        component: () => import("../views/teamSquare.vue"),
+        path: "/messageCenter",
+        name: "messageCenter",
+        component: () => import("../views/messageCenter.vue"),
       },
     ],
   },

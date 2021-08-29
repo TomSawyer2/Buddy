@@ -90,6 +90,14 @@
         ></v-text-field>
       </div>
 
+      <v-select
+        v-model="identityString"
+        :items="items.identityItems"
+        :rules="[(v) => !!v || '请选择您目前的身份~']"
+        label="身份"
+        required
+      ></v-select>
+
       <v-text-field
         v-model="formData.hobby"
         :rules="rules.hobbyRules"
@@ -196,6 +204,7 @@ export default {
       highSchool: "",
       field: "",
       resume: "",
+      identity: "",
       isGraduated: false,
       substation: "",
       notes: "",
@@ -238,10 +247,20 @@ export default {
         "北京站",
         "海外站",
       ],
+      identityItems: [
+        "在站",
+        "出站",
+        "名誉队员",
+        "导师",
+        "顾问",
+        "临时",
+        "其他"
+      ],
       fieldItems: [
-      ]
+      ],
     },
     graduated: "",
+    identityString: "",
     search: null,
   }),
   mounted() {
@@ -249,12 +268,8 @@ export default {
     const { phoneNumber } = (this as any).formData;
     getPersonalInformation({ phoneNumber })
       .then((res: any) => {
+        (this as any).tranformAfterGet(res.data.data);
         (this as any).formData = res.data.data;
-        if (res.data.data.isGraduated) {
-          (this as any).graduated = "是";
-        } else {
-          (this as any).graduated = "否";
-        }
       })
       .catch((err) => {
         console.log(err);
@@ -266,13 +281,8 @@ export default {
     async validate() {
       (this as any).$refs.form.validate();
       console.log((this as any).formData);
+      (this as any).transformBeforeUpdate();
       await (this as any).updateFields();
-      if ((this as any).graduated == "是") {
-        (this as any).formData.isGraduated = true;
-      } else {
-        (this as any).formData.isGraduated = false;
-        (this as any).formData.substation = "";
-      }
       try {
         await updatePersonalInformation((this as any).formData);
         console.log("更新成功！");
@@ -382,6 +392,68 @@ export default {
         (this as any).$nextTick(() => (this as any).model.pop())
       }
     },
+    tranformAfterGet (data : any) {
+      if (data.isGraduated) {
+        (this as any).graduated = "是";
+      } else {
+        (this as any).graduated = "否";
+      }
+      switch (data.identity) {
+        case 0:
+          (this as any).identityString = "在站";
+          break;
+        case 1:
+          (this as any).identityString = "出站";
+          break;
+        case 2:
+          (this as any).identityString = "名誉队员";
+          break;
+        case 3:
+          (this as any).identityString = "导师";
+          break;
+        case 4:
+          (this as any).identityString = "顾问";
+          break;
+        case 5:
+          (this as any).identityString = "临时";
+          break;
+        case 6:
+          (this as any).identityString = "其他";
+          break;
+      }
+    },
+    transformBeforeUpdate () {
+      if ((this as any).graduated == "是") {
+        (this as any).formData.isGraduated = true;
+      } else {
+        (this as any).formData.isGraduated = false;
+        (this as any).formData.substation = "";
+      }
+      switch ((this as any).identityString){
+        case "在站":
+          (this as any).formData.identity = 0;
+          break;
+        case "出站":
+          (this as any).formData.identity = 1;
+          break;
+        case "名誉队员":
+          (this as any).formData.identity = 2;
+          break;
+        case "导师":
+          (this as any).formData.identity = 3;
+          break;
+        case "顾问":
+          (this as any).formData.identity = 4;
+          break;
+        case "临时":
+          (this as any).formData.identity = 5;
+          break;
+        case "其他":
+          (this as any).formData.identity = 6;
+          break;
+        
+      }
+    }
   },
 };
 
