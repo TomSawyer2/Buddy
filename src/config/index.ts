@@ -14,7 +14,6 @@ const URL = {
   addFields: "/fields/add",
   getPersonalInformation: "/personalSpace/info/show",
   getReceivedRequests: "/requests/received",
-  postSendBuddyRequest: "/requests/send",
   getSentRequests: "/requests/sent",
   updatePersonalInformation: "/personalSpace/info/update",
   postLoginByPassword: "/login/password",
@@ -22,7 +21,14 @@ const URL = {
   getRegisterCaptcha: "/register/getValidationCode",
   postRegsiter: "/register/passInfo",
 
-  // xxx-related
+  // buddy-related
+  getAllUsersByPage: "/index/students",
+  getAllOldUsersByPage: "/index/teachers",
+  getUserDetailByPhone: "/index/studentDetail",
+  getOldUserDetailByPhone: "/index/teacherDetail",
+  postSendBuddyRequest: "/requests/send",
+
+  getAllFields: "/fields/all",
 };
 
 const ERROR_CODE = {

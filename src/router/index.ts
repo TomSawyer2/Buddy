@@ -9,6 +9,7 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Home",
     component: Home,
+    redirect: "/personalInformation",
     meta: { requiresAuth: true }, // 添加表示需要验证
     children: [
       {

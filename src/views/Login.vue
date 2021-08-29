@@ -85,7 +85,7 @@
 
 <script lang="ts">
 import { postLoginByPassword, postLoginByCaptcha, getCaptcha } from "../apis";
-import { setToken, getToken, removeToken } from "../utils/storage";
+import { setToken, getToken, removeToken, setPhone } from "../utils/storage";
 
 export default {
   data: () => ({
@@ -153,6 +153,7 @@ export default {
                 this as any
               ).loginDataByPwd.phoneNumber;
               setToken(res.data.data.token);
+              setPhone((this as any).loginDataByPwd.phoneNumber);
               console.log(getToken());
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
@@ -179,6 +180,7 @@ export default {
                 this as any
               ).loginDataByCaptcha.phoneNumber;
               setToken(res.data.data.token);
+              setPhone((this as any).loginDataByCaptcha.phoneNumber);
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
             }
@@ -190,7 +192,7 @@ export default {
     },
     async getCaptchaFunc() {
       const { phoneNumber } = (this as any).loginDataByCaptcha;
-      if (this.checkPhone(phoneNumber)) {
+      if ((this as any).checkPhone(phoneNumber)) {
         try {
           await getCaptcha({ phoneNumber });
           console.log("验证码发送成功");

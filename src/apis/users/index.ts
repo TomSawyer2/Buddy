@@ -12,6 +12,7 @@ import {
   refuseBuddyInfo,
   postSendBuddyRequestInfo,
   addFieldsInfo,
+  PhoneInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -112,4 +113,7 @@ export function addFields(
   params: addFieldsInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.addFields, params);
+}
+export function getUserDetailByPhone(params:PhoneInfo) {
+  return axios.post(URL.getUserDetailByPhone, params);
 }
