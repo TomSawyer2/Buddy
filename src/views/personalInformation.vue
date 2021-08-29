@@ -384,13 +384,6 @@ export default {
         .catch((err) => {
           console.log(err);
         }) 
-    }
-  },
-  watch: {
-    model (val: any) {
-      if (val.length > 10) {
-        (this as any).$nextTick(() => (this as any).model.pop())
-      }
     },
     tranformAfterGet (data : any) {
       if (data.isGraduated) {
@@ -454,6 +447,13 @@ export default {
         
       }
     }
+  },
+  watch: {
+    model (val: any) {
+      if (val.length > 10) {
+        (this as any).$nextTick(() => (this as any).model.pop())
+      }
+    },
   },
 };
 
