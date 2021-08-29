@@ -6,6 +6,7 @@ import {
   updatePersonalInformationInfo,
   // postAvatarInfo,
   RegisterInfo,
+  addFieldsInfo
 } from "@/models";
 import { URL } from "@/config";
 
@@ -42,7 +43,15 @@ export async function updatePersonalInformation(
 export async function postAvatar(
   params: FormData
 ): Promise<Record<string, unknown>> {
-  return await axios.post("http://175.24.30.102:4000/api/post", params, {
+  return await axios.post("http://175.24.30.102:4000/api/postAvatar", params, {
+    headers: { "content-type": "multipart/form-data" },
+  });
+}
+
+export async function postQRCode(
+  params: FormData
+): Promise<Record<string, unknown>> {
+  return await axios.post("http://175.24.30.102:4000/api/postQRCode", params, {
     headers: { "content-type": "multipart/form-data" },
   });
 }
@@ -57,4 +66,15 @@ export function postRegister(
   params: RegisterInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.postRegsiter, params);
+}
+
+export function getFields(
+): Promise<Record<string, unknown>> {
+  return axios.get(URL.getFields);
+}
+
+export function addFields(
+  params: addFieldsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addFields, params);
 }
