@@ -10,6 +10,8 @@ const URL = {
   acceptBuddy: "/requests/pass",
   refuseBuddy: "/requests/reject",
   getCaptcha: "/login/validation/getValidationCode",
+  getFields: "/fields/all",
+  addFields: "/fields/add",
   getPersonalInformation: "/personalSpace/info/show",
   getReceivedRequests: "/requests/received",
   postSendBuddyRequest: "/requests/send",
