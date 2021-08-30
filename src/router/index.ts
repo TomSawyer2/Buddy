@@ -10,7 +10,7 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Home",
     component: Home,
-    redirect: getToken() ? "/personalInformation" : "/login",
+    redirect: getToken().length > 0 ? "/personalInformation" : "/login",
     meta: { requiresAuth: true }, // 添加表示需要验证
     children: [
       {
