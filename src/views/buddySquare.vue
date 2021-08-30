@@ -1,16 +1,11 @@
 <template>
   <div class="buddy-container">
-    <div
-      class="search-container"
-    >
-    
-      <BuddySearch></BuddySearch>
-      <v-divider
-        style="margin-top: 2px; position: fixed; width: 100%; margin-left: -10px"
-      ></v-divider>
+    <div class="search-container">
+      <BuddySearch @search="onSearch"></BuddySearch>
+      <v-divider class="divider"></v-divider>
     </div>
 
-    <div style="margin: 140px 20px 0 20px">
+    <div style="margin: 120px 20px 0 20px">
       <BuddyList
         v-for="(item, index) in userList"
         :key="index"
@@ -19,8 +14,10 @@
         @add="onAdd"
         @todetail="toDetail"
       />
-      <p v-if="totalPage === pageNo" class="info-bottom">滑到底啦～</p>
-      <p v-else class="info-bottom">加载中...</p>
+      <p v-if="totalNum === userList.length" class="info-bottom">
+        我是有底线的(/▽＼)
+      </p>
+      <p v-else class="info-bottom">小点正在玩命加载中(/▽＼)...</p>
     </div>
 
     <v-dialog
@@ -70,6 +67,7 @@ import {
   getAllUsersByPage,
   getUserDetailByPhone,
   postSendBuddyRequest,
+  searchUsersByNameAndFields,
 } from "@/apis";
 import BuddyList from "@/components/BuddyList/BuddyList.vue";
 import BuddyDetail from "@/components/BuddyDetail/BuddyDetail.vue";
@@ -84,6 +82,7 @@ export default {
     userList: [],
     pageNo: 1,
     totalPage: 0,
+    totalNum: -1,
     currentApllyInfo: {
       applyReason: "",
       phoneNumber: "",
@@ -124,15 +123,22 @@ export default {
       }
     },
 
+    async onSearch(searchInfo: { userName: string; fields: string[] }) {
+      try {
+        const res = (await searchUsersByNameAndFields(searchInfo)).data;
+        this.userList = res.data ? res.data.SearchResults : [];
+        this.totalNum = res.data ? res.data.Num : 0;
+        console.log(this.userList);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async getUserList(pageNo: number) {
       const res = (await getAllUsersByPage({ pageNo })).data.data;
-      res.studentsInfo.map((user: any) => {
-        if (user.phoneNumber !== (this as any).currentApllyInfo.phoneNumber) {
-          user.field = user.field.length > 0 ? user.field.split(";") : [];
-          (this as any).userList.push(user);
-        }
-      });
+      (this as any).userList = (this as any).userList.concat(res.studentsInfo);
       (this as any).totalPage = res.totalPage;
+      (this as any).totalNum = res.totalNum;
     },
 
     async scrollEvent() {
@@ -142,7 +148,9 @@ export default {
           document.documentElement.scrollTop -
           window.innerHeight <=
         20;
+      const length = this.userList.length;
       if (
+        length < (this as any).totalNum &&
         (this as any).pageNo < (this as any).totalPage &&
         (this as any).isLoading == false &&
         bottomOfWindow
@@ -160,7 +168,6 @@ export default {
       try {
         let res = (await getUserDetailByPhone({ phoneNumber: teacherPhone }))
           .data.data;
-        res.field = res.field.length > 0 ? res.field.split(";") : [];
         res.hobby = res.hobby.length > 0 ? res.hobby.split(" ") : [];
         (this as any).buddyDetail = res;
         (this as any).isDetailLoading = false;
@@ -193,13 +200,18 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .search-container {
-  /* height: 50px; */
   position: fixed;
   width: 100%;
   background: white;
   z-index: 999;
   margin: 0 10px 0 10px;
+}
+.search-container .divider {
+  position: fixed;
+  width: 100%;
+  margin-left: -10px;
 }
 .info-bottom {
   text-align: center;

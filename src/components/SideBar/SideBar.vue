@@ -2,7 +2,7 @@
   <div
     id="side-bar"
     v-bind:style="{
-      height: pageHeight + 'px',
+      height: '100%',
       position: 'fixed',
       width: width + 'px',
       zIndex: 1000,

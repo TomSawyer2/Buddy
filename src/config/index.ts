@@ -28,7 +28,10 @@ const URL = {
   getOldUserDetailByPhone: "/index/teacherDetail",
   postSendBuddyRequest: "/requests/send",
 
-  getAllFields: "/fields/all",
+  getAllFields: "/fields/all", // 重复了
+
+  // search-related
+  searchUsersByNameAndFields: "/search/nameWithFields",
 };
 
 const ERROR_CODE = {
