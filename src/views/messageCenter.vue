@@ -49,6 +49,9 @@
     <v-container
       class="mt-13 mb-3"
       v-if="noReceivedRequests == 0 && received == 1"
+      v-bind:style="{
+        width: pageWidth + 'px',
+      }"
     >
       <v-row dense>
         <div v-if="received">
@@ -66,6 +69,7 @@
                 v-if="
                   acceptNumber < 3 || (acceptNumber == 3 && item.status == 1)
                 "
+                @click="onToDetail(item.studentPhoneNumber)"
               >
                 <div class="d-flex flex-no-wrap justify-space-between">
                   <div>
@@ -97,18 +101,12 @@
                           }}
                         </div>
                         <div class="grey--text ms-3 mr-5">
-                          履历：{{ item.resume ? item.resume : "暂无" }}
-                        </div>
-                        <div class="grey--text ms-3 mr-5">
                           毕业高中：{{
                             item.highSchool ? item.highSchool : "暂无"
                           }}
                         </div>
                         <div class="grey--text ms-3 mr-5">
                           分站：{{ item.substation ? item.substation : "暂无" }}
-                        </div>
-                        <div class="grey--text ms-3">
-                          备注：{{ item.notes ? item.notes : "暂无" }}
                         </div>
                       </v-row>
                       <v-row>
@@ -144,18 +142,18 @@
                             rounded
                             small
                             color="success"
-                            @click="snackbar = true"
+                            @click="openSnackBar(item)"
                           >
                             接受
                           </v-btn>
-                          <v-snackbar v-model="snackbar" :timeout="timeout">
+                          <v-snackbar v-model="snackbar" :timeout="timeout" style="z-index: 100002">
                             您确定接受该请求？（超过2秒自动关闭）
                             <template v-slot:action="{ attrs }">
                               <v-btn
                                 color="blue"
                                 text
                                 v-bind="attrs"
-                                @click="acceptBuddyFunc(item)"
+                                @click="acceptBuddyFunc(snackbarItem)"
                               >
                                 确定
                               </v-btn>
@@ -221,12 +219,23 @@
         </div>
       </v-row>
     </v-container>
+    <v-dialog
+      v-model="isDetailShow"
+      transition="dialog-bottom-transition"
+      style="z-index: 10001"
+    >
+      <BuddyDetail
+        :userInfo="buddyDetail"
+        :isLoading="isDetailLoading"
+        v-bind:messageCenter = "1"
+      />
+    </v-dialog>
     <v-container class="mt-13 mb-3" v-if="noSentRequests == 0 && received == 0">
       <v-row dense>
         <div v-if="received == 0">
           <v-col v-for="(item, i) in sentItems" :key="i" cols="12" class="mt-5">
             <v-hover v-slot="{ hover }" open-delay="100">
-              <v-card color="#FFFFFF" :elevation="hover ? 12 : 2">
+              <v-card color="#FFFFFF" :elevation="hover ? 12 : 2" @click="onToDetail(item.teacherPhoneNumber)">
                 <div class="d-flex flex-no-wrap justify-space-between">
                   <div>
                     <v-card-title
@@ -365,6 +374,17 @@
         </div>
       </v-row>
     </v-container>
+    <v-dialog
+      v-model="isDetailShow"
+      transition="dialog-bottom-transition"
+      style="z-index: 10001"
+    >
+      <BuddyDetail
+        :userInfo="buddyDetail"
+        :isLoading="isDetailLoading"
+        v-bind:messageCenter = "1"
+      />
+    </v-dialog>
     <div
       class="d-flex flex-no-wrap justify-space-between"
       v-if="noReceivedRequests == 1 && received == 1"
@@ -387,6 +407,7 @@ import {
   acceptBuddy,
   refuseBuddy,
   postSendBuddyRequest,
+  getUserDetailByPhone
 } from "../apis";
 import {
   setToken,
@@ -396,7 +417,10 @@ import {
   getAvatarSrc,
   getUserName,
 } from "@/utils/storage";
+import BuddyDetail from "@/components/BuddyDetail/BuddyDetail.vue";
+import { transformAfterGet, transformBeforeUpdate } from "@/utils/transform"
 export default {
+  components: { BuddyDetail },
   data: () => ({
     icon: "", //不加会报错
     buddyStatus: ["审核中", "老队员已接受申请~", "老队员拒绝了申请~"],
@@ -433,12 +457,41 @@ export default {
     acceptNumber: 0,
     timeout: 2000,
     snackbar: false,
+    isDetailLoading: false,
+    isDetailShow: false,
+    buddyDetail: {},
+    pageWidth: 100,
+    snackbarItem: {},
   }),
   mounted() {
+    (this as any).pageWidth = document.documentElement.clientWidth - 60;
+    console.log("宽度：" + (this as any).pageWidth);
     (this as any).getReceivedRequestsFunc();
     (this as any).getSentRequestsFunc();
   },
   methods: {
+    openSnackBar (item : any) {
+      (this as any).snackbar = true;
+      (this as any).snackbarItem = item;
+    },
+    onAdd(teacherPhoneNumber: string) {
+      (this as any).isDialogShow = true;
+      // (this as any).currentApllyInfo.teacherPhoneNumber = teacherPhoneNumber;
+    },
+    async onToDetail(studentPhoneNumber: string) {
+      (this as any).isDetailLoading = true;
+      (this as any).isDetailShow = true;
+      try {
+        let res = (await getUserDetailByPhone({ phoneNumber: studentPhoneNumber }))
+          .data.data;
+        res.fields = res.fields.length > 1 ? res.fields : ["暂无"];
+        res.hobby = res.hobby.length > 0 ? res.hobby.split(" ") : [];
+        (this as any).buddyDetail = res;
+        (this as any).isDetailLoading = false;
+      } catch (error) {
+        console.log(error);
+      }
+    },
     changeToReceive() {
       (this as any).received = 1;
     },
@@ -453,6 +506,11 @@ export default {
           (this as any).receivedItems = (this as any).receivedItems.concat(
             data.requestInfo
           );
+
+          data.requestInfo.forEach((val: any, idx, array) => {
+            transformAfterGet(data.requestInfo[idx]);
+          })
+
           if ((this as any).acceptNumber != data.acceptNum) {
             (this as any).acceptNumber = data.acceptNum;
           }
@@ -517,11 +575,7 @@ export default {
           console.log(err);
         });
     },
-    async acceptBuddyFunc(item: any) {
-      // if ((this as any).acceptNumber == 3) {
-      //   (this as any).$message.error("您可接收的小队员已满~");
-      //   return;
-      // } else {
+    async acceptBuddyFunc(item : any) {
       (this as any).snackbar = false;
       console.log("同意了以下小队员的申请：");
       console.log(item);
@@ -535,22 +589,10 @@ export default {
           "已成功确认" + item.studentName + "为您的Buddy~"
         );
         (this as any).acceptNumber++;
-        if ((this as any).acceptNumber == 3) {
-          (this as any).$message.success("您可接收的小队员已满~");
-        } else {
-          (this as any).$message.success(
-            "您已接收了" +
-              (this as any).acceptNumber +
-              "位小队员，还可接收" +
-              (3 - (this as any).acceptNumber) +
-              "位小队员"
-          );
-        }
       } catch (err) {
         console.log(err);
         (this as any).$message.error("确认时发生了一些错误，请重试~");
       }
-      // }
     },
     async refuseBuddyFunc(item: any) {
       console.log("拒绝了以下小队员的申请：");
