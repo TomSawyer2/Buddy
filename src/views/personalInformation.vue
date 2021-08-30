@@ -28,23 +28,12 @@
           @change="changeAvatar()"
         ></v-file-input>
       </div>
-
-      <v-file-input
-        accept="image/png, image/jpeg, image/bmp, image/jfif"
-        placeholder="选择图片"
-        prepend-icon="mdi-qrcode"
-        label="上传微信二维码"
-        class="pt-10"
-        style="width: 100%"
-        v-model="updateQRCodeFile.file"
-        @change="updateQRCode()"
-      ></v-file-input>
-
       <v-text-field
         v-model="formData.phoneNumber"
         :rules="rules.phoneNumberRules"
         label="电话"
         required
+        class="pt-10"
       ></v-text-field>
 
       <v-text-field
@@ -64,7 +53,7 @@
           class="pr-2"
         ></v-select>
         <v-select
-          v-model="formData.isGraduated"
+          v-model="graduated"
           :items="items.isGraduatedItems"
           :rules="[(v) => !!v || '请选择您是否出站~']"
           label="是否出站"
@@ -90,14 +79,6 @@
         ></v-text-field>
       </div>
 
-      <v-select
-        v-model="formData.identity"
-        :items="items.identityItems"
-        :rules="[(v) => !!v || '请选择您目前的身份~']"
-        label="身份"
-        required
-      ></v-select>
-
       <v-text-field
         v-model="formData.hobby"
         :rules="rules.hobbyRules"
@@ -119,36 +100,12 @@
         required
       ></v-text-field>
 
-      <!-- <v-text-field
+      <v-text-field
         v-model="formData.field"
         :rules="rules.fieldRules"
         label="技术栈"
         required
-      ></v-text-field> -->
-
-      <v-combobox
-        v-model="formData.field"
-        :items="items.fieldItems"
-        :search-input.sync="search"
-        hide-selected
-        hint="最多添加十个标签（若没有对应选项可以直接输入）"
-        label="添加更多标签"
-        multiple
-        persistent-hint
-        small-chips
-        clearable
-        deletable-chips
-      >
-        <template v-slot:no-data>
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title>
-                没有匹配的选项。 按下 <kbd>enter</kbd> 创建新标签。
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </template>
-      </v-combobox>
+      ></v-text-field>
 
       <v-select
         v-model="formData.substation"
@@ -180,27 +137,11 @@ import {
   getPersonalInformation,
   updatePersonalInformation,
   postAvatar,
-  postQRCode,
-  getFields,
-  addFields,
 } from "../apis";
-import {
-  setToken,
-  getToken,
-  removeToken,
-  getPhone,
-  getAvatarSrc,
-  getUserName,
-  setAvatarSrc,
-} from "../utils/storage";
-import { transformAfterGet, transformBeforeUpdate } from "@/utils/transform"
 export default {
   data: () => ({
     valid: true,
     updateFile: {
-      file: [],
-    },
-    updateQRCodeFile: {
       file: [],
     },
     formData: {
@@ -214,11 +155,9 @@ export default {
       highSchool: "",
       field: "",
       resume: "",
-      identity: "",
       isGraduated: false,
       substation: "",
       notes: "",
-      weChatPic: "",
     },
 
     rules: {
@@ -257,153 +196,62 @@ export default {
         "北京站",
         "海外站",
       ],
-      identityItems: [
-        "在站",
-        "出站",
-        "名誉队员",
-        "导师",
-        "顾问",
-        "临时",
-        "其他",
-      ],
-      fieldItems: [],
     },
     graduated: "",
-    identityString: "",
-    search: null,
   }),
   mounted() {
-    (this as any).formData.phoneNumber = getPhone();
+    (this as any).formData.phoneNumber = (this as any).$store.state.phoneNumber;
     const { phoneNumber } = (this as any).formData;
     getPersonalInformation({ phoneNumber })
       .then((res: any) => {
-        (this as any).formData = transformAfterGet(res.data.data);
+        (this as any).formData = res.data.data;
+        if (res.data.data.isGraduated) {
+          (this as any).graduated = "是";
+        } else {
+          (this as any).graduated = "否";
+        }
       })
       .catch((err) => {
         console.log(err);
         (this as any).$message.error("获取个人信息失败，请重试~");
       });
-    (this as any).getAllFields();
   },
   methods: {
     async validate() {
       (this as any).$refs.form.validate();
       console.log((this as any).formData);
-      (this as any).formData = transformBeforeUpdate((this as any).formData);
-      await (this as any).updateFields();
+      if ((this as any).graduated == "是") {
+        (this as any).formData.isGraduated = true;
+      } else {
+        (this as any).formData.isGraduated = false;
+        (this as any).formData.substation = "";
+      }
       try {
         await updatePersonalInformation((this as any).formData);
         console.log("更新成功！");
-        console.log((this as any).items.fieldItems);
         (this as any).$message.success("更新成功！");
-        setAvatarSrc((this as any).formData.avatar);
-        (this as any).formData = transformAfterGet((this as any).formData);
+        (this as any).$store.state.avatarSrc = (this as any).formData.avatar;
       } catch (error) {
         console.log(error);
         (this as any).$message.error("更新失败，请重试~");
       }
-      (this as any).getAllFields();
     },
     async changeAvatar() {
-      if ((this as any).updateFile.file) {
-        console.log("文件大小：" + (this as any).updateFile.file.size);
-        if ((this as any).updateFile.file.size / 1024 > 1024) {
-          (this as any).$message.error("请上传大小小于1M的图片~");
-          console.log("上传文件过大");
-          (this as any).updateFile.file = [];
-        } else {
-          let file = new FormData(); //创建form对象
-          file.append("pic", (this as any).updateFile.file); //通过append向form对象添加数据
-          console.log(file.get("pic"));
-          await postAvatar(file)
-            .then((res: any) => {
-              console.log(res);
-              if (res.data.status == "ok") {
-                console.log(res.data.link);
-                (this as any).formData.avatar = res.data.link;
-                (this as any).$store.state.avatarSrc = res.data.link;
-                setAvatarSrc(res.data.link);
-              }
-            })
-            .catch((err: any) => {
-              console.log(err);
-              (this as any).$message.error("图片上传失败，请重试~");
-            });
-        }
-      }
-    },
-    async updateQRCode() {
-      if ((this as any).updateQRCodeFile.file) {
-        console.log("文件大小：" + (this as any).updateQRCodeFile.file.size);
-        if ((this as any).updateQRCodeFile.file.size / 1024 > 1024) {
-          (this as any).$message.error("请上传大小小于1M的图片~");
-          console.log("上传文件过大");
-          (this as any).updateQRCodeFile.file = [];
-        } else {
-          let file = new FormData(); //创建form对象
-          file.append("pic", (this as any).updateQRCodeFile.file); //通过append向form对象添加数据
-          console.log(file.get("pic"));
-          await postQRCode(file)
-            .then((res: any) => {
-              console.log(res);
-              if (res.data.status == "ok") {
-                console.log(res.data.link);
-                (this as any).formData.weChatPic = res.data.link;
-              }
-            })
-            .catch((err: any) => {
-              console.log(err);
-              (this as any).$message.error("图片上传失败，请重试~");
-            });
-        }
-      }
-    },
-    async updateFields() {
-      // 取出新添加的标签放入newFields
-      var combinedFields = (this as any).items.fieldItems.concat(
-        (this as any).formData.field
-      );
-      console.log("Combined array:" + combinedFields);
-      var uniqueFields = Array.from(new Set(combinedFields));
-      console.log("Unique array:" + uniqueFields);
-      var fieldItems = (this as any).items.fieldItems;
-      var _arr1 = uniqueFields.filter((item1) => !fieldItems.includes(item1));
-      var _arr2 = fieldItems.filter((item2) => !uniqueFields.includes(item2));
-      const _arr = _arr1.concat(_arr2);
-      console.log("New fields:" + _arr1);
-      var newFields = _arr1;
-
-      if (newFields.length >= 1) {
-        newFields.forEach((val: any, idx, array) => {
-          console.log(val);
-          var field: any = '{"field": ' + '"' + val + '"' + "}";
-          addFields(field)
-            .then((res: any) => {
-              console.log(res);
-            })
-            .catch((err: any) => {
-              console.log(err);
-              (this as any).$message.error("添加标签失败，请重试~");
-            });
-        });
-      }
-    },
-    async getAllFields() {
-      getFields()
+      let file = new FormData(); //创建form对象
+      file.append("pic", (this as any).updateFile.file); //通过append向form对象添加数据
+      console.log(file.get("pic"));
+      await postAvatar(file)
         .then((res: any) => {
           console.log(res);
-          (this as any).items.fieldItems = res.data.data;
+          if (res.data.status == "ok") {
+            console.log(res.data.link);
+            (this as any).formData.avatar = res.data.link;
+          }
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log(err);
+          (this as any).$message.error("图片上传失败，请重试~");
         });
-    },
-  },
-  watch: {
-    model(val: any) {
-      if (val.length > 10) {
-        (this as any).$nextTick(() => (this as any).model.pop());
-      }
     },
   },
 };

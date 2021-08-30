@@ -30,7 +30,6 @@
         label="密码"
         required
         v-if="passwordLogin"
-        type="password"
       ></v-text-field>
       <v-text-field
         v-model="loginDataByCaptcha.validationCode"
@@ -86,17 +85,8 @@
 
 <script lang="ts">
 import { postLoginByPassword, postLoginByCaptcha, getCaptcha } from "../apis";
-import {
-  setToken,
-  getToken,
-  removeToken,
-  setPhone,
-  setAvatarSrc,
-  setUserName,
-  removePhone,
-  removeAvatarSrc,
-  removeUserName,
-} from "../utils/storage";
+import { setToken, getToken, removeToken } from "../utils/storage";
+
 export default {
   data: () => ({
     valid: true,
@@ -128,9 +118,6 @@ export default {
   }),
   mounted() {
     removeToken();
-    removePhone();
-    removeAvatarSrc();
-    removeUserName();
     (this as any).valid = true;
     // 自动调节组件高度
     (this as any).pageHeight = document.documentElement.clientHeight;
@@ -159,9 +146,10 @@ export default {
               console.log("成功登录！");
               (this as any).$message.success("登录成功！");
               //状态控制为登录
-              setAvatarSrc(res.data.data.avatar);
-              setUserName(res.data.data.userName);
-              setPhone((this as any).loginDataByPwd.phoneNumber);
+              (this as any).$store.state.isLogin = true;
+              (this as any).$store.state.avatarSrc = res.data.data.avatar;
+              (this as any).$store.state.userName = res.data.data.userName;
+              (this as any).$store.state.phoneNumber = (this as any).loginDataByPwd.phoneNumber;
               setToken(res.data.data.token);
               console.log(getToken());
               //跳转至主页面
@@ -181,9 +169,11 @@ export default {
             if (res.data.status == 0) {
               console.log("成功登录！");
               //状态控制为登录
-              setAvatarSrc(res.data.data.avatar);
-              setUserName(res.data.data.userName);
-              setPhone((this as any).loginDataByCaptcha.phoneNumber);
+              (this as any).$store.state.isLogin = true;
+              (this as any).$store.state.isLogin = true;
+              (this as any).$store.state.avatarSrc = res.data.data.avatar;
+              (this as any).$store.state.userName = res.data.data.userName;
+              (this as any).$store.state.phoneNumber = (this as any).loginDataByCaptcha.phoneNumber;
               setToken(res.data.data.token);
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
@@ -196,7 +186,7 @@ export default {
     },
     async getCaptchaFunc() {
       const { phoneNumber } = (this as any).loginDataByCaptcha;
-      if ((this as any).checkPhone(phoneNumber)) {
+      if (this.checkPhone(phoneNumber)) {
         try {
           await getCaptcha({ phoneNumber });
           console.log("验证码发送成功");

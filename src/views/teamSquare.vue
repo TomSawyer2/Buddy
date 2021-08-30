@@ -1,5 +1,5 @@
 <template>
   <div>
-    <h1>Buddy广场</h1>
+    <h1>群组广场</h1>
   </div>
 </template>

@@ -54,11 +54,6 @@ Axios.interceptors.response.use(
       case ERROR_CODE.CAPTCHA_ERR_REG:
         Message.error("验证码错误,请重试。");
         throw new Error(res.data.msg);
-
-      case ERROR_CODE.TOKEN_FAILED:
-        Message.error("登录状态异常,请重新登录。");
-        throw new Error(res.data.msg);
-
       default:
         return res;
     }
