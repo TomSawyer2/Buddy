@@ -1,7 +1,10 @@
 <template>
   <div class="buddy-container">
     <div class="search-container">
-      <BuddySearch @search="onSearch"></BuddySearch>
+      <BuddySearch
+        @search="onSearch"
+        @showAllChange="showAllChange"
+      ></BuddySearch>
       <v-divider class="divider"></v-divider>
     </div>
 
@@ -14,6 +17,7 @@
         @add="onAdd"
         @todetail="toDetail"
         :phone="phone"
+        :isAllShow="isAllShow"
       />
       <p v-if="totalNum === userList.length" class="info-bottom">
         我是有底线的(/▽＼)
@@ -57,7 +61,7 @@
         :userInfo="buddyDetail"
         :isLoading="isDetailLoading"
         @add="onAdd"
-        v-bind:messageCenter = "0"
+        v-bind:messageCenter="0"
       />
     </v-dialog>
   </div>
@@ -65,7 +69,6 @@
 
 <script lang="ts">
 import {
-  getAllOldUsersByPage,
   getAllUsersByPage,
   getUserDetailByPhone,
   postSendBuddyRequest,
@@ -97,9 +100,14 @@ export default {
     isDetailLoading: false,
     isErrorShow: false,
     phone: getPhone(),
+    isAllShow: false,
   }),
 
   methods: {
+    showAllChange(isAllShow: boolean) {
+      (this as any).isAllShow = isAllShow;
+    },
+
     onAdd(teacherPhoneNumber: string) {
       (this as any).isDialogShow = true;
       (this as any).currentApllyInfo.teacherPhoneNumber = teacherPhoneNumber;
@@ -116,9 +124,10 @@ export default {
       if ((this as any).currentApllyInfo.applyReason.length > 0) {
         try {
           let res = await postSendBuddyRequest((this as any).currentApllyInfo);
-          Message.success("发送成功！");
           (this as any).handleCancle();
+          Message.success("发送成功！");
         } catch (error) {
+          (this as any).isDialogShow = false;
           console.log(error);
         }
       } else {
@@ -128,18 +137,19 @@ export default {
 
     async onSearch(searchInfo: { userName: string; fields: string[] }) {
       try {
-        const res = (await searchUsersByNameAndFields(searchInfo)).data;
-        (this as any).userList = res.data ? res.data.SearchResults : [];
-        (this as any).totalNum = res.data ? res.data.Num : 0;
-        console.log((this as any).userList);
+        const res = (await searchUsersByNameAndFields(searchInfo)).data.data;
+        (this as any).userList = res.SearchResults;
+        (this as any).totalNum = res.Num;
       } catch (error) {
+        (this as any).userList = [];
+        (this as any).totalNum = 0;
         console.log(error);
       }
     },
 
     async getUserList(pageNo: number) {
-      const res = (await getAllOldUsersByPage({ pageNo })).data.data;
-      (this as any).userList = (this as any).userList.concat(res.teachersInfo);
+      const res = (await getAllUsersByPage({ pageNo })).data.data;
+      (this as any).userList = (this as any).userList.concat(res.studentsInfo); // 不直接从userList里面删掉自己，而是条件渲染，防止totalNum对不上
       (this as any).totalPage = res.totalPage;
       (this as any).totalNum = res.totalNum;
     },

@@ -27,20 +27,22 @@ Axios.interceptors.response.use(
     const errorCode = res.data.status;
     // 错误处理
     switch (errorCode) {
+      case ERROR_CODE.JSON_INVALID:
+        Message.error("请求格式错误。");
+        throw new Error(res.data.msg);
+
       case ERROR_CODE.LOGIN_FAIL:
         console.log("账号或密码错误，请重试。");
         Message.error("账号或密码错误，请重试。");
         throw new Error(res.data.msg);
-        break;
 
-      case ERROR_CODE.CAPTCHA_ERR:
-        console.log("验证码错误");
-        Message.error("验证码错误,请重试。");
-        break;
+      case ERROR_CODE.TOKEN_GENERATE_ERR:
+        Message.error("登录失败，请重试。");
+        throw new Error(res.data.msg);
 
       case ERROR_CODE.PHONENUMBERNOTREGISTERED:
-        console.log("手机号未注册");
         Message.error("手机号未注册，请先注册。");
+        throw new Error(res.data.msg);
         break;
 
       case ERROR_CODE.USER_EXISTED:
@@ -51,18 +53,70 @@ Axios.interceptors.response.use(
         Message.error("手机号已注册！");
         throw new Error(res.data.msg);
 
+      case ERROR_CODE.CAPTCHA_GENERATE_ERR:
+        Message.error("验证码发送失败，请重试。");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.CAPTCHA_NOT_GET:
+        Message.error("请先获取验证码。");
+        throw new Error(res.data.msg);
+
       case ERROR_CODE.CAPTCHA_ERR_REG:
         Message.error("验证码错误,请重试。");
         throw new Error(res.data.msg);
 
-      case ERROR_CODE.TOKEN_FAILED:
-        Message.error("登录状态异常,请重新登录。");
+      case ERROR_CODE.UPDATE_INFO_ERR:
+        Message.error("更新失败,请重试。");
         throw new Error(res.data.msg);
+
+      case ERROR_CODE.TEACHER_NOT_FOUND:
+        Message.error("不能向小队员提出申请~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.FIELD_EXISTED:
+        Message.error("你新建的技术栈已存在，请重新选择。");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.FIELD_BLANK:
+        Message.error("技术栈不能为空！");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.APPLY_REASON_BLANK:
+        Message.error("申请理由不能为空~");
+        break;
+
+      case ERROR_CODE.REQUEST_SELF:
+        Message.error("不能向自己提出申请！");
+        break;
       
+      case ERROR_CODE.REQUEST_NOT_FOUND:
+        Message.error("申请不存在！");
+        break;
+
       case ERROR_CODE.QRCODE_ERR:
         Message.error("请您先前往个人中心页面上传自己的二维码~");
         throw new Error(res.data.msg);
 
+      case ERROR_CODE.INFO_BLANK:
+        Message.error("请您先前往个人中心补全信息~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.REQUEST_MAX_NUM:
+        Message.error("申请通过的数量已经达到上限~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.SEARCH_NOT_FOUND:
+        Message.success("查询无果~");
+        throw new Error(res.data.msg);
+        break;
+
+      case ERROR_CODE.TOKEN_NOT_EXISTED:
+      case ERROR_CODE.TOKEN_EXPIRED:
+      case ERROR_CODE.TOKEN_FAILED:
+      case ERROR_CODE.TOKEN_NOT_EXIST:
+      case ERROR_CODE.TOKEN_ERR:
+        Message.error("认证失败，请重新登录。");
+        throw new Error(res.data.msg);
       default:
         return res;
     }

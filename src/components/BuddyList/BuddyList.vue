@@ -2,7 +2,7 @@
   <v-card
     min-height="180"
     style="margin-top: 15px"
-    v-if="item.phoneNumber !== phone"
+    v-if="(isAllShow ? true : item.identity === 1) && (item.phoneNumber !== phone)"
   >
     <v-card style="box-shadow: none" @click="onToDetail(item.phoneNumber)">
       <div class="info-container">
@@ -78,7 +78,7 @@
 import Vue from "vue";
 export default Vue.extend({
   name: "BuddyList",
-  props: ["item", "cardWidth", "phone"],
+  props: ["item", "cardWidth", "phone", "isAllShow"],
   data() {
     return {};
   },

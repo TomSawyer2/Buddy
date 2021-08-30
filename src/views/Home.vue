@@ -19,6 +19,8 @@ export default Vue.extend({
   mounted() {
     if (getToken().length === 0) {
       this.$router.push({ path: "/login" });
+    } else {
+      this.$router.push({ path: "/personalInformation" });
     }
   },
   methods: {},
@@ -28,6 +30,11 @@ export default Vue.extend({
         if (getToken().length === 0) {
           Message.error("未登录！");
           this.$router.push({ path: "/login" });
+        }
+      }
+      if (to.path === "/") {
+        if (getToken().length > 0) {
+          this.$router.push({ path: "/personalInformation" });
         }
       }
     },

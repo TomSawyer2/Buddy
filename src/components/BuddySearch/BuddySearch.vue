@@ -9,7 +9,7 @@
         style="width: 60%"
       />
       <v-select
-      dense
+        dense
         v-model="searchInfo.fields"
         :items="fields"
         small-chips
@@ -20,6 +20,8 @@
       ></v-select>
     </div>
     <div class="search-btn">
+      <v-switch v-model="isAllShow"></v-switch>
+      <div class="student-show-text">显示小队员</div>
       <v-btn
         :disabled="false"
         color="primary"
@@ -48,12 +50,12 @@ export default Vue.extend({
       fields: ["1", "2", "3", "4"],
       isCardShow: false,
       valid: false,
+      isAllShow: false,
     };
   },
   methods: {
     search() {
-      console.log(this.searchInfo);
-      this.$emit('search', this.searchInfo);
+      this.$emit("search", this.searchInfo);
     },
   },
   async mounted() {
@@ -63,6 +65,11 @@ export default Vue.extend({
     } catch (error) {
       console.log(error);
     }
+  },
+  watch: {
+    isAllShow: function (val: boolean) {
+      this.$emit("showAllChange", val);
+    },
   },
 });
 </script>
@@ -77,5 +84,10 @@ export default Vue.extend({
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
+}
+.student-show-text {
+  margin-top: -23px;
+  color: rgb(107, 105, 105);
+  font-size: 0.875rem;
 }
 </style>
