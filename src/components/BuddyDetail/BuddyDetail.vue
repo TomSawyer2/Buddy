@@ -1,6 +1,7 @@
 <template>
   <v-skeleton-loader
     v-bind="userInfo"
+    v-bind:messageCenter="messageCenter"
     :loading="isLoading"
     style="background: white"
     class="mx-auto"
@@ -38,11 +39,11 @@
           <div class="field">
             <h3>技术栈</h3>
             <v-chip-group
-              v-if="userInfo.field.length > 0"
+              v-if="userInfo.fields.length > 0"
               style="margin-left: 5px"
               column
             >
-              <v-chip v-for="(field, index) in userInfo.field" :key="index">{{
+              <v-chip v-for="(field, index) in userInfo.fields" :key="index">{{
                 field
               }}</v-chip>
             </v-chip-group>
@@ -110,6 +111,7 @@
               small
               style="width: 125px"
               @click="onAdd(userInfo.phoneNumber)"
+              v-if="messageCenter == 0"
             >
               添加为Buddy
               <v-icon color="orange darken-4" right> mdi-plus </v-icon>
@@ -125,9 +127,10 @@
 import Vue from "vue";
 export default Vue.extend({
   name: "BuddyDetail",
-  props: ["userInfo", "isLoading"],
+  props: ["userInfo", "isLoading", "messageCenter"],
   data() {
-    return {};
+    return {
+    };
   },
   methods: {
     onAdd(teacherPhoneNumber: string) {
