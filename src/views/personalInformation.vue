@@ -64,7 +64,7 @@
           class="pr-2"
         ></v-select>
         <v-select
-          v-model="graduated"
+          v-model="formData.isGraduated"
           :items="items.isGraduatedItems"
           :rules="[(v) => !!v || '请选择您是否出站~']"
           label="是否出站"
@@ -91,7 +91,7 @@
       </div>
 
       <v-select
-        v-model="identityString"
+        v-model="formData.identity"
         :items="items.identityItems"
         :rules="[(v) => !!v || '请选择您目前的身份~']"
         label="身份"
@@ -193,6 +193,7 @@ import {
   getUserName,
   setAvatarSrc,
 } from "../utils/storage";
+import { transformAfterGet, transformBeforeUpdate } from "@/utils/transform"
 export default {
   data: () => ({
     valid: true,
@@ -276,8 +277,7 @@ export default {
     const { phoneNumber } = (this as any).formData;
     getPersonalInformation({ phoneNumber })
       .then((res: any) => {
-        (this as any).tranformAfterGet(res.data.data);
-        (this as any).formData = res.data.data;
+        (this as any).formData = transformAfterGet(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -289,7 +289,7 @@ export default {
     async validate() {
       (this as any).$refs.form.validate();
       console.log((this as any).formData);
-      (this as any).transformBeforeUpdate();
+      (this as any).formData = transformBeforeUpdate((this as any).formData);
       await (this as any).updateFields();
       try {
         await updatePersonalInformation((this as any).formData);
@@ -297,6 +297,7 @@ export default {
         console.log((this as any).items.fieldItems);
         (this as any).$message.success("更新成功！");
         setAvatarSrc((this as any).formData.avatar);
+        (this as any).formData = transformAfterGet((this as any).formData);
       } catch (error) {
         console.log(error);
         (this as any).$message.error("更新失败，请重试~");
@@ -396,67 +397,6 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-    },
-    tranformAfterGet(data: any) {
-      if (data.isGraduated) {
-        (this as any).graduated = "是";
-      } else {
-        (this as any).graduated = "否";
-      }
-      switch (data.identity) {
-        case 0:
-          (this as any).identityString = "在站";
-          break;
-        case 1:
-          (this as any).identityString = "出站";
-          break;
-        case 2:
-          (this as any).identityString = "名誉队员";
-          break;
-        case 3:
-          (this as any).identityString = "导师";
-          break;
-        case 4:
-          (this as any).identityString = "顾问";
-          break;
-        case 5:
-          (this as any).identityString = "临时";
-          break;
-        case 6:
-          (this as any).identityString = "其他";
-          break;
-      }
-    },
-    transformBeforeUpdate() {
-      if ((this as any).graduated == "是") {
-        (this as any).formData.isGraduated = true;
-      } else {
-        (this as any).formData.isGraduated = false;
-        (this as any).formData.substation = "";
-      }
-      switch ((this as any).identityString) {
-        case "在站":
-          (this as any).formData.identity = 0;
-          break;
-        case "出站":
-          (this as any).formData.identity = 1;
-          break;
-        case "名誉队员":
-          (this as any).formData.identity = 2;
-          break;
-        case "导师":
-          (this as any).formData.identity = 3;
-          break;
-        case "顾问":
-          (this as any).formData.identity = 4;
-          break;
-        case "临时":
-          (this as any).formData.identity = 5;
-          break;
-        case "其他":
-          (this as any).formData.identity = 6;
-          break;
-      }
     },
   },
   watch: {

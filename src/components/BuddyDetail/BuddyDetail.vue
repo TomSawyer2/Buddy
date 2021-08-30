@@ -1,6 +1,7 @@
 <template>
   <v-skeleton-loader
     v-bind="userInfo"
+    v-bind:messageCenter="messageCenter"
     :loading="isLoading"
     style="background: white"
     class="mx-auto"
@@ -110,6 +111,7 @@
               small
               style="width: 125px"
               @click="onAdd(userInfo.phoneNumber)"
+              v-if="messageCenter == 0"
             >
               添加为Buddy
               <v-icon color="orange darken-4" right> mdi-plus </v-icon>
@@ -125,9 +127,10 @@
 import Vue from "vue";
 export default Vue.extend({
   name: "BuddyDetail",
-  props: ["userInfo", "isLoading"],
+  props: ["userInfo", "isLoading", "messageCenter"],
   data() {
-    return {};
+    return {
+    };
   },
   methods: {
     onAdd(teacherPhoneNumber: string) {
