@@ -13,6 +13,7 @@
         :cardWidth="pageWidth - 90"
         @add="onAdd"
         @todetail="toDetail"
+        :phone="phone"
       />
       <p v-if="totalNum === userList.length" class="info-bottom">
         我是有底线的(/▽＼)
@@ -95,6 +96,7 @@ export default {
     isDetailShow: false,
     isDetailLoading: false,
     isErrorShow: false,
+    phone: getPhone(),
   }),
 
   methods: {
@@ -136,8 +138,8 @@ export default {
     },
 
     async getUserList(pageNo: number) {
-      const res = (await getAllUsersByPage({ pageNo })).data.data;
-      (this as any).userList = (this as any).userList.concat(res.studentsInfo);
+      const res = (await getAllOldUsersByPage({ pageNo })).data.data;
+      (this as any).userList = (this as any).userList.concat(res.teachersInfo);
       (this as any).totalPage = res.totalPage;
       (this as any).totalNum = res.totalNum;
     },

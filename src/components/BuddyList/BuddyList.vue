@@ -1,5 +1,9 @@
 <template>
-  <v-card min-height="180" style="margin-top: 15px">
+  <v-card
+    min-height="180"
+    style="margin-top: 15px"
+    v-if="item.phoneNumber !== phone"
+  >
     <v-card style="box-shadow: none" @click="onToDetail(item.phoneNumber)">
       <div class="info-container">
         <div
@@ -74,7 +78,7 @@
 import Vue from "vue";
 export default Vue.extend({
   name: "BuddyList",
-  props: ["item", "cardWidth"],
+  props: ["item", "cardWidth", "phone"],
   data() {
     return {};
   },
