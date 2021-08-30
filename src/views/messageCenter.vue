@@ -21,13 +21,12 @@
       "
     >
       <v-btn-toggle v-model="icon" borderless shaped mandatory>
-        <v-btn value="received" @click="changeToReceive">
+        <v-btn value="received" @click="changeToReceive" style="z-index: 10000">
           <span class="hidden-sm-and-down">收到的请求</span>
           <v-badge
             color="green"
             :content="totalReceivedNum"
             :value="totalReceivedNum"
-            style="z-index: 1000"
           >
             <v-icon right> mdi-download </v-icon>
           </v-badge>
@@ -39,7 +38,6 @@
             color="green"
             :content="totalSentNum"
             :value="totalSentNum"
-            style="z-index: 1000"
           >
             <v-icon right> mdi-upload </v-icon>
           </v-badge>
@@ -60,7 +58,6 @@
             v-for="(item, i) in receivedItems"
             :key="i"
             cols="12"
-            class="mt-5"
           >
             <v-hover v-slot="{ hover }" open-delay="100">
               <v-card
@@ -640,9 +637,11 @@ export default {
       console.log(newVal);
       if (newVal == 3) {
         (this as any).$message.success("您可接收的小队员已满~");
+        (this as any).totalReceivedNum = "已满";
       } else if (newVal == 2) {
+        // (this as any).$message.success("您已接收2名小队员，还可接收1名小队员~");
         (this as any).$message.error(
-          "若您再接收一名小队员，审核中的小队员将被自动拒绝"
+          "若您再接收一名小队员，其余审核中的小队员将被自动拒绝"
         );
       } else {
         (this as any).$message.success(

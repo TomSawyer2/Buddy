@@ -29,16 +29,19 @@
         ></v-file-input>
       </div>
 
-      <v-file-input
-        accept="image/png, image/jpeg, image/bmp, image/jfif"
-        placeholder="选择图片"
-        prepend-icon="mdi-qrcode"
-        label="上传微信二维码"
-        class="pt-10"
-        style="width: 100%"
-        v-model="updateQRCodeFile.file"
-        @change="updateQRCode()"
-      ></v-file-input>
+      <div style="display: flex; flex-direction: row; align-items: center">
+        <v-file-input
+          accept="image/png, image/jpeg, image/bmp, image/jfif"
+          placeholder="选择图片"
+          prepend-icon="mdi-qrcode"
+          label="上传微信二维码"
+          class="pt-10"
+          style="width: 100%"
+          v-model="updateQRCodeFile.file"
+          @change="updateQRCode()"
+        ></v-file-input>
+        <v-btn @click="pushToWeChatPic" small class="mt-3">查看二维码</v-btn>
+      </div>
 
       <v-text-field
         v-model="formData.phoneNumber"
@@ -152,7 +155,7 @@
 
       <v-select
         v-model="formData.substation"
-        v-if="graduated == '是' ? true : false"
+        v-if="formData.isGraduated == '是' ? true : false"
         :items="items.substationItems"
         :rules="[(v) => !!v || '请选择您目前所在的分站~']"
         label="所在分站"
@@ -397,6 +400,13 @@ export default {
         .catch((err) => {
           console.log(err);
         });
+    },
+    pushToWeChatPic() {
+      if ((this as any).formData.weChatPic) {
+        window.open((this as any).formData.weChatPic, "_blank");
+      } else {
+        (this as any).$message.error("请先上传二维码~");
+      }
     },
   },
   watch: {
