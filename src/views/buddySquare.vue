@@ -56,6 +56,7 @@
         :userInfo="buddyDetail"
         :isLoading="isDetailLoading"
         @add="onAdd"
+        v-bind:messageCenter = "0"
       />
     </v-dialog>
   </div>
@@ -126,9 +127,9 @@ export default {
     async onSearch(searchInfo: { userName: string; fields: string[] }) {
       try {
         const res = (await searchUsersByNameAndFields(searchInfo)).data;
-        this.userList = res.data ? res.data.SearchResults : [];
-        this.totalNum = res.data ? res.data.Num : 0;
-        console.log(this.userList);
+        (this as any).userList = res.data ? res.data.SearchResults : [];
+        (this as any).totalNum = res.data ? res.data.Num : 0;
+        console.log((this as any).userList);
       } catch (error) {
         console.log(error);
       }
@@ -148,7 +149,7 @@ export default {
           document.documentElement.scrollTop -
           window.innerHeight <=
         20;
-      const length = this.userList.length;
+      const length = (this as any).userList.length;
       if (
         length < (this as any).totalNum &&
         (this as any).pageNo < (this as any).totalPage &&
