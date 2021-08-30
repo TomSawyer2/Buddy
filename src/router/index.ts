@@ -1,3 +1,4 @@
+import { getToken } from "@/utils/storage";
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
 import Home from "../views/Home.vue";
@@ -9,7 +10,7 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Home",
     component: Home,
-    redirect: "/personalInformation",
+    redirect: getToken() ? "/personalInformation" : "/login",
     meta: { requiresAuth: true }, // 添加表示需要验证
     children: [
       {
