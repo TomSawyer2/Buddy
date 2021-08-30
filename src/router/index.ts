@@ -9,6 +9,7 @@ const routes: Array<RouteConfig> = [
     path: "/",
     name: "Home",
     component: Home,
+    redirect: "/personalInformation",
     meta: { requiresAuth: true }, // 添加表示需要验证
     children: [
       {
@@ -28,9 +29,9 @@ const routes: Array<RouteConfig> = [
         component: () => import("../views/buddySquare.vue"),
       },
       {
-        path: "/teamSquare",
-        name: "teamSquare",
-        component: () => import("../views/teamSquare.vue"),
+        path: "/messageCenter",
+        name: "messageCenter",
+        component: () => import("../views/messageCenter.vue"),
       },
     ],
   },
@@ -44,6 +45,10 @@ const routes: Array<RouteConfig> = [
     name: "Register",
     component: () => import("@/views/Register.vue"),
   },
+  {
+    path: '*',
+    component: () => import('@/views/Error404.vue')
+  }
 ];
 
 const router = new VueRouter({

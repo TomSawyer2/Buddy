@@ -1,5 +1,15 @@
 <template>
-  <div v-bind:style="{ height: pageHeight + 'px' }">
+  <div
+    id="side-bar"
+    v-bind:style="{
+      height: '100%',
+      position: 'fixed',
+      width: width + 'px',
+      zIndex: 1000,
+    }"
+    @click="openSwitch"
+    v-clickoutside="closeBar"
+  >
     <v-navigation-drawer permanent expand-on-hover absolute>
       <v-list>
         <v-list-item class="px-2">
@@ -41,14 +51,17 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import Vue from "vue";
+import { getPhone, getAvatarSrc, getUserName } from "@/utils/storage";
 export default Vue.extend({
   name: "SideBar",
   data() {
     return {
       pageHeight: 100,
       selectedItem: 0,
+      isOpen: false,
+      width: 56,
       items: [
         { text: "个人中心", icon: "mdi-home", route: "/personalInformation" },
         {
@@ -56,7 +69,11 @@ export default Vue.extend({
           icon: "mdi-account-multiple",
           route: "/buddySquare",
         },
-        { text: "群组广场", icon: "mdi-vector-square", route: "/teamSquare" },
+        {
+          text: "消息中心",
+          icon: "mdi-vector-square",
+          route: "/messageCenter",
+        },
         { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
       ],
@@ -64,12 +81,37 @@ export default Vue.extend({
       userName: "",
     };
   },
+  methods: {
+    openSwitch() {
+      this.isOpen = !this.isOpen;
+      if (this.isOpen) {
+        const timerOpen = setInterval(() => {
+          if (this.width < 256) {
+            this.width += 7;
+          } else {
+            clearInterval(timerOpen);
+          }
+        }, 0.005);
+      } else {
+        const timerClose = setInterval(() => {
+          if (this.width > 56) {
+            this.width -= 7;
+          } else {
+            clearInterval(timerClose);
+          }
+        }, 0.005);
+      }
+    },
+    closeBar() {
+      this.isOpen = !this.isOpen;
+    },
+  },
   mounted() {
     // 自动调节组件高度
     this.pageHeight = document.documentElement.clientHeight;
     console.log(this.pageHeight);
-    this.avatarSrc = this.$store.state.avatarSrc;
-    this.userName = this.$store.state.userName;
+    this.avatarSrc = getAvatarSrc();
+    this.userName = getUserName();
   },
   computed: {
     monitor() {
@@ -79,6 +121,35 @@ export default Vue.extend({
   watch: {
     monitor() {
       this.avatarSrc = this.$store.state.avatarSrc;
+    },
+  },
+  directives: {
+    clickoutside: {
+      // 初始化指令
+      bind(el, binding, vnode) {
+        function documentHandler(e) {
+          // 这里判断点击的元素是否是本身，是本身，则返回
+          if (el.contains(e.target)) {
+            return false;
+          }
+          // 判断指令中是否绑定了函数
+          if (binding.expression) {
+            // 如果绑定了函数 则调用那个函数，此处binding.value就是handleClose方法
+            binding.value(e);
+          }
+        }
+        // 给当前元素绑定个私有变量，方便在unbind中可以解除事件监听
+        el.__vueClickOutside__ = documentHandler;
+        document.addEventListener("click", documentHandler);
+      },
+      update() {
+        return;
+      },
+      unbind(el, binding) {
+        // 解除事件监听
+        document.removeEventListener("click", el.__vueClickOutside__);
+        delete el.__vueClickOutside__;
+      },
     },
   },
 });
