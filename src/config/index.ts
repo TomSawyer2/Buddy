@@ -42,6 +42,7 @@ const ERROR_CODE = {
   CAPTCHA_ERR_REG: 14,
   USER_EXISTED: 12,
   PHONE_EXISTED: 11,
+  QRCODE_ERR: 22,
 };
 
 export { URL, ERROR_CODE };

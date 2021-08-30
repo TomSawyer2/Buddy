@@ -58,6 +58,10 @@ Axios.interceptors.response.use(
       case ERROR_CODE.TOKEN_FAILED:
         Message.error("登录状态异常,请重新登录。");
         throw new Error(res.data.msg);
+      
+      case ERROR_CODE.QRCODE_ERR:
+        Message.error("请您先前往个人中心页面上传自己的二维码~");
+        throw new Error(res.data.msg);
 
       default:
         return res;

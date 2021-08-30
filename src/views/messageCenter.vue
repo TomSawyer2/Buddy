@@ -69,7 +69,6 @@
                 v-if="
                   acceptNumber < 3 || (acceptNumber == 3 && item.status == 1)
                 "
-                @click="onToDetail(item.studentPhoneNumber)"
               >
                 <div class="d-flex flex-no-wrap justify-space-between">
                   <div>
@@ -81,7 +80,7 @@
                     <v-card-subtitle
                       v-text="item.studentPhoneNumber"
                     ></v-card-subtitle>
-                    <v-card-text>
+                    <v-card-text @click="onToDetail(item.studentPhoneNumber)">
                       <v-row>
                         <div class="grey--text ms-3 mr-5">
                           性别：{{ item.sex ? item.sex : "暂无" }}
@@ -235,7 +234,7 @@
         <div v-if="received == 0">
           <v-col v-for="(item, i) in sentItems" :key="i" cols="12" class="mt-5">
             <v-hover v-slot="{ hover }" open-delay="100">
-              <v-card color="#FFFFFF" :elevation="hover ? 12 : 2" @click="onToDetail(item.teacherPhoneNumber)">
+              <v-card color="#FFFFFF" :elevation="hover ? 12 : 2">
                 <div class="d-flex flex-no-wrap justify-space-between">
                   <div>
                     <v-card-title
@@ -246,7 +245,7 @@
                     <v-card-subtitle
                       v-text="item.teacherPhoneNumber"
                     ></v-card-subtitle>
-                    <v-card-text>
+                    <v-card-text @click="onToDetail(item.teacherPhoneNumber)">
                       <v-row>
                         <div class="grey--text ms-3 mr-5">
                           性别：{{ item.sex ? item.sex : "暂无" }}
@@ -282,15 +281,15 @@
                       </v-row>
                     </v-card-text>
                     <v-divider class="ml-4"></v-divider>
-                    <v-row v-if="item.field.length - 1">
-                      <v-sheet class="ml-4 mx-auto my-auto">
-                        <v-chip-group active-class="primary--text" column>
-                          <v-chip v-for="tag in item.field" :key="tag">
+                    <v-card-text v-if="item.field.length - 1">
+                      <v-row>
+                        <v-sheet class="ml-3 mx-auto mt-1 mb-1">
+                          <v-chip v-for="tag in item.field" :key="tag" class="mr-1">
                             {{ tag }}
                           </v-chip>
-                        </v-chip-group>
-                      </v-sheet>
-                    </v-row>
+                        </v-sheet>
+                      </v-row>
+                    </v-card-text>
                     <v-row class="ml-4 mt-2 mb-2 text--disabled">
                       <h4>{{ buddyStatus[item.status] }}</h4>
                       <!-- <v-btn style="right:0;width:auto;height:auto;" class="ml-4">修改理由</v-btn> -->
@@ -577,6 +576,8 @@ export default {
     },
     async acceptBuddyFunc(item : any) {
       (this as any).snackbar = false;
+      (this as any).isDetailShow = false;
+      (this as any).isDetailLoading = false;
       console.log("同意了以下小队员的申请：");
       console.log(item);
       item.status = 1;
@@ -588,10 +589,11 @@ export default {
         (this as any).$message.success(
           "已成功确认" + item.studentName + "为您的Buddy~"
         );
+        (this as any).isDetailShow = false;
         (this as any).acceptNumber++;
       } catch (err) {
         console.log(err);
-        (this as any).$message.error("确认时发生了一些错误，请重试~");
+        (this as any).isDetailShow = false;
       }
     },
     async refuseBuddyFunc(item: any) {
@@ -630,6 +632,7 @@ export default {
     },
     pushToWeChatPic(item: any) {
       window.open(item.weChatPic, "_blank");
+      (this as any).isDetailShow = false;
     },
   },
   watch: {
