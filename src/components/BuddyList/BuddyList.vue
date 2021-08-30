@@ -35,11 +35,11 @@
           </p>
 
           <v-chip-group
-            v-if="item.field.length > 0"
+            v-if="item.fields[0].length > 0"
             style="margin-left: 5px"
             column
           >
-            <v-chip v-for="(field, index) in item.field" :key="index">{{
+            <v-chip v-for="(field, index) in item.fields" :key="index" small>{{
               field
             }}</v-chip>
           </v-chip-group>

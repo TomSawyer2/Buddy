@@ -9,7 +9,8 @@
         style="width: 60%"
       />
       <v-select
-        v-model="searchInfo.field"
+      dense
+        v-model="searchInfo.fields"
         :items="fields"
         small-chips
         label="技术栈"
@@ -42,7 +43,7 @@ export default Vue.extend({
     return {
       searchInfo: {
         userName: "",
-        field: [],
+        fields: [],
       },
       fields: ["1", "2", "3", "4"],
       isCardShow: false,
@@ -52,6 +53,7 @@ export default Vue.extend({
   methods: {
     search() {
       console.log(this.searchInfo);
+      this.$emit('search', this.searchInfo);
     },
   },
   async mounted() {

@@ -11,3 +11,8 @@ export interface SendRequestInfo {
 export interface PhoneInfo {
   phoneNumber: string;
 }
+
+export interface SearchInfo {
+  userName: string;
+  fields: string[];
+}

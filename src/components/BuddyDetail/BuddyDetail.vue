@@ -39,7 +39,7 @@
           <div class="field">
             <h3>技术栈</h3>
             <v-chip-group
-              v-if="userInfo.fields.length > 0"
+              v-if="userInfo.fields[0].length > 0"
               style="margin-left: 5px"
               column
             >
@@ -75,7 +75,7 @@
               style="margin-left: 5px"
               column
             >
-              <v-chip v-for="(hobby, index) in userInfo.hobby" :key="index">{{
+              <v-chip v-for="(hobby, index) in userInfo.hobby" :key="index" small>{{
                 hobby
               }}</v-chip>
             </v-chip-group>

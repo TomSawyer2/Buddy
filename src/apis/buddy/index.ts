@@ -1,5 +1,5 @@
 import { URL } from "@/config";
-import { PageInfo, SendRequestInfo } from "@/models";
+import { PageInfo, SearchInfo, SendRequestInfo } from "@/models";
 import axios from "../request";
 
 export function getAllUsersByPage(params: PageInfo) {
@@ -16,4 +16,8 @@ export function postSendBuddyRequest(params: SendRequestInfo) {
 
 export function getAllFields() {
   return axios.get(URL.getAllFields);
+}
+
+export function searchUsersByNameAndFields(params:SearchInfo) {
+  return axios.post(URL.searchUsersByNameAndFields, params);
 }

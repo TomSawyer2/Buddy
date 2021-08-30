@@ -30,6 +30,7 @@
         label="密码"
         required
         v-if="passwordLogin"
+        type="password"
       ></v-text-field>
       <v-text-field
         v-model="loginDataByCaptcha.validationCode"
@@ -92,6 +93,9 @@ import {
   setPhone,
   setAvatarSrc,
   setUserName,
+  removePhone,
+  removeAvatarSrc,
+  removeUserName,
 } from "../utils/storage";
 export default {
   data: () => ({
@@ -124,6 +128,9 @@ export default {
   }),
   mounted() {
     removeToken();
+    removePhone();
+    removeAvatarSrc();
+    removeUserName();
     (this as any).valid = true;
     // 自动调节组件高度
     (this as any).pageHeight = document.documentElement.clientHeight;
