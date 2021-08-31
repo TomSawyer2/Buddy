@@ -110,6 +110,11 @@ Axios.interceptors.response.use(
         throw new Error(res.data.msg);
         break;
 
+      case ERROR_CODE.REQ_MAX_NUM:
+        Message.error("该老队员已经接受了三名小队员的申请，请选择其他老队员~");
+        throw new Error(res.data.msg);
+        break;
+
       case ERROR_CODE.TOKEN_NOT_EXISTED:
       case ERROR_CODE.TOKEN_EXPIRED:
       case ERROR_CODE.TOKEN_FAILED:

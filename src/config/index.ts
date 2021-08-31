@@ -62,6 +62,7 @@ const ERROR_CODE = {
   QRCODE_ERR: 22, // 没有上传二维码
   INFO_BLANK: 23, // 没有补全信息
   REQUEST_MAX_NUM: 24, // 小队员请求数量上限
+  REQ_MAX_NUM: 25,// 老队员已接收了三个小队员
 
   SEARCH_NOT_FOUND: 28, // 无查询结果
 };
