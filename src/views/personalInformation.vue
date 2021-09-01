@@ -57,24 +57,35 @@
         required
       ></v-text-field>
 
-      <div class="d-flex justify-space-between">
-        <v-select
-          v-model="formData.sex"
-          :items="items.sexItems"
-          :rules="[(v) => !!v || '请选择您的性别~']"
-          label="性别"
-          required
-          class="pr-2"
-        ></v-select>
-        <v-select
-          v-model="formData.isGraduated"
-          :items="items.isGraduatedItems"
-          :rules="[(v) => !!v || '请选择您是否出站~']"
-          label="是否出站"
-          required
-          class="pl-2"
-        ></v-select>
-      </div>
+      <v-select
+        v-model="formData.sex"
+        :items="items.sexItems"
+        :rules="[(v) => !!v || '请选择您的性别~']"
+        label="性别"
+        required
+        class="pr-2"
+      ></v-select>
+
+      <!-- <div class="d-flex justify-space-between"> -->
+        
+        <DatePicker @save="save" :date="formData.birthday" class="pl-2"/>
+      <!-- </div> -->
+
+      <v-select
+        v-model="formData.isGraduated"
+        :items="items.isGraduatedItems"
+        :rules="[(v) => !!v || '请选择您是否出站~']"
+        label="是否出站"
+        required
+      ></v-select>
+      <v-select
+        v-model="formData.substation"
+        v-if="formData.isGraduated == '是' ? true : false"
+        :items="items.substationItems"
+        :rules="[(v) => !!v || '请选择您目前所在的分站~']"
+        label="所在分站"
+        required
+      ></v-select>
 
       <div class="d-flex justify-space-between">
         <v-text-field
@@ -100,35 +111,7 @@
         label="身份"
         required
       ></v-select>
-
-      <v-text-field
-        v-model="formData.hobby"
-        :rules="rules.hobbyRules"
-        label="兴趣爱好（请用空格分隔）"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="formData.teamExperience"
-        :rules="rules.teamExperienceRules"
-        label="队内经历（现在或曾经所在的项目组/队委会小组等等）"
-        required
-      ></v-text-field>
-
-      <v-text-field
-        v-model="formData.resume"
-        :rules="rules.resumeRules"
-        label="履历（没有则填无）"
-        required
-      ></v-text-field>
-
-      <!-- <v-text-field
-        v-model="formData.field"
-        :rules="rules.fieldRules"
-        label="技术栈"
-        required
-      ></v-text-field> -->
-
+      
       <v-combobox
         v-model="formData.field"
         :items="items.fieldItems"
@@ -153,14 +136,28 @@
         </template>
       </v-combobox>
 
-      <v-select
-        v-model="formData.substation"
-        v-if="formData.isGraduated == '是' ? true : false"
-        :items="items.substationItems"
-        :rules="[(v) => !!v || '请选择您目前所在的分站~']"
-        label="所在分站"
+      <v-text-field
+        v-model="formData.teamExperience"
+        :rules="rules.teamExperienceRules"
+        label="队内经历（现在或曾经所在的项目组/队委会小组等等）"
         required
-      ></v-select>
+      ></v-text-field>
+
+      <v-text-field
+        v-model="formData.resume"
+        :rules="rules.resumeRules"
+        label="履历（没有则填无）"
+        required
+      ></v-text-field>
+
+      <SlidePicker @sendCharacter="sendCharacter" :character="formData.character"/>
+
+      <v-text-field
+        v-model="formData.hobby"
+        :rules="rules.hobbyRules"
+        label="兴趣爱好（请用空格分隔）"
+        required
+      ></v-text-field>
 
       <v-text-field v-model="formData.notes" label="备注(选填）"></v-text-field>
 
@@ -197,7 +194,10 @@ import {
   setAvatarSrc,
 } from "../utils/storage";
 import { transformAfterGet, transformBeforeUpdate } from "@/utils/transform"
+import DatePicker from "@/components/DatePicker/DatePicker.vue";
+import SlidePicker from "@/components/SlidePicker/SlidePicker.vue";
 export default {
+  components: { DatePicker, SlidePicker },
   data: () => ({
     valid: true,
     updateFile: {
@@ -210,6 +210,8 @@ export default {
       avatar: "",
       email: "",
       phoneNumber: "",
+      birthday: "",
+      character: "",
       sex: "",
       hobby: "",
       teamExperience: "",
@@ -289,6 +291,14 @@ export default {
     (this as any).getAllFields();
   },
   methods: {
+    sendCharacter (val) {
+      (this as any).formData.character = val;
+      console.log(val);
+    },
+    save (val) {
+      (this as any).formData.birthday = val;
+      console.log(val);
+    },
     async validate() {
       (this as any).$refs.form.validate();
       console.log((this as any).formData);

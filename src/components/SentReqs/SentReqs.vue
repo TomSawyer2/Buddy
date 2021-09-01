@@ -197,6 +197,9 @@ export default Vue.extend({
       this.$emit("reason", item);
       (this as any).reasonDialog = false;
     },
+    pushToWeChatPic (item : any) {
+      this.$emit("weChatPic", item);
+    }
   },
 });
 </script>

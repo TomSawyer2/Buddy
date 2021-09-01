@@ -33,6 +33,7 @@
       :buddyDetail="buddyDetail"
       @todetail="onToDetail"
       @reason="saveReason"
+      @weChatPic="pushToWeChatPic"
     />
 
     <div

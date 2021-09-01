@@ -4,6 +4,15 @@ export function transformAfterGet(data: any) {
     } else {
       data.isGraduated = "否";
     }
+
+    if (data.birthday == "0001-01-01") {
+      data.birthday = "";
+    }
+
+    if (data.character == -1) {
+      data.character = 2;
+    }
+
     switch (data.identity) {
       case 0:
         data.identity = "在站";
