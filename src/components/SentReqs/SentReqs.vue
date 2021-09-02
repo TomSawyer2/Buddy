@@ -10,7 +10,7 @@
                   <div>
                     <v-card-title
                       class="text-h5"
-                      v-text="item.teacherName"
+                      v-text="item.userName"
                     ></v-card-title>
 
                     <v-card-subtitle
@@ -22,18 +22,13 @@
                           性别：{{ item.sex ? item.sex : "暂无" }}
                         </div>
                         <div class="grey--text ms-3 mr-5">
+                          生日：{{ item.birthday ? item.birthday : "暂无" }}
+                        </div>
+                        <div class="grey--text ms-3 mr-5">
                           队员编号：{{ item.number ? item.number : "暂无" }}
                         </div>
                         <div class="grey--text ms-3 mr-5">
                           身份：{{ item.identity ? item.identity : "暂无" }}
-                        </div>
-                        <div class="grey--text ms-3 mr-5">
-                          爱好：{{ item.hobby ? item.hobby : "暂无" }}
-                        </div>
-                        <div class="grey--text ms-3 mr-5">
-                          队内经历：{{
-                            item.teamExperience ? item.teamExperience : "暂无"
-                          }}
                         </div>
                         <div class="grey--text ms-3 mr-5">
                           履历：{{ item.resume ? item.resume : "暂无" }}
@@ -46,17 +41,14 @@
                         <div class="grey--text ms-3 mr-5">
                           分站：{{ item.substation ? item.substation : "暂无" }}
                         </div>
-                        <div class="grey--text ms-3">
-                          备注：{{ item.notes ? item.notes : "暂无" }}
-                        </div>
                       </v-row>
                     </v-card-text>
                     <v-divider class="ml-4"></v-divider>
-                    <v-card-text v-if="item.field.length - 1">
+                    <v-card-text v-if="item.fields.length - 1">
                       <v-row>
                         <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <v-chip
-                            v-for="tag in item.field"
+                            v-for="tag in item.fields"
                             :key="tag"
                             class="mr-1"
                           >
@@ -73,7 +65,7 @@
                           dark
                           class="ml-4"
                           style="right: 0; width: auto; height: auto"
-                          @click.stop="reasonDialog = true"
+                          @click="openDialog(item)"
                         >
                           修改理由
                         </v-btn>
@@ -96,8 +88,8 @@
                                     <v-text-field
                                       label="填写申请的理由"
                                       clearable
-                                      :value="item.applyReason"
-                                      v-model="item.applyReason"
+                                      :value="reasonItem.applyReason"
+                                      v-model="reasonItem.applyReason"
                                     >
                                     </v-text-field>
                                   </v-col>
@@ -184,6 +176,7 @@ export default Vue.extend({
       isDetailShow: false,
       isDetailLoading: false,
       timeout: 5000,
+      reasonItem: {},
     };
   },
   methods: {
@@ -199,7 +192,11 @@ export default Vue.extend({
     },
     pushToWeChatPic (item : any) {
       this.$emit("weChatPic", item);
-    }
+    },
+    openDialog (item : any) {
+      (this as any).reasonDialog = true;
+      (this as any).reasonItem = item;
+    },
   },
 });
 </script>

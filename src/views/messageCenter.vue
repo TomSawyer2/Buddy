@@ -78,7 +78,6 @@ export default {
     },
     updateReasonParams: {
       phoneNumber: "",
-      teacherName: "",
       teacherPhoneNumber: "",
       applyReason: "",
     },
@@ -107,7 +106,6 @@ export default {
           await getUserDetailByPhone({ phoneNumber: studentPhoneNumber })
         ).data.data;
         res.fields = res.fields.length > 1 ? res.fields : ["暂无"];
-        res.hobby = res.hobby.length > 0 ? res.hobby.split(" ") : [];
         (this as any).buddyDetail = res;
       } catch (error) {
         console.log(error);
@@ -161,6 +159,9 @@ export default {
       await getSentRequests((this as any).getRequestsParams)
         .then((res: any) => {
           const data = res.data.data;
+          data.requestInfo.forEach((val: any, idx, array) => {
+            transformAfterGet(data.requestInfo[idx]);
+          });
           (this as any).sentItems = (this as any).sentItems.concat(
             data.requestInfo
           );
@@ -226,12 +227,12 @@ export default {
       // 这个函数是用来修改理由的
       console.log(item);
       (this as any).updateReasonParams.phoneNumber = getPhone();
-      (this as any).updateReasonParams.teacherName = item.userName;
       (this as any).updateReasonParams.teacherPhoneNumber =
-        item.teacherPhoneNumber;
+        item.phoneNumber;
       (this as any).updateReasonParams.applyReason = item.applyReason;
       try {
         await postSendBuddyRequest((this as any).updateReasonParams);
+        (this as any).updateReasonParams.applyReason = "";
         console.log("修改理由成功");
         (this as any).$message.success("修改理由成功！");
       } catch (err) {

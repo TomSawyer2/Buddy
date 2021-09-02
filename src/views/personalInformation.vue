@@ -113,7 +113,7 @@
       ></v-select>
       
       <v-combobox
-        v-model="formData.field"
+        v-model="formData.fields"
         :items="items.fieldItems"
         :search-input.sync="search"
         hide-selected
@@ -137,13 +137,6 @@
       </v-combobox>
 
       <v-text-field
-        v-model="formData.teamExperience"
-        :rules="rules.teamExperienceRules"
-        label="队内经历（现在或曾经所在的项目组/队委会小组等等）"
-        required
-      ></v-text-field>
-
-      <v-text-field
         v-model="formData.resume"
         :rules="rules.resumeRules"
         label="履历（没有则填无）"
@@ -151,15 +144,6 @@
       ></v-text-field>
 
       <SlidePicker @sendCharacter="sendCharacter" :character="formData.character"/>
-
-      <v-text-field
-        v-model="formData.hobby"
-        :rules="rules.hobbyRules"
-        label="兴趣爱好（请用空格分隔）"
-        required
-      ></v-text-field>
-
-      <v-text-field v-model="formData.notes" label="备注(选填）"></v-text-field>
 
       <div class="d-flex justify-center mb-6 mt-6">
         <v-btn
@@ -213,16 +197,13 @@ export default {
       birthday: "",
       character: "",
       sex: "",
-      hobby: "",
-      teamExperience: "",
       number: "",
       highSchool: "",
-      field: "",
+      fields: [],
       resume: "",
       identity: "",
       isGraduated: false,
       substation: "",
-      notes: "",
       weChatPic: "",
     },
 
@@ -236,10 +217,6 @@ export default {
         (v: string | undefined) =>
           (v && v.length == 11) || "请输入正确的手机号",
       ],
-      // hobbyRules: [(v: string | undefined) => !!v || "请输入您的兴趣爱好~"],
-      // teamExperienceRules: [
-      //   (v: string | undefined) => !!v || "请输入您的队内经历~",
-      // ],
       // numberRules: [(v: string | undefined) => !!v || "请输入您的队员编号~"],
       // highSchoolRules: [
       //   (v: string | undefined) => !!v || "请输入您的毕业高中~",
