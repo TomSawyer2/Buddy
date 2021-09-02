@@ -22,13 +22,13 @@
                   <div>
                     <v-card-title
                       class="text-h5"
-                      v-text="item.studentName"
+                      v-text="item.userName"
                     ></v-card-title>
 
                     <v-card-subtitle
-                      v-text="item.studentPhoneNumber"
+                      v-text="item.phoneNumber"
                     ></v-card-subtitle>
-                    <v-card-text @click="onToDetail(item.studentPhoneNumber)">
+                    <v-card-text @click="onToDetail(item.phoneNumber)">
                       <v-row>
                         <div class="grey--text ms-3 mr-5">
                           性别：{{ item.sex ? item.sex : "暂无" }}

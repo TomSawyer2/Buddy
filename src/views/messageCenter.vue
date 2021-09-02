@@ -196,11 +196,11 @@ export default {
       item.status = 1;
       (this as any).chooseBuddyParams.phoneNumber = getPhone();
       (this as any).chooseBuddyParams.studentPhoneNumber =
-        item.studentPhoneNumber;
+        item.phoneNumber;
       try {
         await acceptBuddy((this as any).chooseBuddyParams);
         (this as any).$message.success(
-          "已成功确认" + item.studentName + "为您的Buddy~"
+          "已成功确认" + item.userName + "为您的Buddy~"
         );
         (this as any).acceptNumber++;
       } catch (err) {
@@ -213,10 +213,10 @@ export default {
       item.status = 2;
       (this as any).chooseBuddyParams.phoneNumber = getPhone();
       (this as any).chooseBuddyParams.studentPhoneNumber =
-        item.studentPhoneNumber;
+        item.phoneNumber;
       try {
         await refuseBuddy((this as any).chooseBuddyParams);
-        (this as any).$message.error("已拒绝" + item.studentName);
+        (this as any).$message.error("已拒绝" + item.userName);
       } catch (err) {
         console.log(err);
         (this as any).$message.error("确认时发生了一些错误，请重试~");
@@ -226,7 +226,7 @@ export default {
       // 这个函数是用来修改理由的
       console.log(item);
       (this as any).updateReasonParams.phoneNumber = getPhone();
-      (this as any).updateReasonParams.teacherName = item.teacherName;
+      (this as any).updateReasonParams.teacherName = item.userName;
       (this as any).updateReasonParams.teacherPhoneNumber =
         item.teacherPhoneNumber;
       (this as any).updateReasonParams.applyReason = item.applyReason;

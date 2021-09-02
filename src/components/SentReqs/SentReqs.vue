@@ -14,9 +14,9 @@
                     ></v-card-title>
 
                     <v-card-subtitle
-                      v-text="item.teacherPhoneNumber"
+                      v-text="item.phoneNumber"
                     ></v-card-subtitle>
-                    <v-card-text @click="onToDetail(item.teacherPhoneNumber)">
+                    <v-card-text @click="onToDetail(item.phoneNumber)">
                       <v-row>
                         <div class="grey--text ms-3 mr-5">
                           性别：{{ item.sex ? item.sex : "暂无" }}
