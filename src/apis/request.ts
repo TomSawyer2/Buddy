@@ -53,20 +53,12 @@ Axios.interceptors.response.use(
         Message.error("手机号已注册！");
         throw new Error(res.data.msg);
 
-      case ERROR_CODE.CAPTCHA_GENERATE_ERR:
-        Message.error("验证码发送失败，请重试。");
-        throw new Error(res.data.msg);
-
       case ERROR_CODE.CAPTCHA_NOT_GET:
         Message.error("请先获取验证码。");
         throw new Error(res.data.msg);
 
       case ERROR_CODE.CAPTCHA_ERR_REG:
         Message.error("验证码错误,请重试。");
-        throw new Error(res.data.msg);
-
-      case ERROR_CODE.UPDATE_INFO_ERR:
-        Message.error("更新失败,请重试。");
         throw new Error(res.data.msg);
 
       case ERROR_CODE.TEACHER_NOT_FOUND:
@@ -115,11 +107,20 @@ Axios.interceptors.response.use(
         throw new Error(res.data.msg);
         break;
 
+      case ERROR_CODE.INTERNAL_ERR:
+        Message.error("服务器内部错误，请联系管理员~");
+        throw new Error(res.data.msg);
+        break;
+      
+      case ERROR_CODE.PARAM_ERR:
+        Message.error("请求参数错误，请联系管理员~");
+        throw new Error(res.data.msg);
+        break;
+
       case ERROR_CODE.TOKEN_NOT_EXISTED:
       case ERROR_CODE.TOKEN_EXPIRED:
       case ERROR_CODE.TOKEN_FAILED:
       case ERROR_CODE.TOKEN_NOT_EXIST:
-      case ERROR_CODE.TOKEN_ERR:
         Message.error("认证失败，请重新登录。");
         throw new Error(res.data.msg);
       default:
