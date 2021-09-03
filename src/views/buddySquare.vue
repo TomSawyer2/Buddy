@@ -115,6 +115,7 @@ export default {
 
     handleCancle() {
       (this as any).isDialogShow = false;
+      (this as any).isDetailShow = false;
       (this as any).isErrorShow = false;
       (this as any).currentApllyInfo.applyReason = "";
     },
@@ -127,7 +128,7 @@ export default {
           (this as any).handleCancle();
           Message.success("发送成功！");
         } catch (error) {
-          (this as any).isDialogShow = false;
+          (this as any).handleCancle();
           console.log(error);
         }
       } else {
@@ -181,7 +182,6 @@ export default {
       try {
         let res = (await getUserDetailByPhone({ phoneNumber: teacherPhone }))
           .data.data;
-        res.hobby = res.hobby.length > 0 ? res.hobby.split(" ") : [];
         (this as any).buddyDetail = res;
         (this as any).isDetailLoading = false;
       } catch (error) {

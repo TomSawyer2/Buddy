@@ -65,45 +65,12 @@
         </div>
 
         <div class="func">
-          <div class="interests">
-            <h3>
-              <i class="mdi mdi-heart buddy-i"></i>
-              | 兴趣爱好
-            </h3>
-            <v-chip-group
-              v-if="userInfo.hobby.length > 0"
-              style="margin-left: 5px"
-              column
-            >
-              <v-chip v-for="(hobby, index) in userInfo.hobby" :key="index" small>{{
-                hobby
-              }}</v-chip>
-            </v-chip-group>
-            <v-chip v-else>暂无</v-chip>
-          </div>
-
-          <div class="team-experience">
-            <h3>
-              <i class="mdi mdi-account-group buddy-i"></i>
-              | 队内经历
-            </h3>
-            <p class="buddy-para">{{ userInfo.teamExperience }}</p>
-          </div>
-
           <div class="buddy-resume">
             <h3>
               <i class="mdi mdi-file-account buddy-i"></i>
               | 履历
             </h3>
             <p class="buddy-para">{{ userInfo.resume }}</p>
-          </div>
-
-          <div class="notes">
-            <h3>
-              <i class="mdi mdi-star buddy-i"></i>
-              | 备注
-            </h3>
-            <p class="buddy-para">{{ userInfo.notes }}</p>
           </div>
           <div class="btn-container">
             <v-btn

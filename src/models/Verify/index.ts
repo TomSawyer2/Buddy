@@ -24,15 +24,12 @@ export interface updatePersonalInformationInfo {
   email: string;
   phoneNumber: string;
   sex: string;
-  hobby: string;
-  teamExperience: string;
   number: string;
   highSchool: string;
   field: string;
   resume: string;
   isGraduated: boolean;
   substation: string;
-  notes: string | undefined;
   weChatPic: string;
 }
 
@@ -58,7 +55,6 @@ export interface refuseBuddyInfo {
 
 export interface postSendBuddyRequestInfo {
   phoneNumber: string;
-  teacherName: string;
   teacherPhoneNumber: string;
   applyReason: string;
 }
