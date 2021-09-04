@@ -28,7 +28,7 @@
                     <v-card-subtitle
                       v-text="item.phoneNumber"
                     ></v-card-subtitle>
-                    <v-card-text @click="onToDetail(item.phoneNumber)">
+                    <v-card-text @click="onToDetail(item.id)">
                       <v-row>
                         <div class="grey--text ms-3 mr-5">
                           性别：{{ item.sex ? item.sex : "暂无" }}
@@ -61,9 +61,9 @@
                     </v-card-text>
                     <v-divider
                       class="ml-4"
-                      v-if="item.fields.length - 1"
+                      v-if="item.fields.length - 2"
                     ></v-divider>
-                    <v-card-text v-if="item.fields.length - 1">
+                    <v-card-text v-if="item.fields.length - 2">
                       <v-row>
                         <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <div>
@@ -219,10 +219,10 @@ export default Vue.extend({
       (this as any).snackbar = true;
       (this as any).snackbarItem = item;
     },
-    async onToDetail(teacherPhoneNumber: string) {
+    async onToDetail(id: string) {
       (this as any).isDetailLoading = true;
       (this as any).isDetailShow = true;
-      await this.$emit("todetail", teacherPhoneNumber);
+      await this.$emit("todetail", id);
       (this as any).isDetailLoading = false;
     },
   },

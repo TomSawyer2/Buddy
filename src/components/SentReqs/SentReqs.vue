@@ -16,7 +16,7 @@
                     <v-card-subtitle
                       v-text="item.phoneNumber"
                     ></v-card-subtitle>
-                    <v-card-text @click="onToDetail(item.phoneNumber)">
+                    <v-card-text @click="onToDetail(item.id)">
                       <v-row>
                         <div class="grey--text ms-3 mr-5">
                           性别：{{ item.sex ? item.sex : "暂无" }}
@@ -180,10 +180,10 @@ export default Vue.extend({
     };
   },
   methods: {
-    async onToDetail(studentPhoneNumber: string) {
+    async onToDetail(id: string) {
       (this as any).isDetailLoading = true;
       (this as any).isDetailShow = true;
-      await this.$emit("todetail", studentPhoneNumber);
+      await this.$emit("todetail", id);
       (this as any).isDetailLoading = false;
     },
     saveReason(item: any) {

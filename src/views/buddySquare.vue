@@ -70,10 +70,11 @@
 <script lang="ts">
 import {
   getAllUsersByPage,
-  getUserDetailByPhone,
+  getUserDetailById,
   postSendBuddyRequest,
   searchUsersByNameAndFields,
 } from "@/apis";
+import { transformAfterGet, transformBeforeUpdate } from "@/utils/transform";
 import BuddyList from "@/components/BuddyList/BuddyList.vue";
 import BuddyDetail from "@/components/BuddyDetail/BuddyDetail.vue";
 import BuddySearch from "@/components/BuddySearch/BuddySearch.vue";
@@ -90,8 +91,7 @@ export default {
     totalNum: -1,
     currentApllyInfo: {
       applyReason: "",
-      phoneNumber: "",
-      teacherPhoneNumber: "",
+      id: "",
     },
     buddyDetail: {},
     isLoading: false,
@@ -108,9 +108,9 @@ export default {
       (this as any).isAllShow = isAllShow;
     },
 
-    onAdd(teacherPhoneNumber: string) {
+    onAdd(id: string) {
       (this as any).isDialogShow = true;
-      (this as any).currentApllyInfo.teacherPhoneNumber = teacherPhoneNumber;
+      (this as any).currentApllyInfo.id = id;
     },
 
     handleCancle() {
@@ -176,13 +176,13 @@ export default {
       }
     },
 
-    async toDetail(teacherPhone: string) {
+    async toDetail(id: string) {
       (this as any).isDetailLoading = true;
       (this as any).isDetailShow = true;
       try {
-        let res = (await getUserDetailByPhone({ phoneNumber: teacherPhone }))
+        let res = (await getUserDetailById({ id: id }))
           .data.data;
-        (this as any).buddyDetail = res;
+        (this as any).buddyDetail = transformAfterGet(res);
         (this as any).isDetailLoading = false;
       } catch (error) {
         console.log(error);
@@ -192,7 +192,6 @@ export default {
 
   async mounted() {
     window.addEventListener("scroll", (this as any).scrollEvent);
-    (this as any).currentApllyInfo.phoneNumber = getPhone();
     try {
       (this as any).getUserList(1);
     } catch (error) {

@@ -1,7 +1,6 @@
 import axios from "../request";
 import {
   getCaptchaInfo,
-  getPersonalInformationInfo,
   LoginInfo,
   updatePersonalInformationInfo,
   // postAvatarInfo,
@@ -12,7 +11,14 @@ import {
   refuseBuddyInfo,
   postSendBuddyRequestInfo,
   addFieldsInfo,
-  PhoneInfo,
+  addMajorsInfo,
+  IdInfo,
+  getShareAllAspectsInfo,
+  addShareDirectionInfo,
+  addShareAspectInfo,
+  getGainAllAspectsInfo,
+  addGainDirectionInfo,
+  addGainAspectInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -35,9 +41,8 @@ export async function postLoginByCaptcha(
 }
 
 export async function getPersonalInformation(
-  params: getPersonalInformationInfo
 ): Promise<Record<string, unknown>> {
-  return await axios.post(URL.getPersonalInformation, params);
+  return await axios.post(URL.getPersonalInformation);
 }
 
 export async function updatePersonalInformation(
@@ -107,6 +112,62 @@ export function addFields(
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.addFields, params);
 }
-export function getUserDetailByPhone(params: PhoneInfo) {
-  return axios.post(URL.getUserDetailByPhone, params);
+
+export function getUserDetailById(params: IdInfo) {
+  return axios.post(URL.getUserDetailById, params);
+}
+
+export function getMajors(): Promise<Record<string, unknown>> {
+  return axios.get(URL.getMajors);
+}
+
+export function addMajors(
+  params: addMajorsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addMajors, params);
+}
+
+export function getShareAllDirections(): Promise<Record<string, unknown>> {
+  return axios.post(URL.getShareAllDirections);
+}
+
+export function getShareAllAspects(
+  params: getShareAllAspectsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.getShareAllAspects, params);
+}
+
+export function addShareDirection(
+  params: addShareDirectionInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addShareDirection, params);
+}
+
+export function addShareAspect(
+  params: addShareAspectInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addShareAspect, params);
+}
+
+
+export function getGainAllDirections(): Promise<Record<string, unknown>> {
+  return axios.post(URL.getGainAllDirections);
+}
+
+export function getGainAllAspects(
+  params: getGainAllAspectsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.getGainAllAspects, params);
+}
+
+export function addGainDirection(
+  params: addGainDirectionInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addGainDirection, params);
+}
+
+export function addGainAspect(
+  params: addGainAspectInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addGainAspect, params);
 }

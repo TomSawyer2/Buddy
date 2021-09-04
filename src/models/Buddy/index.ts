@@ -8,8 +8,8 @@ export interface SendRequestInfo {
   applyReason: string;
 }
 
-export interface PhoneInfo {
-  phoneNumber: string;
+export interface IdInfo {
+  id: string;
 }
 
 export interface SearchInfo {

@@ -15,10 +15,6 @@ export interface getCaptchaInfo {
   phoneNumber: string;
 }
 
-export interface getPersonalInformationInfo {
-  phoneNumber: string;
-}
-
 export interface updatePersonalInformationInfo {
   avatar: string;
   email: string;
@@ -44,21 +40,48 @@ export interface getSentRequestsInfo {
 }
 
 export interface acceptBuddyInfo {
-  phoneNumber: string;
-  studentPhoneNumber: string;
+  id: string;
 }
 
 export interface refuseBuddyInfo {
-  phoneNumber: string;
-  studentPhoneNumber: string;
+  id: string;
 }
 
 export interface postSendBuddyRequestInfo {
-  phoneNumber: string;
-  teacherPhoneNumber: string;
+  id: string;
   applyReason: string;
 }
 
 export interface addFieldsInfo {
   field: string;
+}
+
+export interface addMajorsInfo {
+  major: string;
+}
+
+export interface getShareAllAspectsInfo {
+  shareDirection: string;
+}
+
+export interface addShareDirectionInfo {
+  shareDirection: string;
+}
+
+export interface addShareAspectInfo {
+  shareDirection: string;
+  shareAspect: string;
+}
+
+export interface getGainAllAspectsInfo {
+  gainDirection: string;
+}
+
+export interface addGainDirectionInfo {
+  gainDirection: string;
+}
+
+export interface addGainAspectInfo {
+  gainDirection: string;
+  gainAspect: string;
 }

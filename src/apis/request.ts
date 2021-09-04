@@ -27,17 +27,9 @@ Axios.interceptors.response.use(
     const errorCode = res.data.status;
     // 错误处理
     switch (errorCode) {
-      case ERROR_CODE.JSON_INVALID:
-        Message.error("请求格式错误。");
-        throw new Error(res.data.msg);
-
       case ERROR_CODE.LOGIN_FAIL:
         console.log("账号或密码错误，请重试。");
         Message.error("账号或密码错误，请重试。");
-        throw new Error(res.data.msg);
-
-      case ERROR_CODE.TOKEN_GENERATE_ERR:
-        Message.error("登录失败，请重试。");
         throw new Error(res.data.msg);
 
       case ERROR_CODE.PHONENUMBERNOTREGISTERED:
@@ -114,6 +106,26 @@ Axios.interceptors.response.use(
       
       case ERROR_CODE.PARAM_ERR:
         Message.error("请求参数错误，请联系管理员~");
+        throw new Error(res.data.msg);
+        break;
+      
+      case ERROR_CODE.REQ_NOT_MAX_NUM:
+        Message.error("老队员的待接收数量已达上限~");
+        throw new Error(res.data.msg);
+        break;
+      
+      case ERROR_CODE.MAJOR_EMPTY:
+        Message.error("专业方向为空~");
+        throw new Error(res.data.msg);
+        break;
+      
+      case ERROR_CODE.PASS_MAX_NUM: 
+        Message.error("老队员接受数量已达上限~");
+        throw new Error(res.data.msg);
+        break;
+
+      case ERROR_CODE.CHOOSE_MAX_NUM: 
+        Message.error("您的选择数量已达上限~");
         throw new Error(res.data.msg);
         break;
 

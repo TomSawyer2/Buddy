@@ -17,24 +17,23 @@ export default Vue.extend({
     SideBar,
   },
   mounted() {
-    if (getToken().length === 0) {
-      this.$router.push({ path: "/login" });
-    } else {
-      this.$router.push({ path: "/personalInformation" });
+    if (getToken().length === 0 && this.$route.path != "/login") {
+      this.$router.push({ path: "/login" }).catch(err => {console.log(err);});
+    } else if (this.$route.path != "/personalInformation"){
+      this.$router.push({ path: "/personalInformation" }).catch(err => {console.log(err);});
     }
   },
-  methods: {},
   watch: {
     $route(to, from) {
       if (to.path !== "/login") {
         if (getToken().length === 0) {
           Message.error("未登录！");
-          this.$router.push({ path: "/login" });
+          this.$router.push({ path: "/login" }).catch(err => {console.log(err);});
         }
       }
       if (to.path === "/") {
         if (getToken().length > 0) {
-          this.$router.push({ path: "/personalInformation" });
+          this.$router.push({ path: "/personalInformation" }).catch(err => {console.log(err);});
         }
       }
     },

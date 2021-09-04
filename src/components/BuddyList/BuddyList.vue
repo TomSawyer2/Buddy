@@ -4,7 +4,7 @@
     style="margin-top: 15px"
     v-if="(isAllShow ? true : item.identity === 1) && (item.phoneNumber !== phone)"
   >
-    <v-card style="box-shadow: none" @click="onToDetail(item.phoneNumber)">
+    <v-card style="box-shadow: none" @click="onToDetail(item.id)">
       <div class="info-container">
         <div
           :style="{
@@ -65,7 +65,7 @@
         depressed
         small
         style="width: 125px"
-        @click="onAdd(item.phoneNumber)"
+        @click="onAdd(item.id)"
       >
         添加为Buddy
         <v-icon color="orange darken-4" right> mdi-plus </v-icon>
@@ -83,11 +83,11 @@ export default Vue.extend({
     return {};
   },
   methods: {
-    onAdd(teacherPhoneNumber: string) {
-      this.$emit("add", teacherPhoneNumber);
+    onAdd(id: string) {
+      this.$emit("add", id);
     },
-    onToDetail(teacherPhoneNumber: string) {
-      this.$emit("todetail", teacherPhoneNumber);
+    onToDetail(id: string) {
+      this.$emit("todetail", id);
     },
   },
 });

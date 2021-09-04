@@ -58,7 +58,7 @@ import {
   acceptBuddy,
   refuseBuddy,
   postSendBuddyRequest,
-  getUserDetailByPhone,
+  getUserDetailById,
 } from "../apis";
 import { getPhone } from "@/utils/storage";
 import ChooseBtn from "@/components/ChooseBtn/ChooseBtn.vue";
@@ -73,12 +73,10 @@ export default {
       pageNo: 1,
     },
     chooseBuddyParams: {
-      phoneNumber: "",
-      studentPhoneNumber: "",
+      id: "",
     },
     updateReasonParams: {
-      phoneNumber: "",
-      teacherPhoneNumber: "",
+      id: "",
       applyReason: "",
     },
     receivedItems: [],
@@ -100,13 +98,13 @@ export default {
       (this as any).received = val;
       console.log(val);
     },
-    async onToDetail(studentPhoneNumber: string) {
+    async onToDetail(id: string) {
       try {
         let res = (
-          await getUserDetailByPhone({ phoneNumber: studentPhoneNumber })
+          await getUserDetailById({ id: id })
         ).data.data;
-        res.fields = res.fields.length > 1 ? res.fields : ["暂无"];
-        (this as any).buddyDetail = res;
+        res.fields = res.fields.length > 0 ? res.fields : ["暂无"];
+        (this as any).buddyDetail = transformAfterGet(res);
       } catch (error) {
         console.log(error);
       }
@@ -195,40 +193,36 @@ export default {
       console.log("同意了以下小队员的申请：");
       console.log(item);
       item.status = 1;
-      (this as any).chooseBuddyParams.phoneNumber = getPhone();
-      (this as any).chooseBuddyParams.studentPhoneNumber =
-        item.phoneNumber;
-      try {
-        await acceptBuddy((this as any).chooseBuddyParams);
-        (this as any).$message.success(
-          "已成功确认" + item.userName + "为您的Buddy~"
-        );
-        (this as any).acceptNumber++;
-      } catch (err) {
-        console.log(err);
-      }
+      (this as any).chooseBuddyParams.id = item.id;
+      await acceptBuddy((this as any).chooseBuddyParams)
+        .then((res) => {
+          (this as any).$message.success(
+            "已成功确认" + item.userName + "为您的Buddy~"
+          );
+          (this as any).acceptNumber++;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     },
     async refuseBuddyFunc(item: any) {
       console.log("拒绝了以下小队员的申请：");
       console.log(item);
       item.status = 2;
-      (this as any).chooseBuddyParams.phoneNumber = getPhone();
-      (this as any).chooseBuddyParams.studentPhoneNumber =
-        item.phoneNumber;
-      try {
-        await refuseBuddy((this as any).chooseBuddyParams);
-        (this as any).$message.error("已拒绝" + item.userName);
-      } catch (err) {
-        console.log(err);
-        (this as any).$message.error("确认时发生了一些错误，请重试~");
-      }
+      (this as any).chooseBuddyParams.id = item.id;
+      await refuseBuddy((this as any).chooseBuddyParams)
+        .then((res) => {
+          (this as any).$message.error("已拒绝" + item.userName);
+        })
+        .catch((err) => {
+          console.log(err);
+          (this as any).$message.error("确认时发生了一些错误，请重试~");
+        })
     },
     async saveReason(item: any) {
       // 这个函数是用来修改理由的
       console.log(item);
-      (this as any).updateReasonParams.phoneNumber = getPhone();
-      (this as any).updateReasonParams.teacherPhoneNumber =
-        item.phoneNumber;
+      (this as any).updateReasonParams.id = item.id;
       (this as any).updateReasonParams.applyReason = item.applyReason;
       try {
         await postSendBuddyRequest((this as any).updateReasonParams);

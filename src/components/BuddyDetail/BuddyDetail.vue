@@ -30,6 +30,12 @@
             <h3>个人信息</h3>
             <I>性别：{{ userInfo.sex.length ? userInfo.sex : "未填写" }}</I>
             <br />
+            <I>生日：{{ userInfo.birthday.length ? userInfo.birthday : "未填写" }}</I>
+            <br />
+            <I>毕业年份：{{ userInfo.graduateYear.length ? userInfo.graduateYear : "未填写" }}</I>
+            <br />
+            <I>核心层职务：{{ userInfo.managementExperience.length ? userInfo.managementExperience : "未填写" }}</I>
+            <br />
             <I
               >毕业高中：{{
                 userInfo.highSchool.length ? userInfo.highSchool : "未知"
@@ -67,17 +73,48 @@
         <div class="func">
           <div class="buddy-resume">
             <h3>
-              <i class="mdi mdi-file-account buddy-i"></i>
-              | 履历
+              <i class="mdi mdi-map-legend buddy-i"></i>
+              | 所在城市
             </h3>
-            <p class="buddy-para">{{ userInfo.resume }}</p>
+            <p class="buddy-para">{{ userInfo.country + '-' + userInfo.province + '-' + userInfo.city + '-' + userInfo.region }}</p>
+          </div>
+          <div class="buddy-resume">
+            <h3>
+              <i class="mdi mdi-file-account buddy-i"></i>
+              | 项目组经历（履历）
+            </h3>
+            <p class="buddy-para">{{ userInfo.group + '-' + userInfo.project}}</p>
+          </div>
+          <div class="major">
+            <h3>
+              <i class="mdi mdi-professional-hexagon buddy-i"></i>
+              | 专业方向
+            </h3>
+            <v-chip-group
+              v-if="userInfo.majors.length > 0 && userInfo.majors[0] != ''"
+              style="margin-left: 5px"
+              column
+              class="ml-5"
+            >
+              <v-chip v-for="(major, index) in userInfo.majors" :key="index" small>{{
+                major
+              }}</v-chip>
+            </v-chip-group>
+            <v-chip v-else>暂无</v-chip>
+          </div>
+          <div class="major">
+            <h3>
+              <i class="mdi mdi-head-cog buddy-i"></i>
+              | 性格特征
+            </h3>
+            <SlidePicker :character="userInfo.character" :isDisabled="true"/>
           </div>
           <div class="btn-container">
             <v-btn
               depressed
               small
               style="width: 125px"
-              @click="onAdd(userInfo.phoneNumber)"
+              @click="onAdd(userInfo.id)"
               v-if="messageCenter == 0"
             >
               添加为Buddy
@@ -92,16 +129,18 @@
 
 <script lang="ts">
 import Vue from "vue";
+import SlidePicker from "@/components/SlidePicker/SlidePicker.vue";
 export default Vue.extend({
   name: "BuddyDetail",
+  components: { SlidePicker },
   props: ["userInfo", "isLoading", "messageCenter"],
   data() {
     return {
     };
   },
   methods: {
-    onAdd(teacherPhoneNumber: string) {
-      this.$emit("add", teacherPhoneNumber);
+    onAdd(id: string) {
+      this.$emit("add", id);
     },
   },
 });

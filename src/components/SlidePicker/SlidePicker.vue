@@ -1,14 +1,14 @@
 <template>
   <div>
-    <t>性格自评（您认为自己的性格特征）</t>
     <v-slider
-        v-model="character"
-        :tick-labels="ticksLabels"
-        :max="4"
-        step="1"
-        ticks="always"
-        tick-size="6"
-        @change="sendCharacter"
+      v-model="characterChild"
+      :tick-labels="ticksLabels"
+      :max="4"
+      step="1"
+      ticks="always"
+      tick-size="6"
+      @change="sendCharacter"
+      :disabled="isDisabled"
     ></v-slider>
   </div>
 </template>
@@ -17,7 +17,7 @@
 import Vue from "vue";
 export default Vue.extend({
   name: "SlidePicker",
-  props: ["character"],
+  props: ["character", "isDisabled"],
   data() {
     return {
         ticksLabels: [
@@ -27,12 +27,21 @@ export default Vue.extend({
           '',
           '随和',
         ],
+        characterChild: 2,
     };
   },
+  mounted () {
+    (this as any).characterChild = (this as any).character;
+  },
   methods: {
-    sendCharacter (character) {
-      (this as any).$emit("sendCharacter", (this as any).character);
+    sendCharacter (characterChild) {
+      (this as any).$emit("sendCharacter", (this as any).characterChild);
     },
   },
+  watch: {
+    character(newV,oldV) {
+      (this as any).characterChild = newV;
+    }
+  }
 });
 </script>
