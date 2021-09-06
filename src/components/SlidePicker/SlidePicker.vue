@@ -6,7 +6,7 @@
       :max="4"
       step="1"
       ticks="always"
-      tick-size="6"
+      tick-size="2"
       @change="sendCharacter"
       :disabled="isDisabled"
     ></v-slider>
