@@ -1,9 +1,15 @@
-export const baseURL = "https://celebration.dian.org.cn:18082";
-// "http://192.168.0.20:18082";
-// "https://celebration.dian.org.cn:18082";
-// "http://39.101.183.162:18082";
 export const TIMEOUT = 10000;
 export const CONTENT_TYPE = "application/json";
+
+let baseURL= "";
+if (process.env.NODE_ENV === 'development') {
+  baseURL = "http://39.101.183.162:18082";
+  // dev
+} else {
+  baseURL = "https://celebration.dian.org.cn/api";
+  // build
+}
+export default baseURL;
 
 const URL = {
   // font-end

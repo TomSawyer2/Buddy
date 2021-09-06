@@ -1,7 +1,8 @@
 import { getToken } from "@/utils/storage";
 import axios from "axios";
-import { baseURL, TIMEOUT, CONTENT_TYPE, ERROR_CODE } from "../config/index";
+import { TIMEOUT, CONTENT_TYPE, ERROR_CODE } from "../config/index";
 import Message from "../components/Message";
+import baseURL from "../config";
 
 const Axios = axios.create({
   baseURL: baseURL,

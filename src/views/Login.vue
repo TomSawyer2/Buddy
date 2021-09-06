@@ -31,6 +31,7 @@
         required
         v-if="passwordLogin"
         type="password"
+        autocomplete="off"
       ></v-text-field>
       <v-text-field
         v-model="loginDataByCaptcha.validationCode"
@@ -134,7 +135,6 @@ export default {
     (this as any).valid = true;
     // 自动调节组件高度
     (this as any).pageHeight = document.documentElement.clientHeight;
-    console.log((this as any).pageHeight);
   },
   methods: {
     async login() {
@@ -148,22 +148,16 @@ export default {
 
       //发送登录请求
       if ((this as any).passwordLogin) {
-        console.log(
-          "通过密码发送登录请求，参数为：" + (this as any).loginDataByPwd
-        );
         await postLoginByPassword((this as any).loginDataByPwd)
           .then((res: any) => {
-            console.log(res);
             if (res.data.status == 0) {
               // 成功登录
-              console.log("成功登录！");
               (this as any).$message.success("登录成功！");
               //状态控制为登录
               setAvatarSrc(res.data.data.avatar);
               setUserName(res.data.data.userName);
               setPhone((this as any).loginDataByPwd.phoneNumber);
               setToken(res.data.data.token);
-              console.log(getToken());
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
             }
@@ -172,14 +166,9 @@ export default {
             console.log(err);
           });
       } else if ((this as any).captchaLogin) {
-        console.log(
-          "通过验证码发送登录请求，参数为：" + (this as any).loginDataByCaptcha
-        );
         await postLoginByCaptcha((this as any).loginDataByCaptcha)
           .then((res: any) => {
-            console.log(res.data);
             if (res.data.status == 0) {
-              console.log("成功登录！");
               //状态控制为登录
               setAvatarSrc(res.data.data.avatar);
               setUserName(res.data.data.userName);
@@ -199,7 +188,6 @@ export default {
       if ((this as any).checkPhone(phoneNumber)) {
         try {
           await getCaptcha({ phoneNumber });
-          console.log("验证码发送成功");
           (this as any).$message.success("验证码发送成功！");
           (this as any).codeStatus = "60s后再次发送";
           (this as any).btnDisabled = true;

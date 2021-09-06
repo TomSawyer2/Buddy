@@ -1,4 +1,11 @@
 /**
+ * transformAfterGet,transformBeforeUpdate两个函数用于个人信息获取与提交时的映射
+ * arrayToObjectDeWeight用于在个人信息页面将获得的数组转化为element-ui的级联选择器需要的object并去重
+ * arrayToObject用于在个人信息页面将获得的数组转化为element-ui的级联选择器需要的object（无去重功能）
+ * deWeightArray用于去重数组
+ */
+
+/**
  * 两个函数用于个人信息获取与提交时的映射
  */
 export function transformAfterGet(data: any) {
@@ -127,4 +134,71 @@ export function transformBeforeUpdate(formData: any) {
       formData.identity = 7;
       return formData;
   }
+}
+
+/**
+ * 用于在个人信息页面将获得的数组转化为element-ui的级联选择器需要的object并去重
+ */
+
+export function arrayToObjectDeWeight (arr : any, node : any) {
+  const tempObj = {};
+  for (const key in arr) {
+    tempObj[key] = arr[key];
+  };
+  const nodes = Object.keys(tempObj).map(val => ({
+    label: tempObj[val],
+    value: tempObj[val],
+    leaf: true
+  }));
+  let i = 0;
+  let j = 0;
+  if (node.children) {
+    for(i; i < node.children.length; i ++) {
+      for(j; j < nodes.length; j ++) {
+        if (nodes[j].value != "添加方向") {
+          if (node.children[i].value == nodes[j].value) {
+            nodes.splice(j, 1);
+            j --;
+            i ++;
+          }
+        }
+      }
+    }
+  }
+  return nodes;
+}
+
+/**
+ * 用于在个人信息页面将获得的数组转化为element-ui的级联选择器需要的object（无去重功能）
+ */
+
+ export function arrayToObject (arr : any, isLeaf : boolean) {
+  const tempObj = {};
+  for (const key in arr) {
+    tempObj[key] = arr[key];
+  };
+  if (isLeaf) {
+    const nodes = Object.keys(tempObj).map(val => ({
+      label: tempObj[val],
+      value: tempObj[val],
+      leaf: true
+    }));
+    return nodes;
+  } else {
+    const nodes = Object.keys(tempObj).map(val => ({
+      label: tempObj[val],
+      value: tempObj[val]
+    }));
+    return nodes;
+  }
+}
+
+/**
+ * 用于去重数组
+ */
+
+export function deWeightArray(arr : any) {
+  const s = new Set(arr);
+  const result = Array.from(s);
+  return result;
 }
