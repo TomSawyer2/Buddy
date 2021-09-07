@@ -16,7 +16,11 @@ export function transformAfterGet(data: any) {
   }
 
   data.cityValue = data.location.split('-');
-  data.resumeValue = data.Group.split('-');
+
+  if(data.resumeValue) {
+    data.resumeValue = data.group.split('-');
+  }
+ 
 
 
   if (data.birthday == "1900-01-01"|| data.birthday == "0001-01-01") {
@@ -34,6 +38,10 @@ export function transformAfterGet(data: any) {
   if (data.character == -1) {
     data.character = 2;
   }
+
+  const characterResultItemsLocal: string[] = ["INTJ-A INTJ-T", "INTP-A INTP-T", "ENTJ-A ENTJ-T", "ENTP-A ENTP-T", "INFJ-A INFJ-T", "INFP-A INFP-T", "ENFJ-A ENFJ-T", "ENFP-A ENFP-T", "ISTJ-A ISTJ-T", "ISFJ-A ISFJ-T", "ESTJ-A ESTJ-T", "ESFJ-A ESFJ-T", "ISTP-A ISTP-T", "ISFP-A ISFP-T", "ESTP-A ESTP-T", "ESFP-A ESFP-T"];
+  
+  data.characterResult = characterResultItemsLocal[data.characterResult];
 
   switch (data.identity) {
     case 0:
@@ -74,12 +82,19 @@ export function transformBeforeUpdate(formData: any) {
 
   formData.location = formData.cityValue[0] + '-' + formData.cityValue[1] + '-' + formData.cityValue[2] + '-' + formData.cityValue[3];
 
-  formData.Group = formData.resumeValue[0] + '-' + formData.resumeValue[1];
+  if(formData.resumeValue) {
+    formData.group = formData.resumeValue[0] + '-' + formData.resumeValue[1];
+  }
+  
+  formData.graduateYear = parseInt(formData.graduateYear);
+  formData.graduateMonth = parseInt(formData.graduateMonth);
+  const characterResultItemsLocal: string[] = ["INTJ-A INTJ-T", "INTP-A INTP-T", "ENTJ-A ENTJ-T", "ENTP-A ENTP-T", "INFJ-A INFJ-T", "INFP-A INFP-T", "ENFJ-A ENFJ-T", "ENFP-A ENFP-T", "ISTJ-A ISTJ-T", "ISFJ-A ISFJ-T", "ESTJ-A ESTJ-T", "ESFJ-A ESFJ-T", "ISTP-A ISTP-T", "ISFP-A ISFP-T", "ESTP-A ESTP-T", "ESFP-A ESFP-T"];
+  formData.characterResult = characterResultItemsLocal.find(e => e == formData.characterResult);
 
   let i = 0;
   formData.shares = [];
 
-  if (formData.shareValue.length != 0) {
+  if (formData.shareValue) {
     for (i; i < formData.shareValue.length; i ++ ) {
       formData.shares[i] = formData.shareValue[i][0] + '-' + formData.shareValue[i][1];
     }
@@ -87,7 +102,7 @@ export function transformBeforeUpdate(formData: any) {
 
   let j = 0;
   formData.gains = [];
-  if (formData.gainValue.length != 0) {
+  if (formData.gainValue) {
     for (j; j < formData.gainValue.length; j ++ ) {
       formData.gains[j] = formData.gainValue[j][0] + '-' + formData.gainValue[j][1];
     }

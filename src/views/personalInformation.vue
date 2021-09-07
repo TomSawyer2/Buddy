@@ -59,7 +59,7 @@
 
       <DatePicker :label="label.birthdayLabel" @save="saveBirthday" :date="formData.birthday" />
 
-      <MonthPicker :label="label.graduateLabel" :date="formData.graduateYear"  @save="saveGraduateYear"/>
+      <MonthPicker :label="label.graduateLabel" :dateYear="formData.graduateYear" :dateMonth="formData.graduateMonth" @save="saveGraduateYear"/>
 
       <el-cascader
         v-model="formData.cityValue"
@@ -444,7 +444,7 @@ export default {
         character: "",
 
         location: "",
-        Group: "",
+        group: "",
         cityValue: [],
         sex: "",
         number: "",
@@ -456,7 +456,8 @@ export default {
         isGraduated: false,
         substation: "",
         weChatPic: "",
-        graduateYear: {},
+        graduateYear: 0,
+        graduateMonth: 0,
         managementExperience: [],
         shareValue: [],
         shares: [],
@@ -822,22 +823,24 @@ export default {
     },
     handleGainChange(value) {
       let i = 0;
-      for (i; i < value.length; i ++) {
-        if (value[i][0] == "添加方向") {
-          (this as any).formData.gainValue.pop();
-          (this as any).isShowGain = false;
-          setTimeout(() => {
-            (this as any).isShowGain = true;
-          }, 100);
-          (this as any).addGainDialog = true;
-        } else if (value[i][1] == "添加方向") {
-          (this as any).newGainAspectParam.gainDirection = value[i][0];
-          (this as any).formData.gainValue.pop();
-          (this as any).isShowGain = false;
-          setTimeout(() => {
-            (this as any).isShowGain = true;
-          }, 100);
-          (this as any).addGainAspectDialog = true;
+      if(value) {
+        for (i; i < value.length; i ++) {
+          if (value[i][0] == "添加方向") {
+            (this as any).formData.gainValue.pop();
+            (this as any).isShowGain = false;
+            setTimeout(() => {
+              (this as any).isShowGain = true;
+            }, 100);
+            (this as any).addGainDialog = true;
+          } else if (value[i][1] == "添加方向") {
+            (this as any).newGainAspectParam.gainDirection = value[i][0];
+            (this as any).formData.gainValue.pop();
+            (this as any).isShowGain = false;
+            setTimeout(() => {
+              (this as any).isShowGain = true;
+            }, 100);
+            (this as any).addGainAspectDialog = true;
+          }
         }
       }
     },
@@ -851,9 +854,9 @@ export default {
       (this as any).formData.birthday = val;
     },
     saveGraduateYear(val) {
-      (this as any).formData.graduateYear.year = val.slice(0, 4);
-      (this as any).formData.graduateYear.month = val.slice(5, 7);
-      console.log("目前的毕业年月:" + (this as any).formData.graduateYear);
+      console.log(val);
+      (this as any).formData.graduateYear= val.slice(0, 4);
+      (this as any).formData.graduateMonth = val.slice(5, 7);
     },
     async validate() {
       (this as any).$refs.form.validate();

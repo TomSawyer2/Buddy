@@ -3,7 +3,7 @@
         ref="menu"
         v-model="menu"
         :close-on-content-click="false"
-        :return-value.sync="dateLocal"
+        :return-value.sync="date"
         transition="scale-transition"
         offset-y
         max-width="290px"
@@ -11,7 +11,7 @@
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
-            v-model="dateLocal"
+            v-model="date"
             :label="label"
             prepend-icon="mdi-calendar"
             readonly
@@ -20,7 +20,7 @@
           ></v-text-field>
         </template>
         <v-date-picker
-          v-model="dateLocal"
+          v-model="date"
           type="month"
           no-title
           scrollable
@@ -34,21 +34,44 @@
 import Vue from "vue";
 export default Vue.extend({
   name: "MonthPicker",
-  props: ["date", "label"],
+  props: ["dateYear", "dateMonth", "label"],
   data() {
     return {
         menu: false,
-        dateLocal: "",
+        date: new Date().toISOString().substr(0, 7),
+        modal: false,
     };
   },
   methods: {
-    save (dateLocal) {
-        (this as any).$emit("save", (this as any).dateLocal);
-        (this as any).menu = false;
+    save (date) {
+      (this as any).$refs.menu.save(date);
+      (this as any).$emit("save", (this as any).date);
+      (this as any).menu = false;
     },
   },
-  mounted() {
-    (this as any).dateLocal = (this as any).date.year + '-' + (this as any).date.month;
+  watch: {
+    dateYear(newVal, oldVal){
+      if (newVal == 0) {
+        (this as any).date = "";
+      } else {
+        (this as any).date = newVal + '-' + (this as any).dateMonth;
+      }
+    },
+    dateMonth(newVal, oldVal){
+      if (newVal == 0) {
+        (this as any).date = "";
+      } else {
+        (this as any).date = (this as any).dateYear + '-' + newVal;
+      }
+
+    },
+  },
+  created() {
+    if ((this as any).dateYear == 0 && (this as any).dateMonth == 0) {
+      (this as any).date = "";
+    } else {
+      (this as any).date = (this as any).dateYear + '-' + (this as any).dateMonth;
+    }
   }
 });
 </script>
