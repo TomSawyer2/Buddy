@@ -15,10 +15,9 @@ export function transformAfterGet(data: any) {
     data.isGraduated = "否";
   }
 
-  data.cityValue = [data.country, data.province, data.city, data.region];
-  data.resumeValue = [data.group, data.project];
+  data.cityValue = data.location.split('-');
+  data.resumeValue = data.Group.split('-');
 
-  
 
   if (data.birthday == "1900-01-01"|| data.birthday == "0001-01-01") {
     data.birthday = "";
@@ -73,40 +72,26 @@ export function transformBeforeUpdate(formData: any) {
     formData.substation = "";
   }
 
-  console.log(formData.cityValue);
-  formData.country = formData.cityValue[0];
-  formData.province = formData.cityValue[1];
-  formData.city = formData.cityValue[2];
-  formData.region = formData.cityValue[3];
+  formData.location = formData.cityValue[0] + '-' + formData.cityValue[1] + '-' + formData.cityValue[2] + '-' + formData.cityValue[3];
 
-  formData.group = formData.resumeValue[0];
-  formData.project = formData.resumeValue[1];
+  formData.Group = formData.resumeValue[0] + '-' + formData.resumeValue[1];
 
   let i = 0;
   formData.shares = [];
-  console.log("开始转换shareValue，原始： ");
-  console.log(formData.shareValue);
 
   if (formData.shareValue.length != 0) {
     for (i; i < formData.shareValue.length; i ++ ) {
       formData.shares[i] = formData.shareValue[i][0] + '-' + formData.shareValue[i][1];
     }
   } 
-  console.log("最终的shares:");
-  console.log(formData.shares);
 
   let j = 0;
   formData.gains = [];
-  console.log("开始转换gainValue，原始： ");
-  console.log(formData.gainValue);
   if (formData.gainValue.length != 0) {
     for (j; j < formData.gainValue.length; j ++ ) {
       formData.gains[j] = formData.gainValue[j][0] + '-' + formData.gainValue[j][1];
     }
   }
-
-  console.log("最终的gains:");
-  console.log(formData.gains);
 
   switch (formData.identity) {
     case "预备队员":

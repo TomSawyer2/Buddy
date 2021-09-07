@@ -57,20 +57,15 @@
         required
       ></v-select>
 
-      <DatePicker @save="save" :date="formData.birthday" class="pl-2" />
+      <DatePicker :label="label.birthdayLabel" @save="saveBirthday" :date="formData.birthday" />
 
-      <v-select
-        v-model="formData.graduateYear"
-        :items="items.graduateYearItems"
-        label="毕业年份"
-        required
-      ></v-select>
+      <MonthPicker :label="label.graduateLabel" :date="formData.graduateYear"  @save="saveGraduateYear"/>
 
       <el-cascader
         v-model="formData.cityValue"
         :options="cityData"
         @change="handleCityChange"
-        placeholder="请选择您所在的城市"
+        placeholder="请选择您目前工作所在的城市"
         style="position: relative; width: 100%"
         class="cityChoose mb-2"
         clearable
@@ -115,7 +110,7 @@
         v-model="formData.resumeValue"
         :options="resumeData"
         @change="handleResumeChange"
-        placeholder="请选择您的项目组履历(选择您工作时间最长或最有心得的一项）"
+        placeholder="请选择您的项目组履历"
         style="position: relative; width: 100%"
         class="cityChoose mb-2"
         clearable
@@ -125,8 +120,10 @@
       <v-select
         v-model="formData.managementExperience"
         :items="items.managementExperienceItem"
-        label="核心层职务(选择您任职时间最长或最有心得的一项）"
+        label="核心层职务"
         required
+        multiple
+        clearable
       ></v-select>
 
       <el-divider class="mt-15 mb-15"><i class="el-icon-suitcase-1"></i></el-divider>
@@ -247,7 +244,7 @@
         :options="gainData"
         :props="gainProp"
         @change="handleGainChange"
-        placeholder="请选择您想要有所收获的方向"
+        placeholder="请选择您想要学习的方向"
         style="position: relative; width: 100%"
         class="cityChoose mb-5"
         clearable
@@ -359,12 +356,24 @@
         required
       ></v-text-field>
       
-      <h5>性格自评（您认为自己的性格特征）</h5>
-      <SlidePicker
-        @sendCharacter="sendCharacter"
-        :character="formData.character"
-        :isDisabled="false"
-      />
+      <v-select
+        v-model="formData.character"
+        :items="items.characterItems"
+        label="性格特征"
+        required
+      ></v-select>
+
+      <div style="display: flex; flex-direction: row; align-items: center">
+        <p class="font-weight-light">若您对自己的性格特征没有比较清晰的把握，您可以点击按钮前往测评网站进行简短的自测并在下方选择自己的测试结果~</p>
+        <v-btn @click="pushToCharacterWeb">前往测评网站</v-btn>
+      </div>
+
+      <v-select
+        v-model="formData.characterResult"
+        :items="items.characterResultItems"
+        label="性格测试结果"
+        required
+      ></v-select>
 
       <div class="d-flex justify-center mb-6 mt-6">
         <v-btn
@@ -410,13 +419,13 @@ import {
 } from "../utils/storage";
 import { transformAfterGet, transformBeforeUpdate, arrayToObject, arrayToObjectDeWeight, deWeightArray } from "@/utils/transform";
 import DatePicker from "@/components/DatePicker/DatePicker.vue";
-import SlidePicker from "@/components/SlidePicker/SlidePicker.vue";
 import Combobox from "@/components/Combobox/Combobox.vue"
 import Cities from "@/utils/city";
 import Resumes from "@/utils/resume";
+import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
 export default {
-  components: { DatePicker, SlidePicker, Combobox },
+  components: { DatePicker, Combobox, MonthPicker },
   data () {
     let that = (this as any);
     return {
@@ -434,11 +443,8 @@ export default {
         birthday: "",
         character: "",
 
-        country: "",
-        city: "",
-        province: "",
-        region: "",
-
+        location: "",
+        Group: "",
         cityValue: [],
         sex: "",
         number: "",
@@ -450,14 +456,13 @@ export default {
         isGraduated: false,
         substation: "",
         weChatPic: "",
-        graduateYear: 2020,
-        managementExperience: "",
+        graduateYear: {},
+        managementExperience: [],
         shareValue: [],
         shares: [],
         gainValue: [],
         gains: [],
-        group: "",
-        project: "",
+        characterResult: "",
       },
 
       rules: {
@@ -495,8 +500,9 @@ export default {
         ],
         fieldItems: [],
         majorItems: [],
-        graduateYearItems: [],
         managementExperienceItem: [],
+        characterItems: ["稳重踏实", "外向开朗", "善解人意", "和蔼可亲", "尚不清楚"],
+        characterResultItems: ["INTJ-A INTJ-T", "INTP-A INTP-T", "ENTJ-A ENTJ-T", "ENTP-A ENTP-T", "INFJ-A INFJ-T", "INFP-A INFP-T", "ENFJ-A ENFJ-T", "ENFP-A ENFP-T", "ISTJ-A ISTJ-T", "ISFJ-A ISFJ-T", "ESTJ-A ESTJ-T", "ESFJ-A ESFJ-T", "ISTP-A ISTP-T", "ISFP-A ISFP-T", "ESTP-A ESTP-T", "ESFP-A ESFP-T"],
       },
       cityData: [],
       resumeData: [],
@@ -537,13 +543,15 @@ export default {
         gainDirection: "",
       },
       hint: {
-        majorHint: "最多添加十个专业方向（若没有对应选项可以直接输入）",
-        fieldHint: "最多添加十个标签（若没有对应选项可以直接输入）",
+        majorHint: "添加熟悉的专业方向（若没有对应选项可以直接输入）",
+        fieldHint: "添加技术栈标签（若没有对应选项可以直接输入）",
       },
       label: {
-        majorLabel: "专业方向",
+        majorLabel: "熟悉的专业方向",
         fieldLabel: "技术栈方向",
         weChatPicLabel: "上传微信二维码",
+        graduateLabel: "毕业年-月",
+        birthdayLabel: "出生年-月-日",
       },
       shareDisabled: false,
       keyForShare: 0,
@@ -592,7 +600,6 @@ export default {
     await (this as any).getShareAllDirectionsFunc();
     await (this as any).getGainAllDirectionsFunc();
     await (this as any).getAllMajors();
-    await (this as any).fillInYears();
     let i = 0;
     for (i; i <= (this as any).uniqueDirections.length; i ++ ) {
       await getShareAllAspects({"shareDirection": (this as any).uniqueDirections[i]})
@@ -840,19 +847,13 @@ export default {
     handleResumeChange(value) {
       console.log(value);
     },
-    fillInYears() {
-      // 用于动态填充年份
-      var date = new Date();
-      var i = date.getFullYear();
-      for (i; i >= 1950; i--) {
-        (this as any).items.graduateYearItems.push(i);
-      }
-    },
-    sendCharacter(val) {
-      (this as any).formData.character = val;
-    },
-    save(val) {
+    saveBirthday(val) {
       (this as any).formData.birthday = val;
+    },
+    saveGraduateYear(val) {
+      (this as any).formData.graduateYear.year = val.slice(0, 4);
+      (this as any).formData.graduateYear.month = val.slice(5, 7);
+      console.log("目前的毕业年月:" + (this as any).formData.graduateYear);
     },
     async validate() {
       (this as any).$refs.form.validate();
@@ -991,16 +992,14 @@ export default {
         (this as any).$message.error("请先上传二维码~");
       }
     },
+    pushToCharacterWeb() {
+      window.open("https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95", "_blank");
+    },
     addResumeFunc (newVal: any) {
       (this as any).formData.resumeValue = [];
     },
   },
   watch: {
-    model(val: any) {
-      if (val.length > 10) {
-        (this as any).$nextTick(() => (this as any).model.pop());
-      }
-    },
     'formData.weChatPic'(newVal, oldVal) {
       if (newVal != "") {
         (this as any).label.weChatPicLabel = "微信二维码已上传~";

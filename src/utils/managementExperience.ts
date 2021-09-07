@@ -4,6 +4,7 @@
 const managementExperienceItem = [
     "无",
     "队长",
+    "副队长",
     "技术部部长",
     "行政部部长",
     "外联部部长",
