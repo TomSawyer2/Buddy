@@ -20,7 +20,7 @@ export function transformAfterGet(data: any) {
 
   
 
-  if (data.birthday == "0001-01-01") {
+  if (data.birthday == "1900-01-01"|| data.birthday == "0001-01-01") {
     data.birthday = "";
   }
 

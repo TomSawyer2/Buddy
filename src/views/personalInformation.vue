@@ -32,7 +32,7 @@
           v-model="updateQRCodeFile.file"
           @change="updateQRCode()"
         ></v-file-input>
-        <v-btn @click="pushToWeChatPic" small class="mt-3">查看二维码</v-btn>
+        <v-btn @click="pushToWeChatPic" small class="mt-3" v-if="label.weChatPicLabel == '微信二维码已上传~'">查看二维码</v-btn>
       </div>
 
       <v-text-field
@@ -115,7 +115,7 @@
         v-model="formData.resumeValue"
         :options="resumeData"
         @change="handleResumeChange"
-        placeholder="请选择您的项目组履历"
+        placeholder="请选择您的项目组履历(选择您工作时间最长或最有心得的一项）"
         style="position: relative; width: 100%"
         class="cityChoose mb-2"
         clearable
@@ -679,7 +679,7 @@ export default {
         getShareAllAspects(getShareAllAspectsParams)
           .then((res : any) => {
             prevNodes = res.data.data.shareAspects;
-            if (prevNodes.length > 0) {
+            if (prevNodes) {
               prevNodes.push("添加方向");
             } else {
               prevNodes = ["添加方向"];
@@ -698,7 +698,7 @@ export default {
       await getShareAllDirections()
         .then((res : any) => {
           var directions = res.data.data.shareDirections;
-          if (directions.length != 0) {
+          if (directions != null) {
             directions.push("添加方向");
           } else {
             directions = ["添加方向"];

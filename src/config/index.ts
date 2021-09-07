@@ -3,7 +3,7 @@ export const CONTENT_TYPE = "application/json";
 
 let baseURL= "";
 if (process.env.NODE_ENV === 'development') {
-  baseURL = "http://39.101.183.162:18082";
+  baseURL = "http://39.101.183.162:18081/api";
   // dev
 } else {
   baseURL = "https://celebration.dian.org.cn/api";

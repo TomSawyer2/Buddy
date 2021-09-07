@@ -54,7 +54,7 @@ export async function updatePersonalInformation(
 export async function postAvatar(
   params: FormData
 ): Promise<Record<string, unknown>> {
-  return await axios.post("http://175.24.30.102:4000/api/postAvatar", params, {
+  return await axios.post("//175.24.30.102:4000/api/postAvatar", params, {
     headers: { "content-type": "multipart/form-data" },
   });
 }
@@ -62,7 +62,7 @@ export async function postAvatar(
 export async function postQRCode(
   params: FormData
 ): Promise<Record<string, unknown>> {
-  return await axios.post("http://175.24.30.102:4000/api/postQRCode", params, {
+  return await axios.post("//175.24.30.102:4000/api/postQRCode", params, {
     headers: { "content-type": "multipart/form-data" },
   });
 }
