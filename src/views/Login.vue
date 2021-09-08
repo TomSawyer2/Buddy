@@ -136,7 +136,17 @@ export default {
     // 自动调节组件高度
     (this as any).pageHeight = document.documentElement.clientHeight;
   },
+  created() {
+    (this as any).keyupSubmit();
+  },
   methods: {
+    keyupSubmit(){
+      document.onkeydown= e => {
+        if(e.keyCode == 13){
+          (this as any).login();
+        }
+      }
+    },
     async login() {
       (this as any).$refs.form.validate();
 
