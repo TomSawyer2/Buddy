@@ -99,12 +99,65 @@
         required
       ></v-select>
 
-      <v-text-field
-        v-model="formData.number"
-        :rules="rules.numberRules"
-        label="队员编号（格式：D800,若没有则填无）"
-        required
-      ></v-text-field>
+      <div style="display: flex; flex-direction: row; align-items: center">
+        <v-text-field
+          v-model="formData.number"
+          :rules="rules.numberRules"
+          label="队员编号（格式：D800,若没有则填无，若遗忘可通过右侧查询按钮进行搜索）"
+          required
+          class="mr-2"
+          clearable
+        ></v-text-field>
+        <v-btn class="mb-2" @click="queryNumberDialog = true">查询</v-btn>
+      </div>
+
+      <v-dialog
+        v-model="queryNumberDialog"
+        persistent
+        max-width="600px"
+        style="z-index: 1001"
+      >
+        <v-card>
+          <v-card-title>
+            <span class="text-h5 mt-4 ml-2">查询队员编号</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container class="mt-5">
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    label="请填写您的姓名"
+                    clearable
+                    :value="queryName"
+                    v-model="queryName"
+                  >
+                  </v-text-field>
+                 </v-col>
+              </v-row>
+              <Table @changeNumber="changeNumber" v-if="queryNumberSuccess" :queryData="queryTableData"/>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="queryNumberDialog = false"
+              class="mb-6"
+            >
+              关闭
+            </v-btn>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="queryNumberFunc"
+              class="mb-6 mr-5"
+            >
+              查询
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
       <el-cascader
         v-model="formData.resumeValue"
@@ -238,13 +291,14 @@
         </v-card>
       </v-dialog>
 
+      <p class="font-weight-light mt-4" style="font-size: 15px; margin-bottom: 0px">请选择您想要学习的方向</P>
       <el-cascader
         v-model="formData.gainValue"
         v-if="isShowGain"
         :options="gainData"
         :props="gainProp"
         @change="handleGainChange"
-        placeholder="请选择您想要学习的方向"
+        placeholder="暂无"
         style="position: relative; width: 100%"
         class="cityChoose mb-5"
         clearable
@@ -407,6 +461,7 @@ import {
   getGainAllAspects,
   addGainDirection,
   addGainAspect,
+  queryNumber,
 } from "../apis";
 import {
   setToken,
@@ -422,10 +477,11 @@ import DatePicker from "@/components/DatePicker/DatePicker.vue";
 import Combobox from "@/components/Combobox/Combobox.vue"
 import Cities from "@/utils/city";
 import Resumes from "@/utils/resume";
+import Table from "@/components/Table/Table.vue";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
 export default {
-  components: { DatePicker, Combobox, MonthPicker },
+  components: { DatePicker, Combobox, MonthPicker, Table },
   data () {
     let that = (this as any);
     return {
@@ -530,6 +586,7 @@ export default {
       isShowShare: true,
       addDialog: false,
       addAspectDialog: false,
+      queryNumberDialog: false,
       newShareDirection: "",
       newShareAspectParam: {
         shareAspect: "",
@@ -557,6 +614,8 @@ export default {
       shareDisabled: false,
       keyForShare: 0,
       keyForGain: 100000,
+      queryName: "",
+      queryNumberSuccess: false,
     }
   },
   async mounted() {
@@ -648,6 +707,32 @@ export default {
     }, 100);
   },
   methods: {
+    changeNumber(val) {
+      (this as any).queryNumberDialog = false;
+      // (this as any).queryNumberSuccess = false;
+      (this as any).formData.number = val;
+    },
+    async queryNumberFunc() {
+      if ((this as any).queryName) {
+        await queryNumber({userName: (this as any).queryName})
+          .then((res: any) => {
+            (this as any).queryTableData = res.data.data;
+            (this as any).$message.success("查询成功！");
+            (this as any).queryNumberSuccess = true;
+            (this as any).queryNumberDialog = false;
+            setTimeout(() => {
+              (this as any).queryNumberDialog = true;
+            }, 100);
+          })
+          .catch((err: any) => {
+            console.log(err);
+            (this as any).queryNumberDialog = false;
+            (this as any).$message.error("查询时发生了一些错误，请重试~");
+          })
+      } else {
+        (this as any).$message.error("请输入查询的内容");
+      }
+    },
     childrenMajorItems(val) {
       (this as any).formData.majors = val;
     },
@@ -848,13 +933,14 @@ export default {
       console.log(value);
     },
     handleResumeChange(value) {
-      console.log(value);
+      if(value) {
+        console.log(value);
+      }
     },
     saveBirthday(val) {
       (this as any).formData.birthday = val;
     },
     saveGraduateYear(val) {
-      console.log(val);
       (this as any).formData.graduateYear= val.slice(0, 4);
       (this as any).formData.graduateMonth = val.slice(5, 7);
     },
@@ -883,10 +969,10 @@ export default {
           file.append("pic", (this as any).updateFile.file); //通过append向form对象添加数据
           await postAvatar(file)
             .then((res: any) => {
-              if (res.data.status == "ok") {
-                (this as any).formData.avatar = res.data.link;
-                (this as any).$store.state.avatarSrc = res.data.link;
-                setAvatarSrc(res.data.link);
+              if (res.data.status == 0) {
+                (this as any).formData.avatar = res.data.data.filePath;
+                (this as any).$store.state.avatarSrc = res.data.data.filePath;
+                setAvatarSrc(res.data.data.filePath);
               }
             })
             .catch((err: any) => {
@@ -926,7 +1012,7 @@ export default {
       const _arr = _arr1.concat(_arr2);
       var newFields = _arr1;
 
-      if (newFields.length >= 1) {
+      if (newFields.length >= 1 && newFields[0] != "") {
         newFields.forEach((val: any, idx, array) => {
           var field: any = '{"field": ' + '"' + val + '"' + "}";
           addFields(field)
@@ -961,7 +1047,7 @@ export default {
       const _arr = _arr1.concat(_arr2);
       var newMajors = _arr1;
 
-      if (newMajors.length >= 1) {
+      if (newMajors.length >= 1 && newMajors[0] != "") {
         newMajors.forEach((val: any, idx, array) => {
           var major: any = '{"major": ' + '"' + val + '"' + "}";
           addMajors(major)

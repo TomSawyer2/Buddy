@@ -85,3 +85,7 @@ export interface addGainAspectInfo {
   gainDirection: string;
   gainAspect: string;
 }
+
+export interface queryNumberInfo {
+  userName: string;
+}

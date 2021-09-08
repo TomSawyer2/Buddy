@@ -3,7 +3,8 @@ export const CONTENT_TYPE = "application/json";
 
 let baseURL= "";
 if (process.env.NODE_ENV === 'development') {
-  baseURL = "http://39.101.183.162:18081/api";
+  // baseURL = "http://39.101.183.162:18081/api";
+  baseURL = "https://celebration.dian.org.cn/api";
   // dev
 } else {
   baseURL = "https://celebration.dian.org.cn/api";
@@ -39,7 +40,8 @@ const URL = {
   postLoginByCaptcha: "/login/validation/passInfo",
   getRegisterCaptcha: "/register/getValidationCode",
   postRegsiter: "/register/passInfo",
-
+  postAvatar: "https://celebration.dian.org.cn/api/static/avatar",
+  queryNumber: "/number/search",
   // buddy-related
   getAllUsersByPage: "/index/students",
   getAllOldUsersByPage: "/index/teachers",

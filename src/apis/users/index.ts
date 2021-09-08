@@ -19,6 +19,7 @@ import {
   getGainAllAspectsInfo,
   addGainDirectionInfo,
   addGainAspectInfo,
+  queryNumberInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -54,7 +55,7 @@ export async function updatePersonalInformation(
 export async function postAvatar(
   params: FormData
 ): Promise<Record<string, unknown>> {
-  return await axios.post("//175.24.30.102:4000/api/postAvatar", params, {
+  return await axios.post(URL.postAvatar, params, {
     headers: { "content-type": "multipart/form-data" },
   });
 }
@@ -170,4 +171,10 @@ export function addGainAspect(
   params: addGainAspectInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.addGainAspect, params);
+}
+
+export function queryNumber(
+  params: queryNumberInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.queryNumber, params);
 }

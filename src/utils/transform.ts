@@ -38,9 +38,10 @@ export function transformAfterGet(data: any) {
   if (data.character == -1) {
     data.character = 2;
   }
+  const characterItems: string[] = ["稳重踏实", "外向开朗", "善解人意", "和蔼可亲", "尚不清楚"];
+  data.character = characterItems[data.character];
 
   const characterResultItemsLocal: string[] = ["INTJ-A INTJ-T", "INTP-A INTP-T", "ENTJ-A ENTJ-T", "ENTP-A ENTP-T", "INFJ-A INFJ-T", "INFP-A INFP-T", "ENFJ-A ENFJ-T", "ENFP-A ENFP-T", "ISTJ-A ISTJ-T", "ISFJ-A ISFJ-T", "ESTJ-A ESTJ-T", "ESFJ-A ESFJ-T", "ISTP-A ISTP-T", "ISFP-A ISFP-T", "ESTP-A ESTP-T", "ESFP-A ESFP-T"];
-  
   data.characterResult = characterResultItemsLocal[data.characterResult];
 
   switch (data.identity) {
@@ -72,7 +73,6 @@ export function transformAfterGet(data: any) {
 }
 
 export function transformBeforeUpdate(formData: any) {
-  console.log(formData);
   if (formData.isGraduated && formData.isGraduated== "是") {
     formData.isGraduated = true;
   } else if (formData.isGraduated && formData.isGraduated == "否"){
@@ -88,8 +88,12 @@ export function transformBeforeUpdate(formData: any) {
   
   formData.graduateYear = parseInt(formData.graduateYear);
   formData.graduateMonth = parseInt(formData.graduateMonth);
+
   const characterResultItemsLocal: string[] = ["INTJ-A INTJ-T", "INTP-A INTP-T", "ENTJ-A ENTJ-T", "ENTP-A ENTP-T", "INFJ-A INFJ-T", "INFP-A INFP-T", "ENFJ-A ENFJ-T", "ENFP-A ENFP-T", "ISTJ-A ISTJ-T", "ISFJ-A ISFJ-T", "ESTJ-A ESTJ-T", "ESFJ-A ESFJ-T", "ISTP-A ISTP-T", "ISFP-A ISFP-T", "ESTP-A ESTP-T", "ESFP-A ESFP-T"];
-  formData.characterResult = characterResultItemsLocal.find(e => e == formData.characterResult);
+  formData.characterResult = characterResultItemsLocal.indexOf(formData.characterResult);
+
+  const characterItems: string[] = ["稳重踏实", "外向开朗", "善解人意", "和蔼可亲", "尚不清楚"];
+  formData.character = characterItems.indexOf(formData.character);
 
   let i = 0;
   formData.shares = [];
