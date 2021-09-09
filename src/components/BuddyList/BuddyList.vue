@@ -2,7 +2,9 @@
   <v-card
     min-height="180"
     style="margin-top: 15px"
-    v-if="(isAllShow ? true : item.identity === 1) && (item.phoneNumber !== phone)"
+    v-if="
+      (isAllShow ? true : item.identity === 1) && item.phoneNumber !== phone
+    "
   >
     <v-card style="box-shadow: none" @click="onToDetail(item.id)">
       <div class="info-container">
@@ -61,12 +63,7 @@
     </v-card>
 
     <div class="btn-container">
-      <v-btn
-        depressed
-        small
-        style="width: 125px"
-        @click="onAdd(item.id)"
-      >
+      <v-btn depressed small style="width: 125px" @click="onAdd(item.id)">
         添加为Buddy
         <v-icon color="orange darken-4" right> mdi-plus </v-icon>
       </v-btn>

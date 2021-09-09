@@ -32,7 +32,13 @@
           v-model="updateQRCodeFile.file"
           @change="updateQRCode()"
         ></v-file-input>
-        <v-btn @click="pushToWeChatPic" small class="mt-3" v-if="label.weChatPicLabel == '微信二维码已上传~'">查看二维码</v-btn>
+        <v-btn
+          @click="pushToWeChatPic"
+          small
+          class="mt-3"
+          v-if="label.weChatPicLabel == '微信二维码已上传~'"
+          >查看二维码</v-btn
+        >
       </div>
 
       <v-text-field
@@ -57,22 +63,32 @@
         required
       ></v-select>
 
-      <DatePicker :label="label.birthdayLabel" @save="saveBirthday" :date="formData.birthday" />
+      <DatePicker
+        :label="label.birthdayLabel"
+        @save="saveBirthday"
+        :date="formData.birthday"
+      />
 
-      <MonthPicker :label="label.graduateLabel" :dateYear="formData.graduateYear" :dateMonth="formData.graduateMonth" @save="saveGraduateYear"/>
+      <MonthPicker
+        :label="label.graduateLabel"
+        :dateYear="formData.graduateYear"
+        :dateMonth="formData.graduateMonth"
+        @save="saveGraduateYear"
+      />
 
       <el-cascader
         v-model="formData.cityValue"
         :options="cityData"
-        @change="handleCityChange"
         placeholder="请选择您目前工作所在的城市"
         style="position: relative; width: 100%"
         class="cityChoose mb-2"
         clearable
         filterable
       ></el-cascader>
-      
-      <el-divider class="mt-15 mb-15"><i class="el-icon-office-building"></i></el-divider>
+
+      <el-divider class="mt-15 mb-15"
+        ><i class="el-icon-office-building"></i
+      ></el-divider>
 
       <v-select
         v-model="formData.isGraduated"
@@ -81,7 +97,7 @@
         label="是否出站"
         required
       ></v-select>
-      
+
       <v-select
         v-model="formData.identity"
         :items="items.identityItems"
@@ -132,9 +148,13 @@
                     v-model="queryName"
                   >
                   </v-text-field>
-                 </v-col>
+                </v-col>
               </v-row>
-              <Table @changeNumber="changeNumber" v-if="queryNumberSuccess" :queryData="queryTableData"/>
+              <Table
+                @changeNumber="changeNumber"
+                v-if="queryNumberSuccess"
+                :queryData="queryTableData"
+              />
             </v-container>
           </v-card-text>
           <v-card-actions>
@@ -159,19 +179,29 @@
         </v-card>
       </v-dialog>
 
-      <el-cascader
-        v-model="formData.resumeValue"
-        :options="resumeData"
-        @change="handleResumeChange"
-        placeholder="请选择您的项目组履历"
+      <v-combobox
+        v-model="formData.teamValue"
+        :items="items.teams"
+        label="请选择您曾经所在的项目组"
+        multiple
         style="position: relative; width: 100%"
         class="cityChoose mb-2"
         clearable
-        filterable
+      ></v-combobox>
+
+      <el-cascader
+        v-model="formData.resumeValue"
+        :options="resumeData"
+        placeholder="请选择您曾经参与的项目以及身份"
+        style="position: relative; width: 100%"
+        class="cityChoose mb-2"
+        clearable
+        :props="resumeProp"
+        v-if="isShowResume"
       ></el-cascader>
 
       <v-select
-        v-model="formData.managementExperience"
+        v-model="formData.managementExperienceValue"
         :items="items.managementExperienceItem"
         label="核心层职务"
         required
@@ -179,10 +209,26 @@
         clearable
       ></v-select>
 
-      <el-divider class="mt-15 mb-15"><i class="el-icon-suitcase-1"></i></el-divider>
+      <el-divider class="mt-15 mb-15"
+        ><i class="el-icon-suitcase-1"></i
+      ></el-divider>
 
-      <Combobox class="mb-5" :items="items.majorItems" :label="label.majorLabel" :hint="hint.majorHint" :model="formData.majors" @childrenItems="childrenMajorItems"/>
+      <Combobox
+        class="mb-5"
+        :items="items.majorItems"
+        :label="label.majorLabel"
+        :hint="hint.majorHint"
+        :model="formData.majorsValue"
+        @childrenItems="childrenMajorItems"
+      />
 
+      <p
+        class="font-weight-light mt-4"
+        style="font-size: 15px; margin-bottom: 0px"
+        v-if="formData.isGraduated == '是' && isShowShare"
+      >
+        请选择您乐于分享的方向
+      </p>
       <el-cascader
         v-model="formData.shareValue"
         v-if="formData.isGraduated == '是' && isShowShare"
@@ -190,7 +236,7 @@
         :disabled="shareDisabled"
         :props="shareProp"
         @change="handleShareChange"
-        placeholder="请选择您乐于分享的方向"
+        placeholder=""
         style="position: relative; width: 100%"
         class="cityChoose mb-5"
         clearable
@@ -218,7 +264,7 @@
                     v-model="newShareDirection"
                   >
                   </v-text-field>
-                 </v-col>
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -265,7 +311,7 @@
                     v-model="newShareAspectParam.shareAspect"
                   >
                   </v-text-field>
-                 </v-col>
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -291,7 +337,12 @@
         </v-card>
       </v-dialog>
 
-      <p class="font-weight-light mt-4" style="font-size: 15px; margin-bottom: 0px">请选择您想要学习的方向</P>
+      <p
+        class="font-weight-light mt-4"
+        style="font-size: 15px; margin-bottom: 0px"
+      >
+        请选择您想要学习的方向
+      </p>
       <el-cascader
         v-model="formData.gainValue"
         v-if="isShowGain"
@@ -326,7 +377,7 @@
                     v-model="newGainDirection"
                   >
                   </v-text-field>
-                 </v-col>
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -373,7 +424,7 @@
                     v-model="newGainAspectParam.gainAspect"
                   >
                   </v-text-field>
-                 </v-col>
+                </v-col>
               </v-row>
             </v-container>
           </v-card-text>
@@ -399,17 +450,33 @@
         </v-card>
       </v-dialog>
 
-      <Combobox :items="items.fieldItems" :hint="hint.fieldHint" :label="label.fieldLabel" :model="formData.fields" @childrenItems="childrenFieldItems"/>
+      <Combobox
+        :items="items.fieldItems"
+        :hint="hint.fieldHint"
+        :label="label.fieldLabel"
+        :model="formData.fieldsValue"
+        @childrenItems="childrenFieldItems"
+      />
 
-      <el-divider class="mt-15 mb-15"><i class="el-icon-connection"></i></el-divider>
-      
+      <el-divider class="mt-15 mb-15"
+        ><i class="el-icon-connection"></i
+      ></el-divider>
+
       <v-text-field
         v-model="formData.highSchool"
         :rules="rules.highSchoolRules"
         label="毕业高中"
         required
       ></v-text-field>
-      
+
+      <Combobox
+        :items="items.bookItems"
+        :hint="hint.bookHint"
+        :label="label.bookLabel"
+        :model="formData.booksValue"
+        @childrenItems="childrenBookItems"
+      />
+
       <v-select
         v-model="formData.character"
         :items="items.characterItems"
@@ -418,7 +485,9 @@
       ></v-select>
 
       <div style="display: flex; flex-direction: row; align-items: center">
-        <p class="font-weight-light">若您对自己的性格特征没有比较清晰的把握，您可以点击按钮前往测评网站进行简短的自测并在下方选择自己的测试结果~</p>
+        <p class="font-weight-light">
+          若您对自己的性格特征没有比较清晰的把握，您可以点击按钮前往测评网站进行简短的自测并在下方选择自己的测试结果~
+        </p>
         <v-btn @click="pushToCharacterWeb">前往测评网站</v-btn>
       </div>
 
@@ -453,6 +522,8 @@ import {
   addFields,
   getMajors,
   addMajors,
+  getBooks,
+  addBooks,
   getShareAllDirections,
   getShareAllAspects,
   addShareDirection,
@@ -472,18 +543,25 @@ import {
   getUserName,
   setAvatarSrc,
 } from "../utils/storage";
-import { transformAfterGet, transformBeforeUpdate, arrayToObject, arrayToObjectDeWeight, deWeightArray } from "@/utils/transform";
+import {
+  transformAfterGet,
+  transformBeforeUpdate,
+  arrayToObject,
+  arrayToObjectDeWeight,
+  deWeightArray,
+} from "@/utils/transform";
 import DatePicker from "@/components/DatePicker/DatePicker.vue";
-import Combobox from "@/components/Combobox/Combobox.vue"
+import Combobox from "@/components/Combobox/Combobox.vue";
 import Cities from "@/utils/city";
 import Resumes from "@/utils/resume";
+import Groups from "@/utils/group";
 import Table from "@/components/Table/Table.vue";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
 export default {
   components: { DatePicker, Combobox, MonthPicker, Table },
-  data () {
-    let that = (this as any);
+  data() {
+    let that = this as any;
     return {
       valid: true,
       updateFile: {
@@ -494,19 +572,23 @@ export default {
       },
       formData: {
         avatar: "",
+        books: "",
+        booksValue: [],
         email: "",
         phoneNumber: "",
         birthday: "",
         character: "",
-
+        projects: "",
         location: "",
         group: "",
         cityValue: [],
         sex: "",
         number: "",
         highSchool: "",
-        fields: [],
-        majors: [],
+        fields: "",
+        fieldsValue: [],
+        majors: "",
+        majorsValue: [],
         resumeValue: [],
         identity: "",
         isGraduated: false,
@@ -514,12 +596,14 @@ export default {
         weChatPic: "",
         graduateYear: 0,
         graduateMonth: 0,
-        managementExperience: [],
+        managementExperience: "",
+        managementExperienceValue: [],
         shareValue: [],
-        shares: [],
+        shares: "",
         gainValue: [],
-        gains: [],
+        gains: "",
         characterResult: "",
+        teamValue: [],
       },
 
       rules: {
@@ -557,9 +641,34 @@ export default {
         ],
         fieldItems: [],
         majorItems: [],
+        teams: [],
         managementExperienceItem: [],
-        characterItems: ["稳重踏实", "外向开朗", "善解人意", "和蔼可亲", "尚不清楚"],
-        characterResultItems: ["INTJ-A INTJ-T", "INTP-A INTP-T", "ENTJ-A ENTJ-T", "ENTP-A ENTP-T", "INFJ-A INFJ-T", "INFP-A INFP-T", "ENFJ-A ENFJ-T", "ENFP-A ENFP-T", "ISTJ-A ISTJ-T", "ISFJ-A ISFJ-T", "ESTJ-A ESTJ-T", "ESFJ-A ESFJ-T", "ISTP-A ISTP-T", "ISFP-A ISFP-T", "ESTP-A ESTP-T", "ESFP-A ESFP-T"],
+        characterItems: [
+          "稳重踏实",
+          "外向开朗",
+          "善解人意",
+          "和蔼可亲",
+          "尚不清楚",
+        ],
+        characterResultItems: [
+          "INTJ-A INTJ-T",
+          "INTP-A INTP-T",
+          "ENTJ-A ENTJ-T",
+          "ENTP-A ENTP-T",
+          "INFJ-A INFJ-T",
+          "INFP-A INFP-T",
+          "ENFJ-A ENFJ-T",
+          "ENFP-A ENFP-T",
+          "ISTJ-A ISTJ-T",
+          "ISFJ-A ISFJ-T",
+          "ESTJ-A ESTJ-T",
+          "ESFJ-A ESFJ-T",
+          "ISTP-A ISTP-T",
+          "ISFP-A ISFP-T",
+          "ESTP-A ESTP-T",
+          "ESFP-A ESFP-T",
+        ],
+        bookItems: [],
       },
       cityData: [],
       resumeData: [],
@@ -572,16 +681,19 @@ export default {
       shareProp: {
         multiple: true,
         lazy: true,
-        lazyLoad (node, resolve) {
+        lazyLoad(node, resolve) {
           that.lazyLoadShare(node, resolve);
-        }
+        },
       },
       gainProp: {
         multiple: true,
         lazy: true,
-        lazyLoad (node, resolve) {
+        lazyLoad(node, resolve) {
           that.lazyLoadGain(node, resolve);
         },
+      },
+      resumeProp: {
+        multiple: true,
       },
       isShowShare: true,
       addDialog: false,
@@ -603,6 +715,7 @@ export default {
       hint: {
         majorHint: "添加熟悉的专业方向（若没有对应选项可以直接输入）",
         fieldHint: "添加技术栈标签（若没有对应选项可以直接输入）",
+        bookHint: "添加您想推荐的书籍（若没有对应选项可以直接输入）",
       },
       label: {
         majorLabel: "熟悉的专业方向",
@@ -610,46 +723,63 @@ export default {
         weChatPicLabel: "上传微信二维码",
         graduateLabel: "毕业年-月",
         birthdayLabel: "出生年-月-日",
+        bookLabel: "推荐书籍",
       },
       shareDisabled: false,
       keyForShare: 0,
       keyForGain: 100000,
       queryName: "",
       queryNumberSuccess: false,
-    }
+      isShowResume: false,
+    };
   },
   async mounted() {
     (this as any).items.managementExperienceItem = managementExperienceItem;
+    (this as any).items.teams = Groups;
     (this as any).cityData = Cities;
     (this as any).resumeData = Resumes;
     (this as any).formData.phoneNumber = getPhone();
     await getPersonalInformation()
       .then((res: any) => {
         (this as any).formData = transformAfterGet(res.data.data);
-        if ((this as any).formData.shares.length > 0) {
+        (this as any).isShowResume = false;
+        setTimeout(() => {
+          (this as any).isShowResume = true;
+        }, 100);
+        if ((this as any).formData.shares != "") {
           let i = 1;
-          (this as any).formData.shareValue = [(this as any).formData.shares[0].split("-")];
-          for (i; i < (this as any).formData.shares.length ; i ++) {
-            (this as any).formData.shareValue.push((this as any).formData.shares[i].split("-"));
-          }
-          let idx = 0;          
-          for (idx; idx < (this as any).formData.shareValue.length; idx ++ ) {
-            (this as any).uniqueDirections.push((this as any).formData.shareValue[idx][0]);
-          }
-          
-          (this as any).uniqueDirections = deWeightArray((this as any).uniqueDirections);
-        }
-        if ((this as any).formData.gains.length > 0) {
-          let i = 1;
-          (this as any).formData.gainValue = [(this as any).formData.gains[0].split("-")];
-          for (i; i < (this as any).formData.gains.length ; i ++) {
-            (this as any).formData.gainValue.push((this as any).formData.gains[i].split("-"));
+          var shareValueTmp = (this as any).formData.shares.split(";");
+          (this as any).formData.shareValue = [shareValueTmp[0].split('-')];
+          for (i; i < shareValueTmp.length; i++) {
+            (this as any).formData.shareValue = [...(this as any).formData.shareValue, shareValueTmp[i].split("-")];
           }
           let idx = 0;
-          for (idx; idx < (this as any).formData.gainValue.length; idx ++ ) {
-            (this as any).uniqueDirectionsByGain.push((this as any).formData.gainValue[idx][0]);
+          for (idx; idx < (this as any).formData.shareValue.length; idx++) {
+            (this as any).uniqueDirections.push(
+              (this as any).formData.shareValue[idx][0]
+            );
           }
-          (this as any).uniqueDirectionsByGain = deWeightArray((this as any).uniqueDirectionsByGain);
+
+          (this as any).uniqueDirections = deWeightArray(
+            (this as any).uniqueDirections
+          );
+        }
+        if ((this as any).formData.gains != "") {
+          let i = 1;
+          var gainValueTmp = (this as any).formData.gains.split(";");
+          (this as any).formData.gainValue = [gainValueTmp[0].split('-')];
+          for (i; i < gainValueTmp.length; i++) {
+            (this as any).formData.gainValue = [...(this as any).formData.gainValue, gainValueTmp[i].split("-")];
+          }
+          let idx = 0;
+          for (idx; idx < (this as any).formData.gainValue.length; idx++) {
+            (this as any).uniqueDirectionsByGain.push(
+              (this as any).formData.gainValue[idx][0]
+            );
+          }
+          (this as any).uniqueDirectionsByGain = deWeightArray(
+            (this as any).uniqueDirectionsByGain
+          );
         }
       })
       .catch((err) => {
@@ -657,16 +787,22 @@ export default {
         (this as any).$message.error("获取个人信息失败，请重试~");
       });
     await (this as any).getAllFields();
+    await (this as any).getAllMajors();
+    await (this as any).getAllBooks();
     await (this as any).getShareAllDirectionsFunc();
     await (this as any).getGainAllDirectionsFunc();
-    await (this as any).getAllMajors();
     let i = 0;
-    for (i; i <= (this as any).uniqueDirections.length; i ++ ) {
-      await getShareAllAspects({"shareDirection": (this as any).uniqueDirections[i]})
-        .then((res : any) => {
+    for (i; i <= (this as any).uniqueDirections.length; i++) {
+      await getShareAllAspects({
+        shareDirection: (this as any).uniqueDirections[i],
+      })
+        .then((res: any) => {
           let idx = 0;
-          for(idx; idx < (this as any).shareData.length; idx ++) {
-            if ((this as any).shareData[idx].value == (this as any).uniqueDirections[i]) {
+          for (idx; idx < (this as any).shareData.length; idx++) {
+            if (
+              (this as any).shareData[idx].value ==
+              (this as any).uniqueDirections[i]
+            ) {
               var newObj = arrayToObject(res.data.data.shareAspects, true);
               if ((this as any).shareData[idx].children != newObj) {
                 (this as any).shareData[idx].children = newObj;
@@ -674,9 +810,9 @@ export default {
             }
           }
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           console.log(err);
-        })
+        });
     }
     (this as any).isShowShare = false;
     setTimeout(() => {
@@ -684,12 +820,17 @@ export default {
     }, 100);
 
     let j = 0;
-    for (j; j <= (this as any).uniqueDirectionsByGain.length; j ++ ) {
-      await getGainAllAspects({"gainDirection": (this as any).uniqueDirectionsByGain[j]})
-        .then((res : any) => {
+    for (j; j <= (this as any).uniqueDirectionsByGain.length; j++) {
+      await getGainAllAspects({
+        gainDirection: (this as any).uniqueDirectionsByGain[j],
+      })
+        .then((res: any) => {
           let idx = 0;
-          for(idx; idx < (this as any).gainData.length; idx ++) {
-            if ((this as any).gainData[idx].value == (this as any).uniqueDirectionsByGain[j]) {
+          for (idx; idx < (this as any).gainData.length; idx++) {
+            if (
+              (this as any).gainData[idx].value ==
+              (this as any).uniqueDirectionsByGain[j]
+            ) {
               var newObj = arrayToObject(res.data.data.gainAspects, true);
               if ((this as any).gainData[idx].children != newObj) {
                 (this as any).gainData[idx].children = newObj;
@@ -697,9 +838,9 @@ export default {
             }
           }
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           console.log(err);
-        })
+        });
     }
     (this as any).isShowGain = false;
     setTimeout(() => {
@@ -714,7 +855,7 @@ export default {
     },
     async queryNumberFunc() {
       if ((this as any).queryName) {
-        await queryNumber({userName: (this as any).queryName})
+        await queryNumber({ userName: (this as any).queryName })
           .then((res: any) => {
             (this as any).queryTableData = res.data.data;
             (this as any).$message.success("查询成功！");
@@ -728,25 +869,28 @@ export default {
             console.log(err);
             (this as any).queryNumberDialog = false;
             (this as any).$message.error("查询时发生了一些错误，请重试~");
-          })
+          });
       } else {
         (this as any).$message.error("请输入查询的内容");
       }
     },
     childrenMajorItems(val) {
-      (this as any).formData.majors = val;
+      (this as any).formData.majorsValue = val;
     },
     childrenFieldItems(val) {
-      (this as any).formData.fields = val;
+      (this as any).formData.fieldsValue = val;
     },
-    lazyLoadGain(node: any, resolve: any){
+    childrenBookItems(val) {
+      (this as any).formData.booksValue = val;
+    },
+    lazyLoadGain(node: any, resolve: any) {
       const { level } = node;
       if (level < 2 && node.label != "添加方向") {
-        var getGainAllAspectsParams = {gainDirection: ""};
+        var getGainAllAspectsParams = { gainDirection: "" };
         getGainAllAspectsParams.gainDirection = node.label;
         var prevNodes: any[] = [];
         getGainAllAspects(getGainAllAspectsParams)
-          .then((res : any) => {
+          .then((res: any) => {
             prevNodes = res.data.data.gainAspects;
             if (prevNodes) {
               prevNodes.push("添加方向");
@@ -756,9 +900,9 @@ export default {
             var nodes = arrayToObjectDeWeight(prevNodes, node);
             resolve(nodes);
           })
-          .catch((err : any) => {
+          .catch((err: any) => {
             console.log(err);
-          })
+          });
       } else {
         resolve([]);
       }
@@ -766,11 +910,11 @@ export default {
     lazyLoadShare(node: any, resolve: any) {
       const { level } = node;
       if (level < 2 && node.label != "添加方向") {
-        var getShareAllAspectsParams = {shareDirection: ""};
+        var getShareAllAspectsParams = { shareDirection: "" };
         getShareAllAspectsParams.shareDirection = node.label;
         var prevNodes: any[] = [];
         getShareAllAspects(getShareAllAspectsParams)
-          .then((res : any) => {
+          .then((res: any) => {
             prevNodes = res.data.data.shareAspects;
             if (prevNodes) {
               prevNodes.push("添加方向");
@@ -780,16 +924,16 @@ export default {
             var nodes = arrayToObjectDeWeight(prevNodes, node);
             resolve(nodes);
           })
-          .catch((err : any) => {
+          .catch((err: any) => {
             console.log(err);
-          })
+          });
       } else {
         resolve([]);
       }
     },
     async getShareAllDirectionsFunc() {
       await getShareAllDirections()
-        .then((res : any) => {
+        .then((res: any) => {
           var directions = res.data.data.shareDirections;
           if (directions != null) {
             directions.push("添加方向");
@@ -798,13 +942,13 @@ export default {
           }
           (this as any).shareData = arrayToObject(directions, false);
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           console.log(err);
-        })
+        });
     },
     async getGainAllDirectionsFunc() {
       await getGainAllDirections()
-        .then((res : any) => {
+        .then((res: any) => {
           var directions = res.data.data.gainDirections;
           if (directions != null) {
             directions.push("添加方向");
@@ -813,13 +957,13 @@ export default {
           }
           (this as any).gainData = arrayToObject(directions, false);
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           console.log(err);
-        })
+        });
     },
     handleShareChange(value) {
       let i = 0;
-      for (i; i < value.length; i ++) {
+      for (i; i < value.length; i++) {
         if (value[i][0] == "添加方向") {
           (this as any).formData.shareValue.pop();
           (this as any).isShowShare = false;
@@ -839,8 +983,10 @@ export default {
       }
     },
     async addShareDirectionFunc() {
-      await addShareDirection({"shareDirection": (this as any).newShareDirection})
-        .then((res : any) => {
+      await addShareDirection({
+        shareDirection: (this as any).newShareDirection,
+      })
+        .then((res: any) => {
           (this as any).$message.success("已成功添加新方向~");
           (this as any).addDialog = false;
           (this as any).getShareAllDirectionsFunc();
@@ -851,13 +997,13 @@ export default {
             (this as any).isShowShare = true;
           }, 100);
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           console.log(err);
-        })
+        });
     },
     async addGainDirectionFunc() {
-      await addGainDirection({"gainDirection": (this as any).newGainDirection})
-        .then((res : any) => {
+      await addGainDirection({ gainDirection: (this as any).newGainDirection })
+        .then((res: any) => {
           (this as any).$message.success("已成功添加新方向~");
           (this as any).addGainDialog = false;
           (this as any).getGainAllDirectionsFunc();
@@ -868,13 +1014,13 @@ export default {
             (this as any).isShowGain = true;
           }, 1000);
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           console.log(err);
-        })
+        });
     },
     async addShareAspectFunc() {
       await addShareAspect((this as any).newShareAspectParam)
-        .then((res : any) => {
+        .then((res: any) => {
           (this as any).$message.success("已成功添加新方向~");
           (this as any).addAspectDialog = false;
           (this as any).getShareAllDirectionsFunc();
@@ -885,13 +1031,13 @@ export default {
             (this as any).isShowShare = true;
           }, 100);
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           console.log(err);
-        })
+        });
     },
     async addGainAspectFunc() {
       await addGainAspect((this as any).newGainAspectParam)
-        .then((res : any) => {
+        .then((res: any) => {
           (this as any).$message.success("已成功添加新方向~");
           (this as any).addGainAspectDialog = false;
           (this as any).getGainAllDirectionsFunc();
@@ -902,14 +1048,14 @@ export default {
             (this as any).isShowGain = true;
           }, 100);
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           console.log(err);
-        })
+        });
     },
     handleGainChange(value) {
       let i = 0;
-      if(value) {
-        for (i; i < value.length; i ++) {
+      if (value) {
+        for (i; i < value.length; i++) {
           if (value[i][0] == "添加方向") {
             (this as any).formData.gainValue.pop();
             (this as any).isShowGain = false;
@@ -929,19 +1075,11 @@ export default {
         }
       }
     },
-    handleCityChange(value) {
-      console.log(value);
-    },
-    handleResumeChange(value) {
-      if(value) {
-        console.log(value);
-      }
-    },
     saveBirthday(val) {
       (this as any).formData.birthday = val;
     },
     saveGraduateYear(val) {
-      (this as any).formData.graduateYear= val.slice(0, 4);
+      (this as any).formData.graduateYear = val.slice(0, 4);
       (this as any).formData.graduateMonth = val.slice(5, 7);
     },
     async validate() {
@@ -949,6 +1087,7 @@ export default {
       (this as any).formData = transformBeforeUpdate((this as any).formData);
       await (this as any).updateFields();
       await (this as any).updateMajors();
+      await (this as any).updateBooks();
       try {
         await updatePersonalInformation((this as any).formData);
         (this as any).$message.success("更新成功！");
@@ -1004,7 +1143,9 @@ export default {
     },
     async updateFields() {
       // 取出新添加的标签放入newFields
-      var combinedFields = (this as any).items.fieldItems.concat((this as any).formData.fields);
+      var combinedFields = (this as any).items.fieldItems.concat(
+        (this as any).formData.fields
+      );
       var uniqueFields = Array.from(new Set(combinedFields));
       var fieldItems = (this as any).items.fieldItems;
       var _arr1 = uniqueFields.filter((item1) => !fieldItems.includes(item1));
@@ -1017,7 +1158,7 @@ export default {
           var field: any = '{"field": ' + '"' + val + '"' + "}";
           addFields(field)
             .then((res: any) => {
-              console.log(res);
+              (this as any).$message.success("添加技术栈成功！");
             })
             .catch((err: any) => {
               console.log(err);
@@ -1025,6 +1166,40 @@ export default {
             });
         });
       }
+    },
+    async updateBooks() {
+      var combinedBooks = (this as any).items.bookItems.concat(
+        (this as any).formData.books
+      );
+      var uniqueBooks = Array.from(new Set(combinedBooks));
+      var bookItems = (this as any).items.bookItems;
+      var _arr1 = uniqueBooks.filter((item1) => !bookItems.includes(item1));
+      var _arr2 = bookItems.filter((item2) => !uniqueBooks.includes(item2));
+      const _arr = _arr1.concat(_arr2);
+      var newBooks = _arr1;
+
+      if (newBooks.length >= 1 && newBooks[0] != "") {
+        newBooks.forEach((val: any, idx, array) => {
+          var book: any = '{"book": ' + '"' + val + '"' + "}";
+          addBooks(book)
+            .then((res: any) => {
+              console.log(res);
+            })
+            .catch((err: any) => {
+              console.log(err);
+              (this as any).$message.error("添加书籍失败，请重试~");
+            });
+        });
+      }
+    },
+    async getAllBooks() {
+      getBooks()
+        .then((res: any) => {
+          (this as any).items.bookItems = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async getAllFields() {
       getFields()
@@ -1082,14 +1257,17 @@ export default {
       }
     },
     pushToCharacterWeb() {
-      window.open("https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95", "_blank");
+      window.open(
+        "https://www.16personalities.com/ch/%E4%BA%BA%E6%A0%BC%E6%B5%8B%E8%AF%95",
+        "_blank"
+      );
     },
-    addResumeFunc (newVal: any) {
+    addResumeFunc(newVal: any) {
       (this as any).formData.resumeValue = [];
     },
   },
   watch: {
-    'formData.weChatPic'(newVal, oldVal) {
+    "formData.weChatPic"(newVal, oldVal) {
       if (newVal != "") {
         (this as any).label.weChatPicLabel = "微信二维码已上传~";
       }
@@ -1099,8 +1277,8 @@ export default {
     },
     gainData(newVal, oldVal) {
       ++(this as any).keyForGain;
-    }
-  }
+    },
+  },
 };
 </script>
 

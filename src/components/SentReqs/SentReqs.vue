@@ -190,10 +190,10 @@ export default Vue.extend({
       this.$emit("reason", item);
       (this as any).reasonDialog = false;
     },
-    pushToWeChatPic (item : any) {
+    pushToWeChatPic(item: any) {
       this.$emit("weChatPic", item);
     },
-    openDialog (item : any) {
+    openDialog(item: any) {
       (this as any).reasonDialog = true;
       (this as any).reasonItem = item;
     },

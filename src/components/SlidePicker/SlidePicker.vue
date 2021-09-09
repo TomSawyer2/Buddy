@@ -20,28 +20,22 @@ export default Vue.extend({
   props: ["character", "isDisabled"],
   data() {
     return {
-        ticksLabels: [
-          '内向',
-          '',
-          '一般',
-          '',
-          '随和',
-        ],
-        characterChild: 2,
+      ticksLabels: ["内向", "", "一般", "", "随和"],
+      characterChild: 2,
     };
   },
-  mounted () {
+  mounted() {
     (this as any).characterChild = (this as any).character;
   },
   methods: {
-    sendCharacter (characterChild) {
+    sendCharacter(characterChild) {
       (this as any).$emit("sendCharacter", (this as any).characterChild);
     },
   },
   watch: {
-    character(newV,oldV) {
+    character(newV, oldV) {
       (this as any).characterChild = newV;
-    }
-  }
+    },
+  },
 });
 </script>

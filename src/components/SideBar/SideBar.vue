@@ -74,6 +74,11 @@ export default Vue.extend({
           icon: "mdi-vector-square",
           route: "/messageCenter",
         },
+        {
+          text: "设置",
+          icon: "mdi-account-cog",
+          route: "/settings",
+        },
         { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
       ],

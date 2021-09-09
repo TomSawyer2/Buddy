@@ -18,9 +18,13 @@ export default Vue.extend({
   },
   mounted() {
     if (getToken().length === 0 && this.$route.path != "/login") {
-      this.$router.push({ path: "/login" }).catch(err => {console.log(err);});
-    } else if (this.$route.path != "/personalInformation"){
-      this.$router.push({ path: "/personalInformation" }).catch(err => {console.log(err);});
+      this.$router.push({ path: "/login" }).catch((err) => {
+        console.log(err);
+      });
+    } else if (this.$route.path != "/personalInformation") {
+      this.$router.push({ path: "/personalInformation" }).catch((err) => {
+        console.log(err);
+      });
     }
   },
   watch: {
@@ -28,12 +32,16 @@ export default Vue.extend({
       if (to.path !== "/login") {
         if (getToken().length === 0) {
           Message.error("未登录！");
-          this.$router.push({ path: "/login" }).catch(err => {console.log(err);});
+          this.$router.push({ path: "/login" }).catch((err) => {
+            console.log(err);
+          });
         }
       }
       if (to.path === "/") {
         if (getToken().length > 0) {
-          this.$router.push({ path: "/personalInformation" }).catch(err => {console.log(err);});
+          this.$router.push({ path: "/personalInformation" }).catch((err) => {
+            console.log(err);
+          });
         }
       }
     },
