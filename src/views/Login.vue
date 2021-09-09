@@ -40,11 +40,12 @@
         required
         v-if="captchaLogin"
       ></v-text-field>
-      <a
-        href="/register"
-        style="display: flex; justify-content: flex-end; text-decoration: none"
-        >注册</a
-      >
+      <div style="display: flex; justify-content: flex-end">
+        <a href="/forgetPassword" class="mr-5" style="text-decoration: none"
+          >忘记密码</a
+        >
+        <a href="/register" style="text-decoration: none">注册</a>
+      </div>
 
       <div style="display: flex; justify-content: center">
         <v-btn
@@ -140,12 +141,12 @@ export default {
     (this as any).keyupSubmit();
   },
   methods: {
-    keyupSubmit(){
-      document.onkeydown= e => {
-        if(e.keyCode == 13){
+    keyupSubmit() {
+      document.onkeydown = (e) => {
+        if (e.keyCode == 13) {
           (this as any).login();
         }
-      }
+      };
     },
     async login() {
       (this as any).$refs.form.validate();

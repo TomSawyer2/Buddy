@@ -18,6 +18,6 @@ export function getAllFields() {
   return axios.get(URL.getAllFields);
 }
 
-export function searchUsersByNameAndFields(params:SearchInfo) {
+export function searchUsersByNameAndFields(params: SearchInfo) {
   return axios.post(URL.searchUsersByNameAndFields, params);
 }

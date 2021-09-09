@@ -21,7 +21,11 @@
       <v-date-picker
         v-model="date"
         :active-picker.sync="activePicker"
-        :max="(new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)"
+        :max="
+          new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+            .toISOString()
+            .substr(0, 10)
+        "
         min="1950-01-01"
         @change="save"
       ></v-date-picker>
@@ -36,20 +40,20 @@ export default Vue.extend({
   props: ["date"],
   data() {
     return {
-        activePicker: null,
-        menu: false,
+      activePicker: null,
+      menu: false,
     };
   },
   methods: {
-    save (date) {
-        (this as any).$emit("save", (this as any).date);
-        (this as any).menu = false;
+    save(date) {
+      (this as any).$emit("save", (this as any).date);
+      (this as any).menu = false;
     },
   },
   watch: {
-    menu (val) {
-        val && setTimeout(() => ((this as any).activePicker = 'YEAR'))
+    menu(val) {
+      val && setTimeout(() => ((this as any).activePicker = "YEAR"));
     },
-},
+  },
 });
 </script>

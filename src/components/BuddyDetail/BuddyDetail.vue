@@ -30,11 +30,25 @@
             <h3>个人信息</h3>
             <I>性别：{{ userInfo.sex.length ? userInfo.sex : "未填写" }}</I>
             <br />
-            <I>生日：{{ userInfo.birthday.length ? userInfo.birthday : "未填写" }}</I>
+            <I
+              >生日：{{
+                userInfo.birthday.length ? userInfo.birthday : "未填写"
+              }}</I
+            >
             <br />
-            <I>毕业年份：{{ userInfo.graduateYear.length ? userInfo.graduateYear : "未填写" }}</I>
+            <I
+              >毕业年份：{{
+                userInfo.graduateYear.length ? userInfo.graduateYear : "未填写"
+              }}</I
+            >
             <br />
-            <I>核心层职务：{{ userInfo.managementExperience.length ? userInfo.managementExperience : "未填写" }}</I>
+            <I
+              >核心层职务：{{
+                userInfo.managementExperience.length
+                  ? userInfo.managementExperience
+                  : "未填写"
+              }}</I
+            >
             <br />
             <I
               >毕业高中：{{
@@ -76,14 +90,26 @@
               <i class="mdi mdi-map-legend buddy-i"></i>
               | 所在城市
             </h3>
-            <p class="buddy-para">{{ userInfo.country + '-' + userInfo.province + '-' + userInfo.city + '-' + userInfo.region }}</p>
+            <p class="buddy-para">
+              {{
+                userInfo.country +
+                "-" +
+                userInfo.province +
+                "-" +
+                userInfo.city +
+                "-" +
+                userInfo.region
+              }}
+            </p>
           </div>
           <div class="buddy-resume">
             <h3>
               <i class="mdi mdi-file-account buddy-i"></i>
               | 项目组经历（履历）
             </h3>
-            <p class="buddy-para">{{ userInfo.group + '-' + userInfo.project}}</p>
+            <p class="buddy-para">
+              {{ userInfo.group + "-" + userInfo.project }}
+            </p>
           </div>
           <div class="major">
             <h3>
@@ -96,9 +122,12 @@
               column
               class="ml-5"
             >
-              <v-chip v-for="(major, index) in userInfo.majors" :key="index" small>{{
-                major
-              }}</v-chip>
+              <v-chip
+                v-for="(major, index) in userInfo.majors"
+                :key="index"
+                small
+                >{{ major }}</v-chip
+              >
             </v-chip-group>
             <v-chip v-else>暂无</v-chip>
           </div>
@@ -107,7 +136,7 @@
               <i class="mdi mdi-head-cog buddy-i"></i>
               | 性格特征
             </h3>
-            <SlidePicker :character="userInfo.character" :isDisabled="true"/>
+            <SlidePicker :character="userInfo.character" :isDisabled="true" />
           </div>
           <div class="btn-container">
             <v-btn
@@ -135,8 +164,7 @@ export default Vue.extend({
   components: { SlidePicker },
   props: ["userInfo", "isLoading", "messageCenter"],
   data() {
-    return {
-    };
+    return {};
   },
   methods: {
     onAdd(id: string) {

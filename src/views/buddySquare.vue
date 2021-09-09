@@ -180,8 +180,7 @@ export default {
       (this as any).isDetailLoading = true;
       (this as any).isDetailShow = true;
       try {
-        let res = (await getUserDetailById({ id: id }))
-          .data.data;
+        let res = (await getUserDetailById({ id: id })).data.data;
         (this as any).buddyDetail = transformAfterGet(res);
         (this as any).isDetailLoading = false;
       } catch (error) {

@@ -5,6 +5,8 @@
  * deWeightArray用于去重数组
  */
 
+import { Form } from "element-ui";
+
 /**
  * 两个函数用于个人信息获取与提交时的映射
  */
@@ -15,33 +17,70 @@ export function transformAfterGet(data: any) {
     data.isGraduated = "否";
   }
 
-  data.cityValue = data.location.split('-');
+  data.cityValue = data.location.split("-");
 
-  if(data.resumeValue) {
-    data.resumeValue = data.group.split('-');
-  }
- 
-
-
-  if (data.birthday == "1900-01-01"|| data.birthday == "0001-01-01") {
+  if (data.birthday == "1900-01-01" || data.birthday == "0001-01-01") {
     data.birthday = "";
   }
 
-  if (data.majors.length == 1 && data.majors[0] == '') {
-    data.majors.splice(0, data.majors.length)
+  data.majorsValue = [];
+  data.booksValue = [];
+  data.fieldsValue = [];
+  if (data.fields != "") {
+    data.fieldsValue = data.fields.split(';');
+  }
+  if (data.majors != "") {
+    data.majorsValue = data.majors.split(';');
+  }
+  if (data.books != "") {
+    data.booksValue = data.books.split(';');
   }
 
-  if (data.fields.length == 1 && data.fields[0] == '') {
-    data.fields.splice(0, data.fields.length)
+  data.managementExperienceValue = [];
+  if (data.managementExperience != "") {
+    data.managementExperienceValue = data.managementExperience.split(';');
+  }
+  data.teamValue = data.teams.split(";");
+
+  data.resumeValue = [];
+  const projectsTmp: string[] = data.projects.split(";");
+  let idx = 0;
+  for(idx; idx < projectsTmp.length; idx ++ ) {
+    projectsTmp[idx] = projectsTmp[idx].slice(0, 4) + '年' + projectsTmp[idx].slice(4);
+    data.resumeValue = [...data.resumeValue, projectsTmp[idx].split('-')];
   }
 
   if (data.character == -1) {
-    data.character = 2;
+    data.character = "";
   }
-  const characterItems: string[] = ["稳重踏实", "外向开朗", "善解人意", "和蔼可亲", "尚不清楚"];
+
+  const characterItems: string[] = [
+    "稳重踏实",
+    "外向开朗",
+    "善解人意",
+    "和蔼可亲",
+    "尚不清楚",
+  ];
   data.character = characterItems[data.character];
 
-  const characterResultItemsLocal: string[] = ["INTJ-A INTJ-T", "INTP-A INTP-T", "ENTJ-A ENTJ-T", "ENTP-A ENTP-T", "INFJ-A INFJ-T", "INFP-A INFP-T", "ENFJ-A ENFJ-T", "ENFP-A ENFP-T", "ISTJ-A ISTJ-T", "ISFJ-A ISFJ-T", "ESTJ-A ESTJ-T", "ESFJ-A ESFJ-T", "ISTP-A ISTP-T", "ISFP-A ISFP-T", "ESTP-A ESTP-T", "ESFP-A ESFP-T"];
+  const characterResultItemsLocal: string[] = [
+    "INTJ-A INTJ-T",
+    "INTP-A INTP-T",
+    "ENTJ-A ENTJ-T",
+    "ENTP-A ENTP-T",
+    "INFJ-A INFJ-T",
+    "INFP-A INFP-T",
+    "ENFJ-A ENFJ-T",
+    "ENFP-A ENFP-T",
+    "ISTJ-A ISTJ-T",
+    "ISFJ-A ISFJ-T",
+    "ESTJ-A ESTJ-T",
+    "ESFJ-A ESFJ-T",
+    "ISTP-A ISTP-T",
+    "ISFP-A ISFP-T",
+    "ESTP-A ESTP-T",
+    "ESFP-A ESFP-T",
+  ];
   data.characterResult = characterResultItemsLocal[data.characterResult];
 
   switch (data.identity) {
@@ -73,42 +112,112 @@ export function transformAfterGet(data: any) {
 }
 
 export function transformBeforeUpdate(formData: any) {
-  if (formData.isGraduated && formData.isGraduated== "是") {
+  if (formData.isGraduated && formData.isGraduated == "是") {
     formData.isGraduated = true;
-  } else if (formData.isGraduated && formData.isGraduated == "否"){
+  } else if (formData.isGraduated && formData.isGraduated == "否") {
     formData.isGraduated = false;
     formData.substation = "";
   }
 
-  formData.location = formData.cityValue[0] + '-' + formData.cityValue[1] + '-' + formData.cityValue[2] + '-' + formData.cityValue[3];
+  if (formData.cityValue[1] != undefined) {
+    formData.location =
+    formData.cityValue[0] +
+    "-" +
+    formData.cityValue[1] +
+    "-" +
+    formData.cityValue[2] +
+    "-" +
+    formData.cityValue[3];
+  }
 
-  if(formData.resumeValue) {
-    formData.group = formData.resumeValue[0] + '-' + formData.resumeValue[1];
+  formData.majors = "";
+  formData.majors = formData.majorsValue.join(';');
+
+  formData.fields = "";
+  formData.fields = formData.fieldsValue.join(';');
+
+  formData.books = "";
+  formData.books = formData.booksValue.join(';');
+
+  formData.managementExperience = "";
+  formData.managementExperience = formData.managementExperienceValue.join(';');
+  
+  if (formData.teamValue) {
+    formData.teams = formData.teamValue[0];
+    if (formData.teamValue.length > 1) {
+      let idx = 1;
+      for(idx; idx < formData.teamValue.length; idx ++ ) {
+        formData.teams = formData.teams + ';' + formData.teamValue[idx];
+      }
+    }
   }
   
+  formData.projects = "";
+  if (formData.resumeValue) {
+    formData.projects = formData.resumeValue[0][0].slice(0, 4) + '-' + formData.resumeValue[0][1] + '-' + formData.resumeValue[0][2];
+    if (formData.resumeValue.length > 1) {
+      let idx = 1;
+      for(idx; idx < formData.resumeValue.length; idx ++ ) {
+        formData.projects = formData.projects + ';' + formData.resumeValue[idx][0].slice(0, 4) + '-' + formData.resumeValue[idx][1] + '-' + formData.resumeValue[idx][2];
+      }
+    }
+  }
+
   formData.graduateYear = parseInt(formData.graduateYear);
   formData.graduateMonth = parseInt(formData.graduateMonth);
 
-  const characterResultItemsLocal: string[] = ["INTJ-A INTJ-T", "INTP-A INTP-T", "ENTJ-A ENTJ-T", "ENTP-A ENTP-T", "INFJ-A INFJ-T", "INFP-A INFP-T", "ENFJ-A ENFJ-T", "ENFP-A ENFP-T", "ISTJ-A ISTJ-T", "ISFJ-A ISFJ-T", "ESTJ-A ESTJ-T", "ESFJ-A ESFJ-T", "ISTP-A ISTP-T", "ISFP-A ISFP-T", "ESTP-A ESTP-T", "ESFP-A ESFP-T"];
-  formData.characterResult = characterResultItemsLocal.indexOf(formData.characterResult);
+  const characterResultItemsLocal: string[] = [
+    "INTJ-A INTJ-T",
+    "INTP-A INTP-T",
+    "ENTJ-A ENTJ-T",
+    "ENTP-A ENTP-T",
+    "INFJ-A INFJ-T",
+    "INFP-A INFP-T",
+    "ENFJ-A ENFJ-T",
+    "ENFP-A ENFP-T",
+    "ISTJ-A ISTJ-T",
+    "ISFJ-A ISFJ-T",
+    "ESTJ-A ESTJ-T",
+    "ESFJ-A ESFJ-T",
+    "ISTP-A ISTP-T",
+    "ISFP-A ISFP-T",
+    "ESTP-A ESTP-T",
+    "ESFP-A ESFP-T",
+  ];
+  formData.characterResult = characterResultItemsLocal.indexOf(
+    formData.characterResult
+  );
 
-  const characterItems: string[] = ["稳重踏实", "外向开朗", "善解人意", "和蔼可亲", "尚不清楚"];
+  const characterItems: string[] = [
+    "稳重踏实",
+    "外向开朗",
+    "善解人意",
+    "和蔼可亲",
+    "尚不清楚",
+  ];
   formData.character = characterItems.indexOf(formData.character);
-
-  let i = 0;
-  formData.shares = [];
+  
+  let i = 1;
+  formData.shares = "";
 
   if (formData.shareValue) {
-    for (i; i < formData.shareValue.length; i ++ ) {
-      formData.shares[i] = formData.shareValue[i][0] + '-' + formData.shareValue[i][1];
+    formData.shares = formData.shareValue[0][0] + "-" + formData.shareValue[0][1];
+    if (formData.shareValue.length > 1) {
+      for (i; i < formData.shareValue.length; i++) {
+        formData.shares = formData.shares + ';' + formData.shareValue[i][0] + "-" + formData.shareValue[i][1];
+      }
     }
-  } 
+  }
 
-  let j = 0;
-  formData.gains = [];
+  let j = 1;
+  formData.gains = "";
+
   if (formData.gainValue) {
-    for (j; j < formData.gainValue.length; j ++ ) {
-      formData.gains[j] = formData.gainValue[j][0] + '-' + formData.gainValue[j][1];
+    formData.gains = formData.gainValue[0][0] + "-" + formData.gainValue[0][1];
+    if (formData.gainValue.length > 1) {
+      for (j; j < formData.gainValue.length; j++) {
+        formData.gains = formData.gains + ';' + formData.gainValue[j][0] + "-" + formData.gainValue[j][1];
+      }
     }
   }
 
@@ -144,26 +253,26 @@ export function transformBeforeUpdate(formData: any) {
  * 用于在个人信息页面将获得的数组转化为element-ui的级联选择器需要的object并去重
  */
 
-export function arrayToObjectDeWeight (arr : any, node : any) {
+export function arrayToObjectDeWeight(arr: any, node: any) {
   const tempObj = {};
   for (const key in arr) {
     tempObj[key] = arr[key];
-  };
-  const nodes = Object.keys(tempObj).map(val => ({
+  }
+  const nodes = Object.keys(tempObj).map((val) => ({
     label: tempObj[val],
     value: tempObj[val],
-    leaf: true
+    leaf: true,
   }));
   let i = 0;
   let j = 0;
   if (node.children) {
-    for(i; i < node.children.length; i ++) {
-      for(j; j < nodes.length; j ++) {
+    for (i; i < node.children.length; i++) {
+      for (j; j < nodes.length; j++) {
         if (nodes[j].value != "添加方向") {
           if (node.children[i].value == nodes[j].value) {
             nodes.splice(j, 1);
-            j --;
-            i ++;
+            j--;
+            i++;
           }
         }
       }
@@ -176,22 +285,22 @@ export function arrayToObjectDeWeight (arr : any, node : any) {
  * 用于在个人信息页面将获得的数组转化为element-ui的级联选择器需要的object（无去重功能）
  */
 
- export function arrayToObject (arr : any, isLeaf : boolean) {
+export function arrayToObject(arr: any, isLeaf: boolean) {
   const tempObj = {};
   for (const key in arr) {
     tempObj[key] = arr[key];
-  };
+  }
   if (isLeaf) {
-    const nodes = Object.keys(tempObj).map(val => ({
+    const nodes = Object.keys(tempObj).map((val) => ({
       label: tempObj[val],
       value: tempObj[val],
-      leaf: true
+      leaf: true,
     }));
     return nodes;
   } else {
-    const nodes = Object.keys(tempObj).map(val => ({
+    const nodes = Object.keys(tempObj).map((val) => ({
       label: tempObj[val],
-      value: tempObj[val]
+      value: tempObj[val],
     }));
     return nodes;
   }
@@ -201,7 +310,7 @@ export function arrayToObjectDeWeight (arr : any, node : any) {
  * 用于去重数组
  */
 
-export function deWeightArray(arr : any) {
+export function deWeightArray(arr: any) {
   const s = new Set(arr);
   const result = Array.from(s);
   return result;

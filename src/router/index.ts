@@ -34,6 +34,11 @@ const routes: Array<RouteConfig> = [
         name: "messageCenter",
         component: () => import("../views/messageCenter.vue"),
       },
+      {
+        path: "/settings",
+        name: "Settings",
+        component: () => import("../views/Settings.vue"),
+      },
     ],
   },
   {
@@ -47,9 +52,14 @@ const routes: Array<RouteConfig> = [
     component: () => import("@/views/Register.vue"),
   },
   {
-    path: '*',
-    component: () => import('@/views/Error404.vue')
-  }
+    path: "/forgetPassword",
+    name: "forgetPassword",
+    component: () => import("@/views/forgetPassword.vue"),
+  },
+  {
+    path: "*",
+    component: () => import("@/views/Error404.vue"),
+  },
 ];
 
 const router = new VueRouter({

@@ -73,7 +73,7 @@ Axios.interceptors.response.use(
       case ERROR_CODE.REQUEST_SELF:
         Message.error("不能向自己提出申请！");
         break;
-      
+
       case ERROR_CODE.REQUEST_NOT_FOUND:
         Message.error("申请不存在！");
         break;
@@ -93,42 +93,62 @@ Axios.interceptors.response.use(
       case ERROR_CODE.SEARCH_NOT_FOUND:
         Message.success("查询无果~");
         throw new Error(res.data.msg);
-        break;
 
       case ERROR_CODE.REQ_MAX_NUM:
         Message.error("该老队员已经接受了三名小队员的申请，请选择其他老队员~");
         throw new Error(res.data.msg);
-        break;
 
       case ERROR_CODE.INTERNAL_ERR:
         Message.error("服务器内部错误，请联系管理员~");
         throw new Error(res.data.msg);
-        break;
-      
+
       case ERROR_CODE.PARAM_ERR:
         Message.error("请求参数错误，请联系管理员~");
         throw new Error(res.data.msg);
-        break;
-      
+
       case ERROR_CODE.REQ_NOT_MAX_NUM:
         Message.error("老队员的待接收数量已达上限~");
         throw new Error(res.data.msg);
-        break;
-      
+
       case ERROR_CODE.MAJOR_EMPTY:
         Message.error("专业方向为空~");
         throw new Error(res.data.msg);
-        break;
-      
-      case ERROR_CODE.PASS_MAX_NUM: 
+
+      case ERROR_CODE.PASS_MAX_NUM:
         Message.error("老队员接受数量已达上限~");
         throw new Error(res.data.msg);
-        break;
 
-      case ERROR_CODE.CHOOSE_MAX_NUM: 
+      case ERROR_CODE.CHOOSE_MAX_NUM:
         Message.error("您的选择数量已达上限~");
         throw new Error(res.data.msg);
-        break;
+
+      case ERROR_CODE.TOKEN_ERR:
+        Message.error("验证码生成失败，请重试~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.SHARE_DIREC_EXISTED:
+        Message.error("创建的大方向已存在~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.SHARE_ASPECT_EXISTED:
+        Message.error("该分享方向下的小方向已存在~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.SHARE_DIREC_BLANK:
+        Message.error("大方向为空，请重试~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.GAIN_DIREC_EXISTED:
+        Message.error("大方向已存在~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.GAIN_ASPECT_EXISTED:
+        Message.error("小方向已存在~");
+        throw new Error(res.data.msg);
+
+      case ERROR_CODE.GAIN_DIREC_BLANK:
+        Message.error("大方向为空~");
+        throw new Error(res.data.msg);
 
       case ERROR_CODE.TOKEN_NOT_EXISTED:
       case ERROR_CODE.TOKEN_EXPIRED:

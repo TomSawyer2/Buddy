@@ -89,3 +89,22 @@ export interface addGainAspectInfo {
 export interface queryNumberInfo {
   userName: string;
 }
+
+export interface forgetPwdGetCaptchaInfo {
+  phoneNumber: string;
+}
+
+export interface forgetPwdSubmitInfo {
+  phoneNumber: string;
+  validationCode: string;
+  newPassword: string;
+}
+
+export interface changePwdSubmitInfo {
+  validationCode: string;
+  newPassword: string;
+}
+
+export interface addBooksInfo {
+  book: string;
+}

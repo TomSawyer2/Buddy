@@ -20,6 +20,10 @@ import {
   addGainDirectionInfo,
   addGainAspectInfo,
   queryNumberInfo,
+  forgetPwdSubmitInfo,
+  forgetPwdGetCaptchaInfo,
+  changePwdSubmitInfo,
+  addBooksInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -41,8 +45,9 @@ export async function postLoginByCaptcha(
   return await axios.post(URL.postLoginByCaptcha, params);
 }
 
-export async function getPersonalInformation(
-): Promise<Record<string, unknown>> {
+export async function getPersonalInformation(): Promise<
+  Record<string, unknown>
+> {
   return await axios.post(URL.getPersonalInformation);
 }
 
@@ -150,7 +155,6 @@ export function addShareAspect(
   return axios.post(URL.addShareAspect, params);
 }
 
-
 export function getGainAllDirections(): Promise<Record<string, unknown>> {
   return axios.post(URL.getGainAllDirections);
 }
@@ -177,4 +181,37 @@ export function queryNumber(
   params: queryNumberInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.queryNumber, params);
+}
+
+export function forgetPwdGetCaptcha(
+  params: forgetPwdGetCaptchaInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.forgetPwdGetCaptcha, params);
+}
+
+export function forgetPwdSubmit(
+  params: forgetPwdSubmitInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.forgetPwdSubmit, params);
+}
+
+export function changePwdGetCaptcha(
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.changePwdGetCaptcha);
+}
+
+export function changePwdSubmit(
+  params: changePwdSubmitInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.changePwdSubmit, params);
+}
+
+export function getBooks(): Promise<Record<string, unknown>> {
+  return axios.get(URL.getBooks);
+}
+
+export function addBooks(
+  params: addBooksInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addBooks, params);
 }

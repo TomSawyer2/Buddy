@@ -8,7 +8,6 @@
       align-items: center;
     "
   >
-    
     <ChooseBtn
       @childReceived="childReceived"
       :totalReceivedNum="totalReceivedNum"
@@ -100,9 +99,7 @@ export default {
     },
     async onToDetail(id: string) {
       try {
-        let res = (
-          await getUserDetailById({ id: id })
-        ).data.data;
+        let res = (await getUserDetailById({ id: id })).data.data;
         res.fields = res.fields.length > 0 ? res.fields : ["暂无"];
         (this as any).buddyDetail = transformAfterGet(res);
       } catch (error) {
@@ -203,7 +200,7 @@ export default {
         })
         .catch((err) => {
           console.log(err);
-        })
+        });
     },
     async refuseBuddyFunc(item: any) {
       console.log("拒绝了以下小队员的申请：");
@@ -217,7 +214,7 @@ export default {
         .catch((err) => {
           console.log(err);
           (this as any).$message.error("确认时发生了一些错误，请重试~");
-        })
+        });
     },
     async saveReason(item: any) {
       // 这个函数是用来修改理由的
