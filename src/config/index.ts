@@ -16,6 +16,11 @@ const URL = {
   // font-end
 
   // back-end
+  // admin
+  getUserList: "/admin/getUserList",
+  updateUserInfo: "/admin/updateUserInfo",
+  deleteUser: "/admin/deleteUser",
+
   // forgetPwd
   forgetPwdGetCaptcha: "/password/forget/getValidationCode",
   forgetPwdSubmit: "/password/forget/passInfo",

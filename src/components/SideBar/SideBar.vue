@@ -75,6 +75,11 @@ export default Vue.extend({
           route: "/messageCenter",
         },
         {
+          text: "管理员界面",
+          icon: "mdi-account-key",
+          route: "/admin",
+        },
+        {
           text: "设置",
           icon: "mdi-account-cog",
           route: "/settings",
