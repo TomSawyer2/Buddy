@@ -68,7 +68,7 @@ export async function postAvatar(
 export async function postQRCode(
   params: FormData
 ): Promise<Record<string, unknown>> {
-  return await axios.post("//175.24.30.102:4000/api/postQRCode", params, {
+  return await axios.post(URL.postQRCode, params, {
     headers: { "content-type": "multipart/form-data" },
   });
 }

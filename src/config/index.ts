@@ -56,6 +56,7 @@ const URL = {
   getRegisterCaptcha: "/register/getValidationCode",
   postRegsiter: "/register/passInfo",
   postAvatar: "/files/avatar",
+  postQRCode: "/files/wechat",
   queryNumber: "/number/search",
   // buddy-related
   getAllUsersByPage: "/index/students",

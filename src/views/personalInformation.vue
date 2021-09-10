@@ -1133,8 +1133,8 @@ export default {
           file.append("pic", (this as any).updateQRCodeFile.file); //通过append向form对象添加数据
           await postQRCode(file)
             .then((res: any) => {
-              if (res.data.status == "ok") {
-                (this as any).formData.weChatPic = res.data.link;
+              if (res.data.status == 0) {
+                (this as any).formData.weChatPic = res.data.data.filePath;
               }
             })
             .catch((err: any) => {
