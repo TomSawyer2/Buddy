@@ -40,7 +40,10 @@ export function transformAfterGet(data: any) {
   if (data.managementExperience != "") {
     data.managementExperienceValue = data.managementExperience.split(';');
   }
-  data.teamValue = data.teams.split(";");
+
+  if(data.teamValue) {
+    data.teamValue = data.teams.split(";");
+  }
 
   data.resumeValue = [];
   const projectsTmp: string[] = data.projects.split(";");
@@ -142,6 +145,7 @@ export function transformBeforeUpdate(formData: any) {
   formData.managementExperience = "";
   formData.managementExperience = formData.managementExperienceValue.join(';');
   
+  formData.teams = "";
   if (formData.teamValue) {
     formData.teams = formData.teamValue[0];
     if (formData.teamValue.length > 1) {
@@ -199,8 +203,9 @@ export function transformBeforeUpdate(formData: any) {
   
   let i = 1;
   formData.shares = "";
-
-  if (formData.shareValue) {
+  if(formData.shareValue === undefined) {
+    formData.shareValue = [];
+  } else if (formData.shareValue.length != 0){
     formData.shares = formData.shareValue[0][0] + "-" + formData.shareValue[0][1];
     if (formData.shareValue.length > 1) {
       for (i; i < formData.shareValue.length; i++) {
@@ -211,8 +216,9 @@ export function transformBeforeUpdate(formData: any) {
 
   let j = 1;
   formData.gains = "";
-
-  if (formData.gainValue) {
+  if(formData.gainValue === undefined) {
+    formData.gainValue = [];
+  } else if (formData.gainValue.length != 0){
     formData.gains = formData.gainValue[0][0] + "-" + formData.gainValue[0][1];
     if (formData.gainValue.length > 1) {
       for (j; j < formData.gainValue.length; j++) {

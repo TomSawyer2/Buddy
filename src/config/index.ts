@@ -67,7 +67,7 @@ const URL = {
   getAllFields: "/fields/all", // 重复了
 
   // search-related
-  searchUsersByNameAndFields: "/search/nameWithFields",
+  searchUsersByNameAndFields: "/search/buddy",
 };
 
 const ERROR_CODE = {

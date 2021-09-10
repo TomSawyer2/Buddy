@@ -1084,19 +1084,22 @@ export default {
     },
     async validate() {
       (this as any).$refs.form.validate();
-      (this as any).formData = transformBeforeUpdate((this as any).formData);
       await (this as any).updateFields();
       await (this as any).updateMajors();
       await (this as any).updateBooks();
+      (this as any).formData = await transformBeforeUpdate((this as any).formData);
       try {
         await updatePersonalInformation((this as any).formData);
         (this as any).$message.success("更新成功！");
         setAvatarSrc((this as any).formData.avatar);
         (this as any).formData = transformAfterGet((this as any).formData);
       } catch (error) {
+        console.log(error);
         (this as any).$message.error("更新失败，请重试~");
       }
       (this as any).getAllFields();
+      (this as any).getAllBooks();
+      (this as any).getAllMajors();
     },
     async changeAvatar() {
       if ((this as any).updateFile.file) {
@@ -1144,7 +1147,7 @@ export default {
     async updateFields() {
       // 取出新添加的标签放入newFields
       var combinedFields = (this as any).items.fieldItems.concat(
-        (this as any).formData.fields
+        (this as any).formData.fieldsValue
       );
       var uniqueFields = Array.from(new Set(combinedFields));
       var fieldItems = (this as any).items.fieldItems;
@@ -1169,7 +1172,7 @@ export default {
     },
     async updateBooks() {
       var combinedBooks = (this as any).items.bookItems.concat(
-        (this as any).formData.books
+        (this as any).formData.booksValue
       );
       var uniqueBooks = Array.from(new Set(combinedBooks));
       var bookItems = (this as any).items.bookItems;
@@ -1213,7 +1216,7 @@ export default {
     async updateMajors() {
       // 取出新添加的标签放入newFields
       var combinedMajors = (this as any).items.majorItems.concat(
-        (this as any).formData.majors
+        (this as any).formData.majorsValue
       );
       var uniqueMajors = Array.from(new Set(combinedMajors));
       var majorItems = (this as any).items.majorItems;

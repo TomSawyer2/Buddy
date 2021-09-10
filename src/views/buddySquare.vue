@@ -1,6 +1,6 @@
 <template>
   <div class="buddy-container">
-    <div class="search-container">
+    <div class="search-container" style="padding-top: 18px;">
       <BuddySearch
         @search="onSearch"
         @showAllChange="showAllChange"
@@ -136,10 +136,13 @@ export default {
       }
     },
 
-    async onSearch(searchInfo: { userName: string; fields: string[] }) {
+    async onSearch(searchInfo: { userName: string; fields: string[]; graduateYear: number; managementExperience: string[]; majors: string[]; projectYear: number; projectIdentity: string; projectName: string; gains: string[]; shares: string[];}) {
       try {
         const res = (await searchUsersByNameAndFields(searchInfo)).data.data;
         (this as any).userList = res.SearchResults;
+        if ((this as any).userList === null) {
+          (this as any).userList = [];
+        }
         (this as any).totalNum = res.Num;
       } catch (error) {
         (this as any).userList = [];
@@ -216,8 +219,8 @@ export default {
   position: fixed;
   width: 100%;
   background: white;
-  z-index: 999;
-  margin: 0 10px 0 10px;
+  z-index: 5;
+  margin: 0 10px 0 0px;
 }
 .search-container .divider {
   position: fixed;
