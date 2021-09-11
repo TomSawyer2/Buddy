@@ -43,14 +43,6 @@
             >
             <br />
             <I
-              >核心层职务：{{
-                userInfo.managementExperience.length
-                  ? userInfo.managementExperience
-                  : "未填写"
-              }}</I
-            >
-            <br />
-            <I
               >毕业高中：{{
                 userInfo.highSchool.length ? userInfo.highSchool : "未知"
               }}</I
@@ -59,11 +51,11 @@
           <div class="field">
             <h3>技术栈</h3>
             <v-chip-group
-              v-if="userInfo.fields[0].length > 0"
+              v-if="userInfo.fields != ''"
               style="margin-left: 5px"
               column
             >
-              <v-chip v-for="(field, index) in userInfo.fields" :key="index">{{
+              <v-chip v-for="(field, index) in userInfo.fieldsValue" :key="index">{{
                 field
               }}</v-chip>
             </v-chip-group>
@@ -88,55 +80,165 @@
           <div class="buddy-resume">
             <h3>
               <i class="mdi mdi-map-legend buddy-i"></i>
-              | 所在城市
+              | 工作所在城市
             </h3>
-            <p class="buddy-para">
-              {{
-                userInfo.country +
-                "-" +
-                userInfo.province +
-                "-" +
-                userInfo.city +
-                "-" +
-                userInfo.region
-              }}
+            <!-- <p class="buddy-para"> -->
+            <p class="plainText ml-5">
+              {{ userInfo.location ? userInfo.location: "暂无"}}
             </p>
           </div>
           <div class="buddy-resume">
             <h3>
               <i class="mdi mdi-file-account buddy-i"></i>
-              | 项目组经历（履历）
-            </h3>
-            <p class="buddy-para">
-              {{ userInfo.group + "-" + userInfo.project }}
-            </p>
-          </div>
-          <div class="major">
-            <h3>
-              <i class="mdi mdi-professional-hexagon buddy-i"></i>
-              | 专业方向
+              | 项目组
             </h3>
             <v-chip-group
-              v-if="userInfo.majors.length > 0 && userInfo.majors[0] != ''"
+              v-if="userInfo.teamsValue.length > 0 && userInfo.teamsValue[0] != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
             >
               <v-chip
-                v-for="(major, index) in userInfo.majors"
+                v-for="(team, index) in userInfo.teamsValue"
+                :key="index"
+                small
+                >{{ team }}</v-chip
+              >
+            </v-chip-group>
+            <v-chip v-else small class="ml-5">暂无</v-chip>
+          </div>
+          <div class="buddy-resume">
+            <h3>
+              <i class="mdi mdi-file-account buddy-i"></i>
+              | 具体项目
+            </h3>
+            <v-chip-group
+              v-if="userInfo.projectValue.length > 0 && userInfo.projectValue[0] != ''"
+              style="margin-left: 5px"
+              column
+              class="ml-5"
+            >
+              <v-chip
+                v-for="(project, index) in userInfo.projectValue"
+                :key="index"
+                small
+                >{{ project }}</v-chip
+              >
+            </v-chip-group>
+            <v-chip v-else small class="ml-5">暂无</v-chip>
+          </div>
+          <div class="buddy-resume">
+            <h3>
+              <i class="mdi mdi-briefcase buddy-i"></i>
+              | 核心层职务
+            </h3>
+            <v-chip-group
+              v-if="userInfo.managementExperience != ''"
+              style="margin-left: 5px"
+              column
+              class="ml-5"
+            >
+              <v-chip
+                v-for="(managementExperience, index) in userInfo.managementExperienceValue"
+                :key="index"
+                small
+                >{{ managementExperience }}</v-chip
+              >
+            </v-chip-group>
+            <v-chip v-else small class="ml-5">暂无</v-chip>
+          </div>
+          <div class="major">
+            <h3>
+              <i class="mdi mdi-professional-hexagon buddy-i"></i>
+              | 熟悉的专业方向
+            </h3>
+            <v-chip-group
+              v-if="userInfo.majorsValue.length > 0 && userInfo.majorsValue[0] != ''"
+              style="margin-left: 5px"
+              column
+              class="ml-5"
+            >
+              <v-chip
+                v-for="(major, index) in userInfo.majorsValue"
                 :key="index"
                 small
                 >{{ major }}</v-chip
               >
             </v-chip-group>
-            <v-chip v-else>暂无</v-chip>
+            <v-chip v-else small class="ml-5">暂无</v-chip>
           </div>
           <div class="major">
             <h3>
-              <i class="mdi mdi-head-cog buddy-i"></i>
-              | 性格特征
+              <i class="mdi mdi-arrow-top-right buddy-i"></i>
+              | 想要分享的方向
             </h3>
-            <SlidePicker :character="userInfo.character" :isDisabled="true" />
+            <v-chip-group
+              v-if="userInfo.shares != ''"
+              style="margin-left: 5px"
+              column
+              class="ml-5"
+            >
+              <v-chip
+                v-for="(share, index) in userInfo.sharesValue"
+                :key="index"
+                small
+                >{{ share }}</v-chip
+              >
+            </v-chip-group>
+            <v-chip v-else small class="ml-5">暂无</v-chip>
+          </div>
+
+          <div class="major">
+            <h3>
+              <i class="mdi mdi-call-received buddy-i"></i>
+              | 想要学习的方向
+            </h3>
+            <v-chip-group
+              v-if="userInfo.gains != ''"
+              style="margin-left: 5px"
+              column
+              class="ml-5"
+            >
+              <v-chip
+                v-for="(gain, index) in userInfo.gainsValue"
+                :key="index"
+                small
+                >{{ gain }}</v-chip
+              >
+            </v-chip-group>
+            <v-chip v-else small class="ml-5">暂无</v-chip>
+          </div>
+
+          <div class="major">
+            <h3>
+              <i class="mdi mdi-book-open-page-variant buddy-i"></i>
+              | 推荐书籍
+            </h3>
+            <v-chip-group
+              v-if="userInfo.books != ''"
+              style="margin-left: 5px"
+              column
+              class="ml-5"
+            >
+              <v-chip
+                v-for="(book, index) in userInfo.booksValue"
+                :key="index"
+                small
+                >{{ book }}</v-chip
+              >
+            </v-chip-group>
+            <v-chip v-else small class="ml-5">暂无</v-chip>
+          </div>
+
+          <div class="major">
+            <h3>
+              <i class="mdi mdi-head-cog buddy-i"></i>
+              | 性格特征自评及测试结果
+            </h3>
+            <div class="d-flex justify-start">
+              <p class="ml-5">{{ userInfo.character }}</p>
+              <p class="ml-5">{{ userInfo.characterResult }}</p>
+            </div>
           </div>
           <div class="btn-container">
             <v-btn
@@ -161,7 +263,7 @@ import Vue from "vue";
 import SlidePicker from "@/components/SlidePicker/SlidePicker.vue";
 export default Vue.extend({
   name: "BuddyDetail",
-  components: { SlidePicker },
+  components: {},
   props: ["userInfo", "isLoading", "messageCenter"],
   data() {
     return {};
@@ -218,7 +320,7 @@ table.striped > tbody > tr:nth-child(odd) {
 
 .resume .base > div,
 .resume .func > div {
-  padding-bottom: 10px;
+  padding-bottom: 0px;
 }
 
 .resume .base > div:last-of-type,
@@ -382,5 +484,9 @@ table.striped > tbody > tr:nth-child(odd) {
   display: flex;
   justify-content: flex-end;
   padding: 5px;
+}
+
+.plainText {
+
 }
 </style>

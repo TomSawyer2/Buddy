@@ -23,6 +23,21 @@ export function transformAfterGet(data: any) {
     data.birthday = "";
   }
 
+  data.teamsValue = [];
+  if (data.teams != "") {
+    data.teamsValue = data.teams.split(';');
+  }
+
+  data.sharesValue = [];
+  if (data.shares != "") {
+    data.sharesValue = data.shares.split(';');
+  }
+  
+  data.gainsValue = [];
+  if (data.gains != "") {
+    data.gainsValue = data.gains.split(';');
+  }
+
   data.majorsValue = [];
   data.booksValue = [];
   data.fieldsValue = [];
@@ -45,6 +60,11 @@ export function transformAfterGet(data: any) {
     data.teamValue = data.teams.split(";");
   }
 
+  data.projectValue = [];
+  if(data.projects != "") {
+    data.projectValue = data.projects.split(';');
+  }
+  
   data.resumeValue = [];
   const projectsTmp: string[] = data.projects.split(";");
   let idx = 0;
@@ -58,6 +78,7 @@ export function transformAfterGet(data: any) {
   }
 
   const characterItems: string[] = [
+    "暂无",
     "稳重踏实",
     "外向开朗",
     "善解人意",
@@ -67,6 +88,7 @@ export function transformAfterGet(data: any) {
   data.character = characterItems[data.character];
 
   const characterResultItemsLocal: string[] = [
+    "暂无",
     "INTJ-A INTJ-T",
     "INTP-A INTP-T",
     "ENTJ-A ENTJ-T",

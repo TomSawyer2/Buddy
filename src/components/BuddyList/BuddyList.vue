@@ -3,7 +3,7 @@
     min-height="180"
     style="margin-top: 15px"
     v-if="
-      (isAllShow ? true : item.identity === 1) && item.phoneNumber !== phone
+      (isAllShow ? true : item.isGraduated) && item.phoneNumber !== phone
     "
   >
     <v-card style="box-shadow: none" @click="onToDetail(item.id)">
@@ -32,20 +32,21 @@
           </div>
 
           <p class="font-weight-black info-detail-container">
-            编号：{{ item.number.length ? item.number : "无" }}
+            编号：{{ item.number ? item.number : "无" }}
           </p>
 
-          <p class="font-weight-black info-detail-container">
+          <p class="font-weight-black info-detail-container" style="white-space:nowrap;">
             <i class="mdi mdi-phone" aria-hidden="true"></i>
             {{ item.phoneNumber }}
           </p>
 
           <v-chip-group
-            v-if="item.fields[0].length > 0"
+            v-if="item.fields != ''"
             style="margin-left: 5px"
             column
+            class="mt-2"
           >
-            <v-chip v-for="(field, index) in item.fields" :key="index" small>{{
+            <v-chip v-for="(field, index) in item.fieldsValue" :key="index" small>{{
               field
             }}</v-chip>
           </v-chip-group>

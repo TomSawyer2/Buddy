@@ -48,7 +48,7 @@
                       <v-row>
                         <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <v-chip
-                            v-for="tag in item.fields"
+                            v-for="tag in item.fieldsValue"
                             :key="tag"
                             class="mr-1"
                           >

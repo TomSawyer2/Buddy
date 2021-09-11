@@ -644,6 +644,7 @@ export default {
         teams: [],
         managementExperienceItem: [],
         characterItems: [
+          "暂无",
           "稳重踏实",
           "外向开朗",
           "善解人意",
@@ -651,6 +652,7 @@ export default {
           "尚不清楚",
         ],
         characterResultItems: [
+          "暂无",
           "INTJ-A INTJ-T",
           "INTP-A INTP-T",
           "ENTJ-A ENTJ-T",
