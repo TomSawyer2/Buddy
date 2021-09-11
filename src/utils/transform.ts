@@ -11,6 +11,9 @@ import { Form } from "element-ui";
  * 两个函数用于个人信息获取与提交时的映射
  */
 export function transformAfterGet(data: any) {
+  if(data == undefined) {
+    return;
+  }
   if (data.isGraduated) {
     data.isGraduated = "是";
   } else {
@@ -73,41 +76,44 @@ export function transformAfterGet(data: any) {
     data.resumeValue = [...data.resumeValue, projectsTmp[idx].split('-')];
   }
 
-  if (data.character == -1) {
-    data.character = "";
+  if (data.characterResult == -1) {
+    data.characterResult = "暂无";
+  } else {
+    const characterResultItemsLocal: string[] = [
+      "暂无",
+      "INTJ-A INTJ-T",
+      "INTP-A INTP-T",
+      "ENTJ-A ENTJ-T",
+      "ENTP-A ENTP-T",
+      "INFJ-A INFJ-T",
+      "INFP-A INFP-T",
+      "ENFJ-A ENFJ-T",
+      "ENFP-A ENFP-T",
+      "ISTJ-A ISTJ-T",
+      "ISFJ-A ISFJ-T",
+      "ESTJ-A ESTJ-T",
+      "ESFJ-A ESFJ-T",
+      "ISTP-A ISTP-T",
+      "ISFP-A ISFP-T",
+      "ESTP-A ESTP-T",
+      "ESFP-A ESFP-T",
+    ];
+    data.characterResult = characterResultItemsLocal[data.characterResult];  
   }
-
-  const characterItems: string[] = [
-    "暂无",
-    "稳重踏实",
-    "外向开朗",
-    "善解人意",
-    "和蔼可亲",
-    "尚不清楚",
-  ];
-  data.character = characterItems[data.character];
-
-  const characterResultItemsLocal: string[] = [
-    "暂无",
-    "INTJ-A INTJ-T",
-    "INTP-A INTP-T",
-    "ENTJ-A ENTJ-T",
-    "ENTP-A ENTP-T",
-    "INFJ-A INFJ-T",
-    "INFP-A INFP-T",
-    "ENFJ-A ENFJ-T",
-    "ENFP-A ENFP-T",
-    "ISTJ-A ISTJ-T",
-    "ISFJ-A ISFJ-T",
-    "ESTJ-A ESTJ-T",
-    "ESFJ-A ESFJ-T",
-    "ISTP-A ISTP-T",
-    "ISFP-A ISFP-T",
-    "ESTP-A ESTP-T",
-    "ESFP-A ESFP-T",
-  ];
-  data.characterResult = characterResultItemsLocal[data.characterResult];
-
+  if (data.character == -1) {
+    data.character = "暂无";
+  } else {
+    const characterItems: string[] = [
+      "暂无",
+      "稳重踏实",
+      "外向开朗",
+      "善解人意",
+      "和蔼可亲",
+      "尚不清楚",
+    ];
+    data.character = characterItems[data.character];
+  }
+  
   switch (data.identity) {
     case 0:
       data.identity = "预备队员";

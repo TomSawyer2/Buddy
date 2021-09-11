@@ -11,5 +11,5 @@ export function updateUserInfo(params: updateUserInfoInfo) {
 }
 
 export function deleteUser(params: deleteUserInfo) {
-    return axios.delete(URL.deleteUser, params);
+    return axios.delete(URL.deleteUser, {data: params});
 }

@@ -150,6 +150,10 @@ Axios.interceptors.response.use(
         Message.error("大方向为空~");
         throw new Error(res.data.msg);
 
+      case ERROR_CODE.PERMISSION_ERR:
+        Message.error("权限不足，您不能进行相关操作~");
+        throw new Error(res.data.msg);
+
       case ERROR_CODE.TOKEN_NOT_EXISTED:
       case ERROR_CODE.TOKEN_EXPIRED:
       case ERROR_CODE.TOKEN_FAILED:

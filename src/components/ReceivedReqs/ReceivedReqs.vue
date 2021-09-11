@@ -228,7 +228,6 @@ export default Vue.extend({
   },
   mounted() {
     (this as any).pageWidth = document.documentElement.clientWidth - 60;
-    console.log("宽度：" + (this as any).pageWidth);
   },
 });
 </script>

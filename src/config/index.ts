@@ -116,7 +116,7 @@ const ERROR_CODE = {
   INTERNAL_ERR: 500, // 服务器内部错误
   PARAM_ERR: 501, // 参数错误
 
-  
+  PERMISSION_ERR: 1001, // 权限不足
   
 };
 

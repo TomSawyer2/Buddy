@@ -3,7 +3,7 @@
     min-height="180"
     style="margin-top: 15px"
     v-if="
-      (isAllShow ? true : item.isGraduated) && item.phoneNumber !== phone
+      (isAllShow ? true : item.isGraduated ) && item.phoneNumber !== phone
     "
   >
     <v-card style="box-shadow: none" @click="onToDetail(item.id)">

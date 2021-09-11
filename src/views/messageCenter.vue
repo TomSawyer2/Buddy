@@ -1,13 +1,5 @@
 <template>
-  <div
-    style="
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-    "
-  >
+  <div class="mainBox">
     <ChooseBtn
       @childReceived="childReceived"
       :totalReceivedNum="totalReceivedNum"
@@ -95,7 +87,6 @@ export default {
   methods: {
     childReceived(val) {
       (this as any).received = val;
-      console.log(val);
     },
     async onToDetail(id: string) {
       try {
@@ -122,26 +113,15 @@ export default {
           if ((this as any).acceptNumber != data.acceptNum) {
             (this as any).acceptNumber = data.acceptNum;
           }
-          console.log("已接收了" + (this as any).acceptNumber + "位小队员");
-          console.log((this as any).receivedItems);
           //如果数据不止一页则参数+1继续请求数据直到总数与本地数组总数相同
-          console.log("当前本地的数量：" + (this as any).receivedItems.length);
-          console.log("当前后台的数量：" + data.totalNum);
           if ((this as any).receivedItems.length != data.totalNum) {
             (this as any).getRequestsParams.pageNo++;
-            console.log(
-              "继续请求，当前请求第" +
-                (this as any).getRequestsParams.pageNo +
-                "页"
-            );
             getReceivedRequests((this as any).getRequestsParams);
           }
           (this as any).totalReceivedNum = data.totalNum;
           if (data.totalNum == 0) {
-            console.log("暂无收到的请求。");
             (this as any).noReceivedRequests = 1;
           } else {
-            console.log("有收到的请求。");
             (this as any).noReceivedRequests = 0;
           }
         })
@@ -160,25 +140,15 @@ export default {
           (this as any).sentItems = (this as any).sentItems.concat(
             data.requestInfo
           );
-          console.log((this as any).sentItems);
           //如果数据不止一页则参数+1继续请求数据直到总数与本地数组总数相同
-          console.log("当前本地的数量：" + (this as any).sentItems.length);
-          console.log("当前后台的数量：" + data.totalNum);
           if ((this as any).sentItems.length != data.totalNum) {
             (this as any).getRequestsParams.pageNo++;
-            console.log(
-              "继续请求，当前请求第" +
-                (this as any).getRequestsParams.pageNo +
-                "页"
-            );
             getSentRequests((this as any).getRequestsParams);
           }
           (this as any).totalSentNum = data.totalNum;
           if (data.totalNum == 0) {
-            console.log("暂无发送的请求。");
             (this as any).noSentRequests = 1;
           } else {
-            console.log("有已发送的请求。");
             (this as any).noSentRequests = 0;
           }
         })
@@ -187,8 +157,6 @@ export default {
         });
     },
     async acceptBuddyFunc(item: any) {
-      console.log("同意了以下小队员的申请：");
-      console.log(item);
       item.status = 1;
       (this as any).chooseBuddyParams.id = item.id;
       await acceptBuddy((this as any).chooseBuddyParams)
@@ -203,8 +171,6 @@ export default {
         });
     },
     async refuseBuddyFunc(item: any) {
-      console.log("拒绝了以下小队员的申请：");
-      console.log(item);
       item.status = 2;
       (this as any).chooseBuddyParams.id = item.id;
       await refuseBuddy((this as any).chooseBuddyParams)
@@ -218,16 +184,13 @@ export default {
     },
     async saveReason(item: any) {
       // 这个函数是用来修改理由的
-      console.log(item);
       (this as any).updateReasonParams.id = item.id;
       (this as any).updateReasonParams.applyReason = item.applyReason;
       try {
         await postSendBuddyRequest((this as any).updateReasonParams);
         (this as any).updateReasonParams.applyReason = "";
-        console.log("修改理由成功");
         (this as any).$message.success("修改理由成功！");
       } catch (err) {
-        console.log("修改理由失败");
         (this as any).$message.error("修改理由失败，请重试~");
       }
     },
@@ -238,7 +201,6 @@ export default {
   },
   watch: {
     acceptNumber: function (newVal: any, oldVal: any) {
-      console.log(newVal);
       if (newVal == 3) {
         (this as any).$message.success("您可接收的小队员已满~");
         (this as any).totalReceivedNum = "已满";
@@ -259,3 +221,14 @@ export default {
   },
 };
 </script>
+
+<style>
+.mainBox {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 56px;
+}
+</style>

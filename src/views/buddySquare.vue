@@ -102,6 +102,7 @@ export default {
     isErrorShow: false,
     phone: getPhone(),
     isAllShow: false,
+    i: 0,
   }),
 
   methods: {
@@ -155,9 +156,8 @@ export default {
     async getUserList(pageNo: number) {
       const res = (await getAllUsersByPage({ pageNo })).data.data;
       (this as any).userList = (this as any).userList.concat(res.studentsInfo); // 不直接从userList里面删掉自己，而是条件渲染，防止totalNum对不上
-      let i = 0;
-      for(i; i < (this as any).userList.length; i ++ ) {
-        (this as any).userList[i] = transformAfterGet((this as any).userList[i]);
+      for((this as any).i; (this as any).i < (this as any).userList.length; (this as any).i ++ ) {
+        (this as any).userList[(this as any).i] = transformAfterGet((this as any).userList[(this as any).i]);
       }
       (this as any).totalPage = res.totalPage;
       (this as any).totalNum = res.totalNum;
@@ -179,8 +179,11 @@ export default {
       ) {
         (this as any).isLoading = true;
         (this as any).pageNo++;
-        (this as any).getUserList((this as any).pageNo);
-        (this as any).isLoading = false;
+        setTimeout(() => {
+          (this as any).getUserList((this as any).pageNo);
+          (this as any).isLoading = false;
+        }, 1000);
+        
       }
     },
 
@@ -190,7 +193,6 @@ export default {
       try {
         let res = (await getUserDetailById({ id: id })).data.data;
         (this as any).buddyDetail = transformAfterGet(res);
-        console.log((this as any).buddyDetail);
         (this as any).isDetailLoading = false;
       } catch (error) {
         console.log(error);

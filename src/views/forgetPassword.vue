@@ -1,13 +1,7 @@
 <template>
   <div
     v-bind:style="{ height: pageHeight + 'px' }"
-    style="
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-    "
+    class="mainBox"
   >
     <v-form ref="form" v-model="valid" lazy-validation style="width: 40%">
       <v-text-field
@@ -201,3 +195,14 @@ export default {
   },
 };
 </script>
+
+<style>
+.mainBox {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 56px;
+}
+</style>
