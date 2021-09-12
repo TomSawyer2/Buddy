@@ -195,8 +195,7 @@ export function forgetPwdSubmit(
   return axios.post(URL.forgetPwdSubmit, params);
 }
 
-export function changePwdGetCaptcha(
-): Promise<Record<string, unknown>> {
+export function changePwdGetCaptcha(): Promise<Record<string, unknown>> {
   return axios.post(URL.changePwdGetCaptcha);
 }
 

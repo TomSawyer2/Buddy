@@ -11,7 +11,7 @@
       <v-expansion-panel>
         <v-expansion-panel-header>用户信息</v-expansion-panel-header>
         <v-expansion-panel-content>
-          <AdminTable :queryData="userData" @deleteUserChild="deleteUserFunc" @updateUserInfoChild="updateUserInfoFunc" style="width: 100%; max-height: 2000px" class="tableFooter"/>
+          <AdminTable v-if="haveMajors && haveBooks && haveFields" :queryData="userData" :majorItems="majorItems" :bookItems="bookItems" :fieldItems="fieldItems" @deleteUserChild="deleteUserFunc" @updateUserInfoChild="updateUserInfoFunc" @getMajorsChild="getMajorsFunc" @getBooksChild="getBooksFunc" @getFieldsChild="getFieldsFunc" style="width: 100%; max-height: 2000px" class="tableFooter"/>
         </v-expansion-panel-content>
       </v-expansion-panel>
       <v-expansion-panel>
@@ -26,8 +26,8 @@
 </template>
 
 <script lang="ts">
-import { getUserList, updateUserInfo, deleteUser } from "../apis";
-import AdminTable from "@/components/AdminTable/AdminTable.vue";
+import { getUserList, updateUserInfo, deleteUser, getMajors, getFields, getBooks } from "../apis";
+import AdminTable from "@/components/Admin/AdminTable.vue";
 import {
   setToken,
   getToken,
@@ -44,11 +44,23 @@ export default {
   data: () => ({
     pageHeight: 0,
     userData: [],
+    majorItems: [],
+    bookItems: [],
+    fieldItems: [],
+    haveMajors: false,
+    haveBooks: false,
+    haveFields: false,
   }),
-  mounted() {
+  async mounted() {
     // 自动调节组件高度
     (this as any).pageHeight = document.documentElement.clientHeight;
+    (this as any).haveBooks = false;
+    (this as any).haveMajors = false;
+    (this as any).haveFields = false;
     (this as any).getUserListFunc();
+    await (this as any).getMajorsFunc();
+    await (this as any).getBooksFunc();
+    await (this as any).getFieldsFunc();
   },
   methods: {
       async getUserListFunc() {
@@ -62,7 +74,6 @@ export default {
             })
       },
       async deleteUserFunc(item: any) {
-        console.log({ id: item.id });
         await deleteUser({ id: item.id })
           .then((res : any) => {
             (this as any).$message.success("删除用户成功！");
@@ -80,6 +91,36 @@ export default {
           })
           .catch((err : any) => {
             (this as any).$message.error("用户信息更新失败，请重试~");
+          })
+      },
+      async getMajorsFunc () {
+        await getMajors()
+          .then((res: any) => {
+            (this as any).majorItems = res.data.data;
+            (this as any).haveMajors = true;
+          })
+          .catch((err: any) => {
+            console.log(err);
+          })
+      },
+      async getBooksFunc () {
+        await getBooks()
+          .then((res: any) => {
+            (this as any).bookItems = res.data.data;
+            (this as any).haveBooks = true;
+          })
+          .catch((err: any) => {
+            console.log(err);
+          })
+      },
+      async getFieldsFunc () {
+        await getFields()
+          .then((res: any) => {
+            (this as any).fieldItems = res.data.data;
+            (this as any).haveFields = true;
+          })
+          .catch((err: any) => {
+            console.log(err);
           })
       }
   },

@@ -91,7 +91,7 @@ export default {
     async onToDetail(id: string) {
       try {
         let res = (await getUserDetailById({ id: id })).data.data;
-        res.fields = res.fields.length > 0 ? res.fields : ["暂无"];
+        res.fields = res.fields != "" ? res.fields : "暂无";
         (this as any).buddyDetail = transformAfterGet(res);
       } catch (error) {
         console.log(error);
@@ -109,7 +109,6 @@ export default {
           data.requestInfo.forEach((val: any, idx, array) => {
             transformAfterGet(data.requestInfo[idx]);
           });
-
           if ((this as any).acceptNumber != data.acceptNum) {
             (this as any).acceptNumber = data.acceptNum;
           }

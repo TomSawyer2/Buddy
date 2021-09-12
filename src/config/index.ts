@@ -72,7 +72,6 @@ const URL = {
 };
 
 const ERROR_CODE = {
-  
   TOKEN_NOT_EXISTED: 1, // token不存在
   TOKEN_EXPIRED: 2, // token过期或无效 // TODO 重新登录
   TOKEN_FAILED: 3, // token与提交申请的用户不一致
@@ -105,7 +104,7 @@ const ERROR_CODE = {
   FIELD_EXISTED: 101, // 新建技术栈已存在
   FIELD_BLANK: 102, // 技术栈为空
   MAJOR_EMPTY: 103, // 专业方向为空
-  
+
   SHARE_DIREC_EXISTED: 104, // 分享大方向已存在
   SHARE_ASPECT_EXISTED: 105, // 该分享方向下的小方向已存在
   SHARE_DIREC_BLANK: 106, // 分享的大方向为空
@@ -117,7 +116,6 @@ const ERROR_CODE = {
   PARAM_ERR: 501, // 参数错误
 
   PERMISSION_ERR: 1001, // 权限不足
-  
 };
 
 export { URL, ERROR_CODE };

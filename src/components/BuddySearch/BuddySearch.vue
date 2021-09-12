@@ -1,133 +1,143 @@
 <template>
-    <div style="flex-direction: column; width: 80%; ">
-      <v-expansion-panels class="searchbar panelBar">
-        <v-expansion-panel>
-          <v-expansion-panel-header>
-            <v-text-field
-              label="老队员姓名"
-              v-model="searchInfo.userName"
-              validate-on-blur
-              clearable
-              style="width: 60%"
-            />
-            <div class="searchContainer ml-2">
-              <div class="studentShow">
-                <v-switch v-model="isAllShow"></v-switch>
-                <div class="student-show-text">显示小队员</div>
-              </div>
-              <div class="search-btn ml-2">
-                <v-btn
-                  :disabled="false"
-                  color="primary"
-                  @click="search"
-                  style="width: 30%"
-                >
-                  <v-icon>mdi-magnify</v-icon>
-                  搜索
-                </v-btn>
-              </div>
+  <div style="flex-direction: column; width: 80%">
+    <v-expansion-panels class="searchbar panelBar">
+      <v-expansion-panel>
+        <v-expansion-panel-header>
+          <v-text-field
+            label="老队员姓名"
+            v-model="searchInfo.userName"
+            validate-on-blur
+            clearable
+            style="width: 60%"
+          />
+          <div class="searchContainer ml-2">
+            <div class="studentShow">
+              <v-switch v-model="isAllShow"></v-switch>
+              <div class="student-show-text">显示小队员</div>
             </div>
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-select
-              dense
-              v-model="searchInfo.fields"
-              :items="fields"
-              small-chips
-              label="技术栈"
-              multiple
-              outline
-              clearable
-              style="width: 70%"
-            ></v-select>
-            <v-select
-              dense
-              v-model="searchInfo.graduateYear"
-              :items="graduateYear"
-              label="毕业年份"
-              outline
-              clearable
-              style="width: 70%"
-            ></v-select>
-            <v-select
-              dense
-              v-model="searchInfo.managementExperience"
-              :items="managementExperience"
-              label="核心层职务"
-              outline
-              clearable
-              multiple
-              style="width: 70%"
-            ></v-select>
-            <v-select
-              dense
-              v-model="searchInfo.majors"
-              :items="majors"
-              label="专业方向"
-              outline
-              clearable
-              multiple
-              style="width: 70%"
-            ></v-select>
-            <v-select
-              dense
-              v-model="searchInfo.projectYear"
-              :items="projectYear"
-              label="项目年份"
-              outline
-              clearable
-              style="width: 70%"
-            ></v-select>
-            <v-select
-              dense
-              v-model="searchInfo.projectName"
-              :items="projectName"
-              label="项目名称"
-              outline
-              clearable
-              style="width: 70%"
-            ></v-select>
-            <v-select
-              dense
-              v-model="searchInfo.projectIdentity"
-              :items="projectIdentity"
-              label="项目中的身份"
-              outline
-              clearable
-              style="width: 70%"
-            ></v-select>
-            <el-cascader
-              v-model="searchInfo.gainsValue"
-              :options="gains"
-              :props="gainProp"
-              v-if="isShowGain"
-              placeholder="想要学习的方向"
-              class="cityChoose"
-              style="width: 70%"
-              clearable
-            ></el-cascader>
-            <el-cascader
-              v-model="searchInfo.sharesValue"
-              :options="shares"
-              :props="shareProp"
-              v-if="isShowShare"
-              class="cityChoose"
-              placeholder="乐于分享的方向"
-              style="width: 70%"
-              clearable
-            ></el-cascader>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </div>
-    
+            <div class="search-btn ml-2">
+              <v-btn
+                :disabled="false"
+                color="primary"
+                @click="search"
+                style="width: 30%"
+              >
+                <v-icon>mdi-magnify</v-icon>
+                搜索
+              </v-btn>
+            </div>
+          </div>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-select
+            dense
+            v-model="searchInfo.fields"
+            :items="fields"
+            small-chips
+            label="技术栈"
+            multiple
+            outline
+            clearable
+            style="width: 70%"
+          ></v-select>
+          <v-select
+            dense
+            v-model="searchInfo.graduateYear"
+            :items="graduateYear"
+            label="毕业年份"
+            outline
+            clearable
+            style="width: 70%"
+          ></v-select>
+          <v-select
+            dense
+            v-model="searchInfo.managementExperience"
+            :items="managementExperience"
+            label="核心层职务"
+            outline
+            clearable
+            multiple
+            style="width: 70%"
+          ></v-select>
+          <v-select
+            dense
+            v-model="searchInfo.majors"
+            :items="majors"
+            label="专业方向"
+            outline
+            clearable
+            multiple
+            style="width: 70%"
+          ></v-select>
+          <v-select
+            dense
+            v-model="searchInfo.projectYear"
+            :items="projectYear"
+            label="项目年份"
+            outline
+            clearable
+            style="width: 70%"
+          ></v-select>
+          <v-select
+            dense
+            v-model="searchInfo.projectName"
+            :items="projectName"
+            label="项目名称"
+            outline
+            clearable
+            style="width: 70%"
+          ></v-select>
+          <v-select
+            dense
+            v-model="searchInfo.projectIdentity"
+            :items="projectIdentity"
+            label="项目中的身份"
+            outline
+            clearable
+            style="width: 70%"
+          ></v-select>
+          <el-cascader
+            v-model="searchInfo.gainsValue"
+            :options="gains"
+            :props="gainProp"
+            v-if="isShowGain"
+            placeholder="想要学习的方向"
+            class="cityChoose"
+            style="width: 70%"
+            clearable
+          ></el-cascader>
+          <el-cascader
+            v-model="searchInfo.sharesValue"
+            :options="shares"
+            :props="shareProp"
+            v-if="isShowShare"
+            class="cityChoose"
+            placeholder="乐于分享的方向"
+            style="width: 70%"
+            clearable
+          ></el-cascader>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
+  </div>
 </template>
 
 <script lang="ts">
-import { getAllFields, getMajors, getShareAllDirections, getShareAllAspects, getGainAllDirections, getGainAllAspects } from "@/apis";
+import {
+  getAllFields,
+  getMajors,
+  getShareAllDirections,
+  getShareAllAspects,
+  getGainAllDirections,
+  getGainAllAspects,
+} from "@/apis";
 import managementExperienceItem from "@/utils/managementExperience";
 import ResumeData from "@/utils/resumeData";
-import { arrayToObject, arrayToObjectDeWeight, deWeightArray } from "@/utils/transform";
+import {
+  arrayToObject,
+  arrayToObjectDeWeight,
+  deWeightArray,
+} from "@/utils/transform";
 import Vue from "vue";
 export default Vue.extend({
   name: "BuddySearch",
@@ -206,10 +216,19 @@ export default Vue.extend({
       let i = 1;
       (this as any).searchInfo.shares = [];
       if ((this as any).searchInfo.sharesValue.length != 0) {
-        (this as any).searchInfo.shares = [(this as any).searchInfo.sharesValue[0][0] + "-" + (this as any).searchInfo.sharesValue[0][1]];
+        (this as any).searchInfo.shares = [
+          (this as any).searchInfo.sharesValue[0][0] +
+            "-" +
+            (this as any).searchInfo.sharesValue[0][1],
+        ];
         if ((this as any).searchInfo.sharesValue.length > 1) {
           for (i; i < (this as any).searchInfo.sharesValue.length; i++) {
-            (this as any).searchInfo.shares = [...(this as any).searchInfo.shares, (this as any).searchInfo.sharesValue[i][0] + "-" + (this as any).searchInfo.sharesValue[i][1]];
+            (this as any).searchInfo.shares = [
+              ...(this as any).searchInfo.shares,
+              (this as any).searchInfo.sharesValue[i][0] +
+                "-" +
+                (this as any).searchInfo.sharesValue[i][1],
+            ];
           }
         }
       }
@@ -217,36 +236,44 @@ export default Vue.extend({
       let j = 1;
       (this as any).searchInfo.gains = [];
       if ((this as any).searchInfo.gainsValue.length != 0) {
-        (this as any).searchInfo.gains = [(this as any).searchInfo.gainsValue[0][0] + "-" + (this as any).searchInfo.gainsValue[0][1]];
+        (this as any).searchInfo.gains = [
+          (this as any).searchInfo.gainsValue[0][0] +
+            "-" +
+            (this as any).searchInfo.gainsValue[0][1],
+        ];
         if ((this as any).searchInfo.gainsValue.length > 1) {
           for (j; j < (this as any).searchInfo.gainsValue.length; j++) {
-            (this as any).searchInfo.gains = [...(this as any).searchInfo.gains, (this as any).searchInfo.gainsValue[j][0] + "-" + (this as any).searchInfo.gainsValue[j][1]];
+            (this as any).searchInfo.gains = [
+              ...(this as any).searchInfo.gains,
+              (this as any).searchInfo.gainsValue[j][0] +
+                "-" +
+                (this as any).searchInfo.gainsValue[j][1],
+            ];
           }
         }
-        
       }
       this.$emit("search", this.searchInfo);
     },
     fillInGraduateYears() {
       let i = new Date().getFullYear();
-      for(i; i > 1950; i -- ) {
+      for (i; i > 1950; i--) {
         (this as any).graduateYear.push(i);
       }
     },
     fillInProjectYears() {
       let i = new Date().getFullYear();
-      for(i; i > 2001; i -- ) {
+      for (i; i > 2001; i--) {
         (this as any).projectYear.push(i);
       }
     },
-    async getMajorsFunc () {
+    async getMajorsFunc() {
       await getMajors()
-        .then((res : any) => {
+        .then((res: any) => {
           (this as any).majors = res.data.data;
         })
-        .catch((err : any) => {
+        .catch((err: any) => {
           (this as any).$message.error("获得专业方向错误，请刷新页面~");
-        })
+        });
     },
     lazyLoadGain(node: any, resolve: any) {
       const { level } = node;
@@ -388,8 +415,9 @@ export default Vue.extend({
   color: rgb(107, 105, 105);
   font-size: 0.875rem;
 }
-.panelBar .v-expansion-panel::before{
+.panelBar .v-expansion-panel::before {
   border-radius: 0px;
-  box-shadow: 0px 0px 0px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 14%), 0px 0px 0px 0px rgb(0 0 0 / 12%);
+  box-shadow: 0px 0px 0px 0px rgb(0 0 0 / 20%), 0px 0px 0px 0px rgb(0 0 0 / 14%),
+    0px 0px 0px 0px rgb(0 0 0 / 12%);
 }
 </style>

@@ -37,11 +37,12 @@
 import Vue from "vue";
 export default Vue.extend({
   name: "DatePicker",
-  props: ["date"],
+  props: ["dateOrigin"],
   data() {
     return {
       activePicker: null,
       menu: false,
+      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
     };
   },
   methods: {
@@ -50,10 +51,16 @@ export default Vue.extend({
       (this as any).menu = false;
     },
   },
+  mounted() {
+    (this as any).date = (this as any).dateOrigin;
+  },
   watch: {
     menu(val) {
       val && setTimeout(() => ((this as any).activePicker = "YEAR"));
     },
+    dateOrigin(newV, oldV) {
+      (this as any).date = newV;
+    }
   },
 });
 </script>

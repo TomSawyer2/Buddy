@@ -78,7 +78,7 @@ export default {
     pageHeight: 100,
   }),
   methods: {
-      async changePassword() {
+    async changePassword() {
       if (
         (this as any).changePasswordParam.newPassword ==
         (this as any).confirmPassword

@@ -1,6 +1,6 @@
 <template>
   <div class="buddy-container">
-    <div class="search-container" style="padding-top: 18px;">
+    <div class="search-container" style="padding-top: 18px">
       <BuddySearch
         @search="onSearch"
         @showAllChange="showAllChange"
@@ -138,7 +138,18 @@ export default {
       }
     },
 
-    async onSearch(searchInfo: { userName: string; fields: string[]; graduateYear: number; managementExperience: string[]; majors: string[]; projectYear: number; projectIdentity: string; projectName: string; gains: string[]; shares: string[];}) {
+    async onSearch(searchInfo: {
+      userName: string;
+      fields: string[];
+      graduateYear: number;
+      managementExperience: string[];
+      majors: string[];
+      projectYear: number;
+      projectIdentity: string;
+      projectName: string;
+      gains: string[];
+      shares: string[];
+    }) {
       try {
         const res = (await searchUsersByNameAndFields(searchInfo)).data.data;
         (this as any).userList = res.SearchResults;
@@ -156,8 +167,14 @@ export default {
     async getUserList(pageNo: number) {
       const res = (await getAllUsersByPage({ pageNo })).data.data;
       (this as any).userList = (this as any).userList.concat(res.studentsInfo); // 不直接从userList里面删掉自己，而是条件渲染，防止totalNum对不上
-      for((this as any).i; (this as any).i < (this as any).userList.length; (this as any).i ++ ) {
-        (this as any).userList[(this as any).i] = transformAfterGet((this as any).userList[(this as any).i]);
+      for (
+        (this as any).i;
+        (this as any).i < (this as any).userList.length;
+        (this as any).i++
+      ) {
+        (this as any).userList[(this as any).i] = transformAfterGet(
+          (this as any).userList[(this as any).i]
+        );
       }
       (this as any).totalPage = res.totalPage;
       (this as any).totalNum = res.totalNum;
@@ -183,7 +200,6 @@ export default {
           (this as any).getUserList((this as any).pageNo);
           (this as any).isLoading = false;
         }, 1000);
-        
       }
     },
 

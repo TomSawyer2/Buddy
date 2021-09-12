@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-bind:style="{ height: pageHeight + 'px' }"
-    class="mainBox"
-  >
+  <div v-bind:style="{ height: pageHeight + 'px' }" class="mainBox">
     <v-form ref="form" v-model="valid" lazy-validation style="width: 40%">
       <v-text-field
         v-model="forgetPasswordParam.phoneNumber"

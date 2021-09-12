@@ -66,7 +66,7 @@
       <DatePicker
         :label="label.birthdayLabel"
         @save="saveBirthday"
-        :date="formData.birthday"
+        :dateOrigin="formData.birthday"
       />
 
       <MonthPicker
@@ -751,9 +751,12 @@ export default {
         if ((this as any).formData.shares != "") {
           let i = 1;
           var shareValueTmp = (this as any).formData.shares.split(";");
-          (this as any).formData.shareValue = [shareValueTmp[0].split('-')];
+          (this as any).formData.shareValue = [shareValueTmp[0].split("-")];
           for (i; i < shareValueTmp.length; i++) {
-            (this as any).formData.shareValue = [...(this as any).formData.shareValue, shareValueTmp[i].split("-")];
+            (this as any).formData.shareValue = [
+              ...(this as any).formData.shareValue,
+              shareValueTmp[i].split("-"),
+            ];
           }
           let idx = 0;
           for (idx; idx < (this as any).formData.shareValue.length; idx++) {
@@ -769,9 +772,12 @@ export default {
         if ((this as any).formData.gains != "") {
           let i = 1;
           var gainValueTmp = (this as any).formData.gains.split(";");
-          (this as any).formData.gainValue = [gainValueTmp[0].split('-')];
+          (this as any).formData.gainValue = [gainValueTmp[0].split("-")];
           for (i; i < gainValueTmp.length; i++) {
-            (this as any).formData.gainValue = [...(this as any).formData.gainValue, gainValueTmp[i].split("-")];
+            (this as any).formData.gainValue = [
+              ...(this as any).formData.gainValue,
+              gainValueTmp[i].split("-"),
+            ];
           }
           let idx = 0;
           for (idx; idx < (this as any).formData.gainValue.length; idx++) {
@@ -1089,7 +1095,9 @@ export default {
       await (this as any).updateFields();
       await (this as any).updateMajors();
       await (this as any).updateBooks();
-      (this as any).formData = await transformBeforeUpdate((this as any).formData);
+      (this as any).formData = await transformBeforeUpdate(
+        (this as any).formData
+      );
       try {
         await updatePersonalInformation((this as any).formData);
         (this as any).$message.success("更新成功！");
