@@ -1,10 +1,13 @@
 <template>
-  <div class="mainBox">
+  <div class="mainBox" :style="{ marginLeft: margin }">
     <v-form
       ref="form"
       v-model="valid"
       lazy-validation
-      style="width: 50%"
+      v-bind:style="{
+        width: width + '%',
+        marginBottom: '50px',
+      }"
       class="mt-10"
     >
       <div style="display: flex; flex-direction: row; align-items: center">
@@ -733,9 +736,18 @@ export default {
       queryName: "",
       queryNumberSuccess: false,
       isShowResume: false,
+      width: 50,
+      margin: 0,
     };
   },
   async mounted() {
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).width = 90;
+      (this as any).margin = 0;
+    } else {
+      (this as any).width = 50;
+      (this as any).margin = 56;
+    }
     (this as any).items.managementExperienceItem = managementExperienceItem;
     (this as any).items.teams = Groups;
     (this as any).cityData = Cities;

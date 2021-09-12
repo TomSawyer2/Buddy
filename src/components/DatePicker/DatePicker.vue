@@ -42,7 +42,9 @@ export default Vue.extend({
     return {
       activePicker: null,
       menu: false,
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+        .toISOString()
+        .substr(0, 10),
     };
   },
   methods: {
@@ -60,7 +62,7 @@ export default Vue.extend({
     },
     dateOrigin(newV, oldV) {
       (this as any).date = newV;
-    }
+    },
   },
 });
 </script>

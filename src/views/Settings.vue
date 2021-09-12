@@ -1,6 +1,11 @@
 <template>
   <div class="pageHolder" v-bind:style="{ height: pageHeight + 'px' }">
-    <v-form ref="form" v-model="valid" lazy-validation style="width: 40%">
+    <v-form
+      ref="form"
+      v-model="valid"
+      lazy-validation
+      :style="{ width: width + '%' }"
+    >
       <v-text-field
         v-model="changePasswordParam.phoneNumber"
         :rules="rules.phoneNumberRules"
@@ -76,6 +81,7 @@ export default {
     timer: null,
     selectBtnText: "使用验证码登录",
     pageHeight: 100,
+    width: 40,
   }),
   methods: {
     async changePassword() {
@@ -153,6 +159,11 @@ export default {
     },
   },
   mounted() {
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).width = 90;
+    } else {
+      (this as any).width = 40;
+    }
     // 自动调节组件高度
     (this as any).pageHeight = document.documentElement.clientHeight;
   },

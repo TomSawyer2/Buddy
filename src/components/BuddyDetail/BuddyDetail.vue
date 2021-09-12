@@ -17,9 +17,7 @@
             <div class="info-buddy">
               <h4 class="name">{{ userInfo.userName }}</h4>
               <small class="job">
-                分站：{{
-                  userInfo.substation ? userInfo.substation : "无"
-                }}
+                分站：{{ userInfo.substation ? userInfo.substation : "无" }}
                 <br />
                 编号：{{ userInfo.number ? userInfo.number : "无" }}
                 <br />
@@ -30,11 +28,7 @@
             <h3>个人信息</h3>
             <I>性别：{{ userInfo.sex ? userInfo.sex : "未填写" }}</I>
             <br />
-            <I
-              >生日：{{
-                userInfo.birthday ? userInfo.birthday : "未填写"
-              }}</I
-            >
+            <I>生日：{{ userInfo.birthday ? userInfo.birthday : "未填写" }}</I>
             <br />
             <I
               >毕业年份：{{
@@ -71,9 +65,7 @@
             </div>
             <div class="email">
               <i class="mdi mdi-email"></i>
-              <span>{{
-                userInfo.email ? userInfo.email : "未填写"
-              }}</span>
+              <span>{{ userInfo.email ? userInfo.email : "未填写" }}</span>
             </div>
           </div>
         </div>
@@ -86,7 +78,9 @@
             </h3>
             <!-- <p class="buddy-para"> -->
             <p class="plainText ml-5">
-              {{ userInfo.location ? userInfo.location : "暂无" }}
+              {{
+                userInfo.location[1] != undefined ? userInfo.location : "暂无"
+              }}
             </p>
           </div>
           <div class="buddy-resume">
@@ -95,9 +89,7 @@
               | 项目组
             </h3>
             <v-chip-group
-              v-if="
-                userInfo.teams != ''
-              "
+              v-if="userInfo.teams != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
@@ -117,9 +109,7 @@
               | 具体项目
             </h3>
             <v-chip-group
-              v-if="
-                userInfo.projects != ''
-              "
+              v-if="userInfo.projects != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
@@ -161,9 +151,7 @@
               | 熟悉的专业方向
             </h3>
             <v-chip-group
-              v-if="
-                userInfo.majors != ''
-              "
+              v-if="userInfo.majors != ''"
               style="margin-left: 5px"
               column
               class="ml-5"

@@ -21,8 +21,8 @@ export function transformAfterGet(data: any) {
     data.isGraduated = "否";
   }
 
-  if(data.location !== undefined) {
-    if(data.location != "") {
+  if (data.location !== undefined) {
+    if (data.location != "") {
       data.cityValue = data.location.split("-");
     }
   }
@@ -33,21 +33,21 @@ export function transformAfterGet(data: any) {
 
   data.teamsValue = [];
   if (data.teams !== undefined) {
-    if(data.teams != '') {
+    if (data.teams != "") {
       data.teamsValue = data.teams.split(";");
     }
   }
 
   data.sharesValue = [];
   if (data.shares !== undefined) {
-    if(data.shares != '') {
+    if (data.shares != "") {
       data.sharesValue = data.shares.split(";");
     }
   }
 
   data.gainsValue = [];
   if (data.gains !== undefined) {
-    if(data.gains != "") {
+    if (data.gains != "") {
       data.gainsValue = data.gains.split(";");
     }
   }
@@ -56,18 +56,18 @@ export function transformAfterGet(data: any) {
   data.booksValue = [];
   data.fieldsValue = [];
   if (data.fields !== undefined) {
-    if(data.fields != "") {
+    if (data.fields != "") {
       data.fieldsValue = data.fields.split(";");
     }
   }
   if (data.majors !== undefined) {
-    if(data.majors != "") {
+    if (data.majors != "") {
       data.majorsValue = data.majors.split(";");
     }
   }
-    
+
   if (data.books !== undefined) {
-    if(data.books != "") {
+    if (data.books != "") {
       data.booksValue = data.books.split(";");
     }
   }
@@ -84,7 +84,7 @@ export function transformAfterGet(data: any) {
   data.projectValue = [];
   data.resumeValue = [];
   if (data.projects !== undefined) {
-    if(data.projects != "" ) {
+    if (data.projects != "") {
       data.projectValue = data.projects.split(";");
       const projectsTmp: string[] = data.projects.split(";");
       let idx = 0;
@@ -170,8 +170,11 @@ export function transformBeforeUpdate(formData: any) {
     formData.substation = "";
   }
 
-  if(formData.cityValue !== undefined) {
-    if (formData.cityValue[1] !== undefined && formData.cityValue[2] !== undefined) {
+  if (formData.cityValue !== undefined) {
+    if (
+      formData.cityValue[1] != "undefined" &&
+      formData.cityValue[2] != "undefined"
+    ) {
       formData.location =
         formData.cityValue[0] +
         "-" +
@@ -180,6 +183,8 @@ export function transformBeforeUpdate(formData: any) {
         formData.cityValue[2] +
         "-" +
         formData.cityValue[3];
+    } else {
+      formData.location = "";
     }
   }
 
@@ -207,7 +212,7 @@ export function transformBeforeUpdate(formData: any) {
   }
 
   formData.projects = "";
-  if(formData.resumeValue !== undefined) {
+  if (formData.resumeValue !== undefined) {
     if (formData.resumeValue[1] !== undefined) {
       formData.projects =
         formData.resumeValue[0][0].slice(0, 4) +

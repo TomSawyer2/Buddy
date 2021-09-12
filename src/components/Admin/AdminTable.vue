@@ -20,7 +20,17 @@
     >
       <template v-slot:top>
         <v-dialog v-model="dialog" max-width="500px" style="z-index: 1000">
-          <AdminDetail :editedItem="editedItem" :majorItems="majorItemsChild" :bookItems="bookItemsChild" :fieldItems="fieldItemsChild" @getMajorsChild="getMajors" @getBooksChild="getBooks" @getFieldsChild="getFields" @closeChild="close" @updateInfoChild="updateInfo"/>
+          <AdminDetail
+            :editedItem="editedItem"
+            :majorItems="majorItemsChild"
+            :bookItems="bookItemsChild"
+            :fieldItems="fieldItemsChild"
+            @getMajorsChild="getMajors"
+            @getBooksChild="getBooks"
+            @getFieldsChild="getFields"
+            @closeChild="close"
+            @updateInfoChild="updateInfo"
+          />
         </v-dialog>
         <v-dialog
           v-model="dialogDelete"
@@ -151,7 +161,7 @@ export default Vue.extend({
     },
     getFields() {
       (this as any).$emit("getFieldsChild");
-    }
+    },
   },
   watch: {
     dialog(val) {

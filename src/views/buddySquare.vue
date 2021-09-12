@@ -1,5 +1,5 @@
 <template>
-  <div class="buddy-container">
+  <div class="buddy-container" :style="{ marginLeft: margin + 'px' }">
     <div class="search-container" style="padding-top: 18px">
       <BuddySearch
         @search="onSearch"
@@ -103,6 +103,7 @@ export default {
     phone: getPhone(),
     isAllShow: false,
     i: 0,
+    margin: 56,
   }),
 
   methods: {
@@ -218,6 +219,11 @@ export default {
 
   async mounted() {
     window.addEventListener("scroll", (this as any).scrollEvent);
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).margin = 0;
+    } else {
+      (this as any).margin = 56;
+    }
     try {
       (this as any).getUserList(1);
     } catch (error) {
@@ -233,7 +239,6 @@ export default {
 
 <style scoped>
 .buddy-container {
-  margin-left: 56px;
   flex: 1;
   display: flex;
   flex-direction: column;

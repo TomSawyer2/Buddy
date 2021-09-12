@@ -3,10 +3,10 @@
     <v-container
       class="mt-13 mb-3"
       v-if="noReceivedRequests == 0 && received == 1"
-      v-bind:style="{
-        width: pageWidth + 'px',
-      }"
     >
+      <!-- v-bind:style="{
+        width: pageWidth + 'px',
+      }" -->
       <v-row dense>
         <div v-if="received">
           <v-col v-for="(item, i) in receivedItems" :key="i" cols="12">

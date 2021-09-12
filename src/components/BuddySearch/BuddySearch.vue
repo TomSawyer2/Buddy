@@ -6,13 +6,13 @@
           <v-text-field
             label="老队员姓名"
             v-model="searchInfo.userName"
-            validate-on-blur
             clearable
             style="width: 60%"
+            v-on:click.native.stop
           />
           <div class="searchContainer ml-2">
             <div class="studentShow">
-              <v-switch v-model="isAllShow"></v-switch>
+              <v-switch v-model="isAllShow" v-on:click.native.stop></v-switch>
               <div class="student-show-text">显示小队员</div>
             </div>
             <div class="search-btn ml-2">
@@ -21,6 +21,7 @@
                 color="primary"
                 @click="search"
                 style="width: 30%"
+                v-on:click.native.stop
               >
                 <v-icon>mdi-magnify</v-icon>
                 搜索
