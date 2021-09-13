@@ -31,13 +31,6 @@ export function transformAfterGet(data: any) {
     data.birthday = "";
   }
 
-  data.teamsValue = [];
-  if (data.teams !== undefined) {
-    if (data.teams != "") {
-      data.teamsValue = data.teams.split(";");
-    }
-  }
-
   data.sharesValue = [];
   if (data.shares !== undefined) {
     if (data.shares != "") {
@@ -54,6 +47,7 @@ export function transformAfterGet(data: any) {
 
   data.majorsValue = [];
   data.booksValue = [];
+  data.teamsValue = [];
   data.fieldsValue = [];
   if (data.fields !== undefined) {
     if (data.fields != "") {
@@ -72,13 +66,20 @@ export function transformAfterGet(data: any) {
     }
   }
 
+  if (data.teams !== undefined) {
+    if (data.teams != "") {
+      data.teamsValue = data.teams.split(";");
+    }
+  }
+
   data.managementExperienceValue = [];
   if (data.managementExperience !== undefined) {
     data.managementExperienceValue = data.managementExperience.split(";");
   }
 
-  if (data.teamValue) {
-    data.teamValue = data.teams.split(";");
+  data.characterValue = [];
+  if (data.character !== undefined) {
+    data.characterValue = data.character.split(";");
   }
 
   data.projectValue = [];
@@ -120,19 +121,20 @@ export function transformAfterGet(data: any) {
     ];
     data.characterResult = characterResultItemsLocal[data.characterResult];
   }
-  if (data.character == -1) {
-    data.character = "暂无";
-  } else {
-    const characterItems: string[] = [
-      "暂无",
-      "稳重踏实",
-      "外向开朗",
-      "善解人意",
-      "和蔼可亲",
-      "尚不清楚",
-    ];
-    data.character = characterItems[data.character];
-  }
+
+  // if (data.character == -1) {
+  //   data.character = "暂无";
+  // } else {
+  //   const characterItems: string[] = [
+  //     "暂无",
+  //     "稳重踏实",
+  //     "外向开朗",
+  //     "善解人意",
+  //     "和蔼可亲",
+  //     "难以描述",
+  //   ];
+  //   data.character = characterItems[data.character];
+  // }
 
   switch (data.identity) {
     case 0:
@@ -163,6 +165,7 @@ export function transformAfterGet(data: any) {
 }
 
 export function transformBeforeUpdate(formData: any) {
+  console.log(formData);
   if (formData.isGraduated && formData.isGraduated == "是") {
     formData.isGraduated = true;
   } else if (formData.isGraduated && formData.isGraduated == "否") {
@@ -197,18 +200,16 @@ export function transformBeforeUpdate(formData: any) {
   formData.books = "";
   formData.books = formData.booksValue.join(";");
 
+  formData.teams = "";
+  formData.teams = formData.teamsValue.join(";");
+
   formData.managementExperience = "";
   formData.managementExperience = formData.managementExperienceValue.join(";");
 
-  formData.teams = "";
-  if (formData.teamValue) {
-    formData.teams = formData.teamValue[0];
-    if (formData.teamValue.length > 1) {
-      let idx = 1;
-      for (idx; idx < formData.teamValue.length; idx++) {
-        formData.teams = formData.teams + ";" + formData.teamValue[idx];
-      }
-    }
+  formData.character = "";
+  formData.character = formData.characterValue.join(";");
+  if (formData.character.substr(0,1) == ';') {
+    formData.character = formData.character.substr(1);
   }
 
   formData.projects = "";
@@ -262,15 +263,15 @@ export function transformBeforeUpdate(formData: any) {
     formData.characterResult
   );
 
-  const characterItems: string[] = [
-    "暂无",
-    "稳重踏实",
-    "外向开朗",
-    "善解人意",
-    "和蔼可亲",
-    "尚不清楚",
-  ];
-  formData.character = characterItems.indexOf(formData.character);
+  // const characterItems: string[] = [
+  //   "暂无",
+  //   "稳重踏实",
+  //   "外向开朗",
+  //   "善解人意",
+  //   "和蔼可亲",
+  //   "难以描述",
+  // ];
+  // formData.character = characterItems.indexOf(formData.character);
 
   let i = 1;
   formData.shares = "";

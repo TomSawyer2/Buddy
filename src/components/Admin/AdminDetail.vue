@@ -99,7 +99,7 @@
           <v-col cols="12" sm="12" md="12">
             <v-combobox
               v-model="userData.teamsValue"
-              :items="items.teams"
+              :items="items.teamItems"
               label="项目组"
               multiple
               style="position: relative; width: 100%"
@@ -222,12 +222,12 @@ import DatePicker from "@/components/DatePicker/DatePicker.vue";
 import Combobox from "@/components/Combobox/Combobox.vue";
 import Cities from "@/utils/city";
 import Resumes from "@/utils/resume";
-import Groups from "@/utils/group";
+// import Groups from "@/utils/group";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
 export default {
   components: { DatePicker, MonthPicker },
-  props: ["editedItem", "majorItems", "bookItems", "fieldItems"],
+  props: ["editedItem", "majorItems", "bookItems", "fieldItems", "teamItems"],
   data() {
     return {
       userData: {},
@@ -258,6 +258,7 @@ export default {
         fieldItems: [],
         majorItems: [],
         teams: [],
+        teamItems: [],
         managementExperienceItem: [],
         characterItems: [
           "暂无",
@@ -265,7 +266,7 @@ export default {
           "外向开朗",
           "善解人意",
           "和蔼可亲",
-          "尚不清楚",
+          "难以描述",
         ],
         characterResultItems: [
           "暂无",
@@ -306,7 +307,7 @@ export default {
   },
   async mounted() {
     (this as any).items.managementExperienceItem = managementExperienceItem;
-    (this as any).items.teams = Groups;
+    // (this as any).items.teams = Groups;
     (this as any).cityData = Cities;
     (this as any).resumeData = Resumes;
     await (this as any).$emit("getMajorsChild");
@@ -315,6 +316,8 @@ export default {
     (this as any).items.bookItems = (this as any).bookItems;
     await (this as any).$emit("getFieldsChild");
     (this as any).items.fieldItems = (this as any).fieldItems;
+    await (this as any).$emit("getTeamsChild");
+    (this as any).items.teamItems = (this as any).teamItems;
     (this as any).userData = await transformAfterGet((this as any).editedItem);
   },
   watch: {
@@ -358,6 +361,9 @@ export default {
     },
     childrenFieldItems(val) {
       (this as any).formData.fieldsValue = val;
+    },
+    childrenTeamItems(val) {
+      (this as any).formData.teamsValue = val;
     },
   },
 };

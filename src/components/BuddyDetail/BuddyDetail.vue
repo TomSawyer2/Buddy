@@ -79,7 +79,7 @@
             <!-- <p class="buddy-para"> -->
             <p class="plainText ml-5">
               {{
-                userInfo.location[1] != undefined ? userInfo.location : "暂无"
+                userInfo.location != "" ? userInfo.location : "暂无"
               }}
             </p>
           </div>
@@ -234,7 +234,7 @@
               | 性格特征自评及测试结果
             </h3>
             <div class="d-flex justify-start">
-              <p class="ml-5">{{ userInfo.character }}</p>
+              <p class="ml-5">{{ userInfo.character ? userInfo.character: "暂无" }}</p>
               <p class="ml-5">{{ userInfo.characterResult }}</p>
             </div>
           </div>

@@ -25,9 +25,11 @@
             :majorItems="majorItemsChild"
             :bookItems="bookItemsChild"
             :fieldItems="fieldItemsChild"
+            :teamItems="teamItemsChild"
             @getMajorsChild="getMajors"
             @getBooksChild="getBooks"
             @getFieldsChild="getFields"
+            @getTeamsChild="getTeams"
             @closeChild="close"
             @updateInfoChild="updateInfo"
           />
@@ -69,7 +71,7 @@ import AdminDetail from "@/components/Admin/AdminDetail.vue";
 export default Vue.extend({
   name: "AdminTable",
   components: { AdminDetail },
-  props: ["queryData", "majorItems", "fieldItems", "bookItems"],
+  props: ["queryData", "majorItems", "fieldItems", "bookItems", "teamItems"],
   data() {
     return {
       search: "",
@@ -82,6 +84,7 @@ export default Vue.extend({
           value: "userName",
         },
         { text: "队员编号", value: "number" },
+        { text: "项目组", value: "teams" },
         { text: "操作", value: "actions", sortable: false },
       ],
       dialog: false,
@@ -103,6 +106,7 @@ export default Vue.extend({
       majorItemsChild: [],
       bookItemsChild: [],
       fieldItemsChild: [],
+      teamItemsChild: [],
     };
   },
   created() {
@@ -117,6 +121,7 @@ export default Vue.extend({
     (this as any).majorItemsChild = (this as any).majorItems;
     (this as any).fieldItemsChild = (this as any).fieldItems;
     (this as any).bookItemsChild = (this as any).bookItems;
+    (this as any).teamItemsChild = (this as any).teamItems;
   },
   methods: {
     todetail(item: any) {
@@ -168,6 +173,9 @@ export default Vue.extend({
     },
     getFields() {
       (this as any).$emit("getFieldsChild");
+    },
+    getTeams() {
+      (this as any).$emit("getTeamsChild");
     },
   },
   watch: {

@@ -9,16 +9,18 @@
           <v-expansion-panel-header>用户信息</v-expansion-panel-header>
           <v-expansion-panel-content>
             <AdminTable
-              v-if="haveMajors && haveBooks && haveFields"
+              v-if="haveMajors && haveBooks && haveFields && haveTeams"
               :queryData="userData"
               :majorItems="majorItems"
               :bookItems="bookItems"
               :fieldItems="fieldItems"
+              :teamItems="teamItems"
               @deleteUserChild="deleteUserFunc"
               @updateUserInfoChild="updateUserInfoFunc"
               @getMajorsChild="getMajorsFunc"
               @getBooksChild="getBooksFunc"
               @getFieldsChild="getFieldsFunc"
+              @getTeamsChild="getTeamsFunc"
               style="width: '100%'; max-height: 2000px"
               class="tableFooter"
             />
@@ -41,6 +43,7 @@ import {
   getMajors,
   getFields,
   getBooks,
+  getTeams
 } from "../apis";
 import AdminTable from "@/components/Admin/AdminTable.vue";
 import {
@@ -65,6 +68,7 @@ export default {
     haveMajors: false,
     haveBooks: false,
     haveFields: false,
+    haveTeams: false,
     margin: 56,
     width: 70,
   }),
@@ -84,6 +88,7 @@ export default {
     await (this as any).getMajorsFunc();
     await (this as any).getBooksFunc();
     await (this as any).getFieldsFunc();
+    await (this as any).getTeamsFunc();
   },
   methods: {
     async getUserListFunc() {
@@ -131,6 +136,16 @@ export default {
         .then((res: any) => {
           (this as any).bookItems = res.data.data;
           (this as any).haveBooks = true;
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
+    },
+    async getTeamsFunc() {
+      await getTeams()
+        .then((res: any) => {
+          (this as any).teamItems = res.data.data;
+          (this as any).haveTeams = true;
         })
         .catch((err: any) => {
           console.log(err);

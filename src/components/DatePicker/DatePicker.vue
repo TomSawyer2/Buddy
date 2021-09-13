@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <v-menu
+    <!-- <v-menu
       ref="menu"
       v-model="menu"
       :close-on-content-click="false"
@@ -29,8 +28,14 @@
         min="1950-01-01"
         @change="save"
       ></v-date-picker>
-    </v-menu>
-  </div>
+    </v-menu> -->
+    <div class="block">
+      <el-date-picker
+        v-model="date"
+        type="date"
+        placeholder="选择出生日期">
+      </el-date-picker>
+    </div>
 </template>
 
 <script lang="ts">
@@ -41,16 +46,13 @@ export default Vue.extend({
   data() {
     return {
       activePicker: null,
-      menu: false,
-      date: new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-        .toISOString()
-        .substr(0, 10),
+      date: "",
     };
   },
   methods: {
     save(date) {
-      (this as any).$emit("save", (this as any).date);
-      (this as any).menu = false;
+      console.log(typeof date);
+      (this as any).$emit("save", date);
     },
   },
   mounted() {
@@ -63,6 +65,9 @@ export default Vue.extend({
     dateOrigin(newV, oldV) {
       (this as any).date = newV;
     },
+    date(newV, oldV) {
+      (this as any).save(newV);
+    }
   },
 });
 </script>

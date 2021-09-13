@@ -224,10 +224,10 @@ export default Vue.extend({
       (this as any).snackbar = true;
       (this as any).snackbarItem = item;
     },
-    async onToDetail(id: string) {
+    async onToDetail(id: number) {
       (this as any).isDetailLoading = true;
       (this as any).isDetailShow = true;
-      await this.$emit("todetail", id);
+      await (this as any).$emit("todetail", id);
       (this as any).isDetailLoading = false;
     },
   },
