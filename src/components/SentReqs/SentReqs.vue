@@ -21,7 +21,7 @@
                         <div class="grey--text ms-3 mr-5">
                           性别：{{ item.sex ? item.sex : "暂无" }}
                         </div>
-                        <div class="grey--text ms-3 mr-5">
+                        <div class="grey--text ms-3 mr-5" v-if="ismobile == 0">
                           生日：{{ item.birthday ? item.birthday : "暂无" }}
                         </div>
                         <div class="grey--text ms-3 mr-5">
@@ -30,10 +30,7 @@
                         <div class="grey--text ms-3 mr-5">
                           身份：{{ item.identity ? item.identity : "暂无" }}
                         </div>
-                        <div class="grey--text ms-3 mr-5">
-                          履历：{{ item.resume ? item.resume : "暂无" }}
-                        </div>
-                        <div class="grey--text ms-3 mr-5">
+                        <div class="grey--text ms-3 mr-5" v-if="ismobile == 0">
                           毕业高中：{{
                             item.highSchool ? item.highSchool : "暂无"
                           }}
@@ -44,7 +41,7 @@
                       </v-row>
                     </v-card-text>
                     <v-divider class="ml-4"></v-divider>
-                    <v-card-text v-if="item.fields.length - 1">
+                    <v-card-text v-if="item.fields.length - 1 && ismobile == 0">
                       <v-row>
                         <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <v-chip
@@ -177,7 +174,15 @@ export default Vue.extend({
       isDetailLoading: false,
       timeout: 5000,
       reasonItem: {},
+      ismobile: 0,
     };
+  },
+  created() {
+    if(localStorage.getItem('ismobile') == '1') {
+      (this as any).ismobile = 1;
+    } else {
+      (this as any).ismobile = 0;
+    }
   },
   methods: {
     async onToDetail(id: string) {

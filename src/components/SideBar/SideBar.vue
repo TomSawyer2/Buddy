@@ -75,14 +75,34 @@ export default Vue.extend({
           route: "/messageCenter",
         },
         {
-          text: "管理员界面",
-          icon: "mdi-account-key",
-          route: "/admin",
+          text: "设置",
+          icon: "mdi-account-cog",
+          route: "/settings",
+        },
+        { text: "退出", icon: "mdi-account-off", route: "/login" },
+        // 这里可以拓展
+      ],
+      itemsForAdmin: [
+        { text: "个人中心", icon: "mdi-home", route: "/personalInformation" },
+        {
+          text: "Buddy广场",
+          icon: "mdi-account-multiple",
+          route: "/buddySquare",
+        },
+        {
+          text: "消息中心",
+          icon: "mdi-vector-square",
+          route: "/messageCenter",
         },
         {
           text: "设置",
           icon: "mdi-account-cog",
           route: "/settings",
+        },
+        {
+          text: "管理员界面",
+          icon: "mdi-account-key",
+          route: "/admin",
         },
         { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
@@ -119,6 +139,9 @@ export default Vue.extend({
   mounted() {
     // 自动调节组件高度
     this.pageHeight = document.documentElement.clientHeight;
+    if(localStorage.getItem('permission') == '1' || localStorage.getItem('permission') == '2') {
+        this.items = this.itemsForAdmin;
+    }
     console.log(this.pageHeight);
     this.avatarSrc = getAvatarSrc();
     this.userName = getUserName();

@@ -1,9 +1,9 @@
 <template>
   <div
-    v-bind:style="{ height: pageHeight + 'px', marginLeft: margin + 'px' }"
+    v-bind:style="{ height: pageHeight + 'px', marginLeft: margin + 'px'}"
     class="mainBox"
   >
-    <v-form :style="{ width: width + '%' }" class="mt-10">
+    <v-form :style="{ width: width + '%'}" class="mt-2">
       <v-expansion-panels popout>
         <v-expansion-panel>
           <v-expansion-panel-header>用户信息</v-expansion-panel-header>
@@ -19,7 +19,7 @@
               @getMajorsChild="getMajorsFunc"
               @getBooksChild="getBooksFunc"
               @getFieldsChild="getFieldsFunc"
-              style="width: 100%; max-height: 2000px"
+              style="width: '100%'; max-height: 2000px"
               class="tableFooter"
             />
           </v-expansion-panel-content>
@@ -69,6 +69,7 @@ export default {
     width: 70,
   }),
   async mounted() {
+    (this as any).pageHeight = document.documentElement.clientHeight;
     if (localStorage.getItem("ismobile") == "1") {
       (this as any).margin = 0;
       (this as any).width = 90;
@@ -76,8 +77,6 @@ export default {
       (this as any).margin = 56;
       (this as any).width = 70;
     }
-    // 自动调节组件高度
-    (this as any).pageHeight = document.documentElement.clientHeight;
     (this as any).haveBooks = false;
     (this as any).haveMajors = false;
     (this as any).haveFields = false;
@@ -162,6 +161,9 @@ export default {
 }
 
 .tableFooter .v-data-footer {
-  justify-content: flex-end;
+  justify-content: center;
+  width: 100%;
+  padding: 0 0;
 }
+
 </style>

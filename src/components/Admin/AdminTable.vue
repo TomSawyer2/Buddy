@@ -105,6 +105,13 @@ export default Vue.extend({
       fieldItemsChild: [],
     };
   },
+  created() {
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).footer_props['items-per-page-options'][0] = 2;
+    } else {
+      (this as any).footer_props['items-per-page-options'][0] = 5;
+    }
+  },
   mounted() {
     (this as any).loading = true;
     (this as any).majorItemsChild = (this as any).majorItems;

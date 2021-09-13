@@ -4,9 +4,6 @@
       class="mt-13 mb-3"
       v-if="noReceivedRequests == 0 && received == 1"
     >
-      <!-- v-bind:style="{
-        width: pageWidth + 'px',
-      }" -->
       <v-row dense>
         <div v-if="received">
           <v-col v-for="(item, i) in receivedItems" :key="i" cols="12">
@@ -36,13 +33,13 @@
                         <div class="grey--text ms-3 mr-5">
                           队员编号：{{ item.number ? item.number : "暂无" }}
                         </div>
-                        <div class="grey--text ms-3 mr-5">
+                        <div class="grey--text ms-3 mr-5" v-if="ismobile == 0">
                           生日：{{ item.birthday ? item.birthday : "暂无" }}
                         </div>
                         <div class="grey--text ms-3 mr-5">
                           身份：{{ item.identity ? item.identity : "暂无" }}
                         </div>
-                        <div class="grey--text ms-3 mr-5">
+                        <div class="grey--text ms-3 mr-5" v-if="ismobile == 0">
                           毕业高中：{{
                             item.highSchool ? item.highSchool : "暂无"
                           }}
@@ -63,7 +60,7 @@
                       class="ml-4"
                       v-if="item.fields.length - 2"
                     ></v-divider>
-                    <v-card-text v-if="item.fields.length - 2">
+                    <v-card-text v-if="item.fields.length - 2 && ismobile == 0">
                       <v-row>
                         <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <div>
@@ -205,7 +202,15 @@ export default Vue.extend({
       snackbar: false,
       timeout: 5000,
       snackbarItem: {},
+      ismobile: 0,
     };
+  },
+  created() {
+    if(localStorage.getItem('ismobile') == '1') {
+      (this as any).ismobile = 1;
+    } else {
+      (this as any).ismobile = 0;
+    }
   },
   methods: {
     acceptBuddyFunc(item: any) {

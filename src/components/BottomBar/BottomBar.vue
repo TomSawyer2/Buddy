@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation :value="value" color="primary" absolute>
+  <v-bottom-navigation :value="value" absolute color="primary">
     <v-btn @click="pushToPersonalInformation">
       <span>个人中心</span>
 
@@ -18,7 +18,7 @@
       <v-icon>mdi-vector-square</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToAdmin">
+    <v-btn @click="pushToAdmin" v-if="showAdmin">
       <span>管理员界面</span>
 
       <v-icon>mdi-account-key</v-icon>
@@ -46,7 +46,15 @@ export default Vue.extend({
   data() {
     return {
       value: 0,
+      showAdmin: false,
     };
+  },
+  created() {
+    if(localStorage.getItem('permission') == '1' || localStorage.getItem('permission') == '2') {
+      this.showAdmin = true;
+    } else {
+      this.showAdmin = false;
+    }
   },
   methods: {
     pushToPersonalInformation() {

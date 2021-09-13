@@ -6,53 +6,64 @@
       lazy-validation
       :style="{ width: width + '%' }"
     >
-      <v-text-field
-        v-model="changePasswordParam.phoneNumber"
-        :rules="rules.phoneNumberRules"
-        label="手机号"
-        required
-      ></v-text-field>
-      <div style="display: flex; flex-direction: row; align-items: center">
-        <v-text-field
-          v-model="changePasswordParam.validationCode"
-          label="验证码"
-          required
-          class="mr-2"
-        ></v-text-field>
-        <v-btn
-          :disabled="btnDisabled"
-          @click="getCaptchaFunc"
-          style="width: 20%"
-        >
-          {{ codeStatus }}
-        </v-btn>
-      </div>
+      <v-expansion-panels popout>
+        <v-expansion-panel>
+          <v-expansion-panel-header>修改密码</v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-text-field
+              v-model="changePasswordParam.phoneNumber"
+              :rules="rules.phoneNumberRules"
+              label="手机号"
+              required
+            ></v-text-field>
+            <div style="display: flex; flex-direction: row; align-items: center">
+              <v-text-field
+                v-model="changePasswordParam.validationCode"
+                label="验证码"
+                required
+                class="mr-2"
+              ></v-text-field>
+              <v-btn
+                :disabled="btnDisabled"
+                @click="getCaptchaFunc"
+                style="width: 20%"
+              >
+                {{ codeStatus }}
+              </v-btn>
+            </div>
 
-      <v-text-field
-        v-model="changePasswordParam.newPassword"
-        label="新密码"
-        required
-        type="password"
-        autocomplete="off"
-      ></v-text-field>
-      <v-text-field
-        v-model="confirmPassword"
-        label="确认密码"
-        required
-        type="password"
-        autocomplete="off"
-      ></v-text-field>
+            <v-text-field
+              v-model="changePasswordParam.newPassword"
+              label="新密码"
+              required
+              type="password"
+              autocomplete="off"
+            ></v-text-field>
+            <v-text-field
+              v-model="confirmPassword"
+              label="确认密码"
+              required
+              type="password"
+              autocomplete="off"
+            ></v-text-field>
 
-      <div style="display: flex; justify-content: center">
-        <v-btn
-          :disabled="!valid"
-          color="success"
-          @click="changePassword"
-          style="width: 30%"
-        >
-          修改密码
-        </v-btn>
-      </div>
+            <div style="display: flex; justify-content: center">
+              <v-btn
+                :disabled="!valid"
+                color="success"
+                @click="changePassword"
+                style="width: 30%"
+              >
+                修改密码
+              </v-btn>
+            </div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        <v-expansion-panel>
+          <v-expansion-panel-header>功能2</v-expansion-panel-header>
+          <v-expansion-panel-content> 功能2 </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -162,7 +173,7 @@ export default {
     if (localStorage.getItem("ismobile") == "1") {
       (this as any).width = 90;
     } else {
-      (this as any).width = 40;
+      (this as any).width = 60;
     }
     // 自动调节组件高度
     (this as any).pageHeight = document.documentElement.clientHeight;
