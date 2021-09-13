@@ -1,10 +1,13 @@
 <template>
-  <div class="mainBox">
+  <div class="mainBox" :style="{ marginLeft: margin }">
     <v-form
       ref="form"
       v-model="valid"
       lazy-validation
-      style="width: 50%"
+      v-bind:style="{
+        width: width + '%',
+        marginBottom: '50px',
+      }"
       class="mt-10"
     >
       <div style="display: flex; flex-direction: row; align-items: center">
@@ -62,26 +65,30 @@
         label="性别"
         required
       ></v-select>
-
+      
+      <span class="demonstration mt-4">出生日期</span>
       <DatePicker
         :label="label.birthdayLabel"
         @save="saveBirthday"
-        :date="formData.birthday"
+        :dateOrigin="formData.birthday"
       />
-
-      <MonthPicker
-        :label="label.graduateLabel"
-        :dateYear="formData.graduateYear"
-        :dateMonth="formData.graduateMonth"
-        @save="saveGraduateYear"
-      />
+      
+      <div class="mt-4">
+        <span class="demonstration">毕业年月</span>
+        <MonthPicker
+          :label="label.graduateLabel"
+          :dateYear="formData.graduateYear"
+          :dateMonth="formData.graduateMonth"
+          @save="saveGraduateYear"
+        />
+      </div>
 
       <el-cascader
         v-model="formData.cityValue"
         :options="cityData"
         placeholder="请选择您目前工作所在的城市"
         style="position: relative; width: 100%"
-        class="cityChoose mb-2"
+        class="cityChoose mt-2 mb-2"
         clearable
         filterable
       ></el-cascader>
@@ -179,15 +186,12 @@
         </v-card>
       </v-dialog>
 
-      <v-combobox
-        v-model="formData.teamValue"
-        :items="items.teams"
+      <Combobox
+        :items="items.teamItems"
         label="请选择您曾经所在的项目组"
-        multiple
-        style="position: relative; width: 100%"
-        class="cityChoose mb-2"
-        clearable
-      ></v-combobox>
+        :model="formData.teamsValue"
+        @childrenItems="childrenTeamItems"
+      />
 
       <el-cascader
         v-model="formData.resumeValue"
@@ -478,9 +482,10 @@
       />
 
       <v-select
-        v-model="formData.character"
+        v-model="formData.characterValue"
         :items="items.characterItems"
         label="性格特征"
+        multiple
         required
       ></v-select>
 
@@ -533,6 +538,8 @@ import {
   addGainDirection,
   addGainAspect,
   queryNumber,
+  getTeams,
+  addTeams,
 } from "../apis";
 import {
   setToken,
@@ -554,7 +561,7 @@ import DatePicker from "@/components/DatePicker/DatePicker.vue";
 import Combobox from "@/components/Combobox/Combobox.vue";
 import Cities from "@/utils/city";
 import Resumes from "@/utils/resume";
-import Groups from "@/utils/group";
+// import Groups from "@/utils/group";
 import Table from "@/components/Table/Table.vue";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
@@ -578,6 +585,7 @@ export default {
         phoneNumber: "",
         birthday: "",
         character: "",
+        characterValue: "",
         projects: "",
         location: "",
         group: "",
@@ -603,7 +611,8 @@ export default {
         gainValue: [],
         gains: "",
         characterResult: "",
-        teamValue: [],
+        teams: "",
+        teamsValue: [],
       },
 
       rules: {
@@ -641,7 +650,7 @@ export default {
         ],
         fieldItems: [],
         majorItems: [],
-        teams: [],
+        teamItems: [],
         managementExperienceItem: [],
         characterItems: [
           "暂无",
@@ -649,7 +658,7 @@ export default {
           "外向开朗",
           "善解人意",
           "和蔼可亲",
-          "尚不清楚",
+          "难以描述",
         ],
         characterResultItems: [
           "暂无",
@@ -733,11 +742,20 @@ export default {
       queryName: "",
       queryNumberSuccess: false,
       isShowResume: false,
+      width: 50,
+      margin: 0,
     };
   },
   async mounted() {
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).width = 90;
+      (this as any).margin = 0;
+    } else {
+      (this as any).width = 50;
+      (this as any).margin = 56;
+    }
     (this as any).items.managementExperienceItem = managementExperienceItem;
-    (this as any).items.teams = Groups;
+    // (this as any).items.teams = Groups;
     (this as any).cityData = Cities;
     (this as any).resumeData = Resumes;
     (this as any).formData.phoneNumber = getPhone();
@@ -751,9 +769,12 @@ export default {
         if ((this as any).formData.shares != "") {
           let i = 1;
           var shareValueTmp = (this as any).formData.shares.split(";");
-          (this as any).formData.shareValue = [shareValueTmp[0].split('-')];
+          (this as any).formData.shareValue = [shareValueTmp[0].split("-")];
           for (i; i < shareValueTmp.length; i++) {
-            (this as any).formData.shareValue = [...(this as any).formData.shareValue, shareValueTmp[i].split("-")];
+            (this as any).formData.shareValue = [
+              ...(this as any).formData.shareValue,
+              shareValueTmp[i].split("-"),
+            ];
           }
           let idx = 0;
           for (idx; idx < (this as any).formData.shareValue.length; idx++) {
@@ -769,9 +790,12 @@ export default {
         if ((this as any).formData.gains != "") {
           let i = 1;
           var gainValueTmp = (this as any).formData.gains.split(";");
-          (this as any).formData.gainValue = [gainValueTmp[0].split('-')];
+          (this as any).formData.gainValue = [gainValueTmp[0].split("-")];
           for (i; i < gainValueTmp.length; i++) {
-            (this as any).formData.gainValue = [...(this as any).formData.gainValue, gainValueTmp[i].split("-")];
+            (this as any).formData.gainValue = [
+              ...(this as any).formData.gainValue,
+              gainValueTmp[i].split("-"),
+            ];
           }
           let idx = 0;
           for (idx; idx < (this as any).formData.gainValue.length; idx++) {
@@ -791,6 +815,7 @@ export default {
     await (this as any).getAllFields();
     await (this as any).getAllMajors();
     await (this as any).getAllBooks();
+    await (this as any).getAllTeams();
     await (this as any).getShareAllDirectionsFunc();
     await (this as any).getGainAllDirectionsFunc();
     let i = 0;
@@ -878,6 +903,9 @@ export default {
     },
     childrenMajorItems(val) {
       (this as any).formData.majorsValue = val;
+    },
+    childrenTeamItems(val) {
+      (this as any).formData.teamsValue = val;
     },
     childrenFieldItems(val) {
       (this as any).formData.fieldsValue = val;
@@ -1088,8 +1116,11 @@ export default {
       (this as any).$refs.form.validate();
       await (this as any).updateFields();
       await (this as any).updateMajors();
+      await (this as any).updateTeams();
       await (this as any).updateBooks();
-      (this as any).formData = await transformBeforeUpdate((this as any).formData);
+      (this as any).formData = await transformBeforeUpdate(
+        (this as any).formData
+      );
       try {
         await updatePersonalInformation((this as any).formData);
         (this as any).$message.success("更新成功！");
@@ -1102,6 +1133,7 @@ export default {
       (this as any).getAllFields();
       (this as any).getAllBooks();
       (this as any).getAllMajors();
+      (this as any).getAllTeams();
     },
     async changeAvatar() {
       if ((this as any).updateFile.file) {
@@ -1196,6 +1228,40 @@ export default {
             });
         });
       }
+    },
+    async updateTeams() {
+      var combinedTeams = (this as any).items.teamItems.concat(
+        (this as any).formData.teamsValue
+      );
+      var uniqueTeams = Array.from(new Set(combinedTeams));
+      var teamItems = (this as any).items.teamItems;
+      var _arr1 = uniqueTeams.filter((item1) => !teamItems.includes(item1));
+      var _arr2 = teamItems.filter((item2) => !uniqueTeams.includes(item2));
+      const _arr = _arr1.concat(_arr2);
+      var newTeams = _arr1;
+
+      if (newTeams.length >= 1 && newTeams[0] != "") {
+        newTeams.forEach((val: any, idx, array) => {
+          var team: any = '{"team": ' + '"' + val + '"' + "}";
+          addTeams(team)
+            .then((res: any) => {
+              console.log(res);
+            })
+            .catch((err: any) => {
+              console.log(err);
+              (this as any).$message.error("添加项目组失败，请重试~");
+            });
+        });
+      }
+    },
+    async getAllTeams() {
+      getTeams()
+        .then((res: any) => {
+          (this as any).items.teamItems = res.data.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     async getAllBooks() {
       getBooks()

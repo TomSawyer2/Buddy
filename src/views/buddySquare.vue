@@ -1,6 +1,6 @@
 <template>
-  <div class="buddy-container">
-    <div class="search-container" style="padding-top: 18px;">
+  <div class="buddy-container" :style="{ marginLeft: margin + 'px' }">
+    <div class="search-container" :style="{paddingTop: paddingTop + 'px'}">
       <BuddySearch
         @search="onSearch"
         @showAllChange="showAllChange"
@@ -102,6 +102,9 @@ export default {
     isErrorShow: false,
     phone: getPhone(),
     isAllShow: false,
+    i: 0,
+    margin: 56,
+    paddingTop: 18,
   }),
 
   methods: {
@@ -137,7 +140,18 @@ export default {
       }
     },
 
-    async onSearch(searchInfo: { userName: string; fields: string[]; graduateYear: number; managementExperience: string[]; majors: string[]; projectYear: number; projectIdentity: string; projectName: string; gains: string[]; shares: string[];}) {
+    async onSearch(searchInfo: {
+      userName: string;
+      fields: string[];
+      graduateYear: number;
+      managementExperience: string[];
+      majors: string[];
+      projectYear: number;
+      projectIdentity: string;
+      projectName: string;
+      gains: string[];
+      shares: string[];
+    }) {
       try {
         const res = (await searchUsersByNameAndFields(searchInfo)).data.data;
         (this as any).userList = res.SearchResults;
@@ -155,9 +169,14 @@ export default {
     async getUserList(pageNo: number) {
       const res = (await getAllUsersByPage({ pageNo })).data.data;
       (this as any).userList = (this as any).userList.concat(res.studentsInfo); // 不直接从userList里面删掉自己，而是条件渲染，防止totalNum对不上
-      let i = 0;
-      for(i; i < (this as any).userList.length; i ++ ) {
-        (this as any).userList[i] = transformAfterGet((this as any).userList[i]);
+      for (
+        (this as any).i;
+        (this as any).i < (this as any).userList.length;
+        (this as any).i++
+      ) {
+        (this as any).userList[(this as any).i] = transformAfterGet(
+          (this as any).userList[(this as any).i]
+        );
       }
       (this as any).totalPage = res.totalPage;
       (this as any).totalNum = res.totalNum;
@@ -179,8 +198,10 @@ export default {
       ) {
         (this as any).isLoading = true;
         (this as any).pageNo++;
-        (this as any).getUserList((this as any).pageNo);
-        (this as any).isLoading = false;
+        setTimeout(() => {
+          (this as any).getUserList((this as any).pageNo);
+          (this as any).isLoading = false;
+        }, 1000);
       }
     },
 
@@ -190,7 +211,6 @@ export default {
       try {
         let res = (await getUserDetailById({ id: id })).data.data;
         (this as any).buddyDetail = transformAfterGet(res);
-        console.log((this as any).buddyDetail);
         (this as any).isDetailLoading = false;
       } catch (error) {
         console.log(error);
@@ -200,6 +220,14 @@ export default {
 
   async mounted() {
     window.addEventListener("scroll", (this as any).scrollEvent);
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).margin = 0;
+      (this as any).paddingTop = 0;
+    } else {
+      (this as any).margin = 56;
+      (this as any).paddingTop = 18;
+
+    }
     try {
       (this as any).getUserList(1);
     } catch (error) {
@@ -215,7 +243,6 @@ export default {
 
 <style scoped>
 .buddy-container {
-  margin-left: 56px;
   flex: 1;
   display: flex;
   flex-direction: column;

@@ -24,6 +24,7 @@ import {
   forgetPwdGetCaptchaInfo,
   changePwdSubmitInfo,
   addBooksInfo,
+  addTeamsInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -195,8 +196,7 @@ export function forgetPwdSubmit(
   return axios.post(URL.forgetPwdSubmit, params);
 }
 
-export function changePwdGetCaptcha(
-): Promise<Record<string, unknown>> {
+export function changePwdGetCaptcha(): Promise<Record<string, unknown>> {
   return axios.post(URL.changePwdGetCaptcha);
 }
 
@@ -214,4 +214,14 @@ export function addBooks(
   params: addBooksInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.addBooks, params);
+}
+
+export function getTeams(): Promise<Record<string, unknown>> {
+  return axios.get(URL.getTeams);
+}
+
+export function addTeams(
+  params: addTeamsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.addTeams, params);
 }

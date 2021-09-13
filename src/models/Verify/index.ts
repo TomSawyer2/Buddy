@@ -108,3 +108,7 @@ export interface changePwdSubmitInfo {
 export interface addBooksInfo {
   book: string;
 }
+
+export interface addTeamsInfo {
+  team: string;
+}

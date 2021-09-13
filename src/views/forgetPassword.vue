@@ -1,15 +1,6 @@
 <template>
-  <div
-    v-bind:style="{ height: pageHeight + 'px' }"
-    style="
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-    "
-  >
-    <v-form ref="form" v-model="valid" lazy-validation style="width: 40%">
+  <div v-bind:style="{ height: pageHeight + 'px' }" class="mainBox">
+    <v-form ref="form" v-model="valid" lazy-validation style="width: 50%">
       <v-text-field
         v-model="forgetPasswordParam.phoneNumber"
         :rules="rules.phoneNumberRules"
@@ -201,3 +192,13 @@ export default {
   },
 };
 </script>
+
+<style>
+.mainBox {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+</style>

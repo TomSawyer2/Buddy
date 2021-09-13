@@ -2,9 +2,7 @@
   <v-card
     min-height="180"
     style="margin-top: 15px"
-    v-if="
-      (isAllShow ? true : item.isGraduated) && item.phoneNumber !== phone
-    "
+    v-if="(isAllShow ? true : item.isGraduated) && item.phoneNumber !== phone"
   >
     <v-card style="box-shadow: none" @click="onToDetail(item.id)">
       <div class="info-container">
@@ -35,7 +33,10 @@
             编号：{{ item.number ? item.number : "无" }}
           </p>
 
-          <p class="font-weight-black info-detail-container" style="white-space:nowrap;">
+          <p
+            class="font-weight-black info-detail-container"
+            style="white-space: nowrap"
+          >
             <i class="mdi mdi-phone" aria-hidden="true"></i>
             {{ item.phoneNumber }}
           </p>
@@ -46,9 +47,12 @@
             column
             class="mt-2"
           >
-            <v-chip v-for="(field, index) in item.fieldsValue" :key="index" small>{{
-              field
-            }}</v-chip>
+            <v-chip
+              v-for="(field, index) in item.fieldsValue"
+              :key="index"
+              small
+              >{{ field }}</v-chip
+            >
           </v-chip-group>
           <p v-else class="font-weight-black info-detail-container">
             技术栈：未填写

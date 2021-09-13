@@ -17,34 +17,28 @@
             <div class="info-buddy">
               <h4 class="name">{{ userInfo.userName }}</h4>
               <small class="job">
-                分站：{{
-                  userInfo.substation.length ? userInfo.substation : "无"
-                }}
+                分站：{{ userInfo.substation ? userInfo.substation : "无" }}
                 <br />
-                编号：{{ userInfo.number.length ? userInfo.number : "无" }}
+                编号：{{ userInfo.number ? userInfo.number : "无" }}
                 <br />
               </small>
             </div>
           </div>
           <div class="about">
             <h3>个人信息</h3>
-            <I>性别：{{ userInfo.sex.length ? userInfo.sex : "未填写" }}</I>
+            <I>性别：{{ userInfo.sex ? userInfo.sex : "未填写" }}</I>
             <br />
-            <I
-              >生日：{{
-                userInfo.birthday.length ? userInfo.birthday : "未填写"
-              }}</I
-            >
+            <I>生日：{{ userInfo.birthday ? userInfo.birthday : "未填写" }}</I>
             <br />
             <I
               >毕业年份：{{
-                userInfo.graduateYear.length ? userInfo.graduateYear : "未填写"
+                userInfo.graduateYear ? userInfo.graduateYear : "未填写"
               }}</I
             >
             <br />
             <I
               >毕业高中：{{
-                userInfo.highSchool.length ? userInfo.highSchool : "未知"
+                userInfo.highSchool ? userInfo.highSchool : "未知"
               }}</I
             >
           </div>
@@ -55,9 +49,11 @@
               style="margin-left: 5px"
               column
             >
-              <v-chip v-for="(field, index) in userInfo.fieldsValue" :key="index">{{
-                field
-              }}</v-chip>
+              <v-chip
+                v-for="(field, index) in userInfo.fieldsValue"
+                :key="index"
+                >{{ field }}</v-chip
+              >
             </v-chip-group>
             <v-chip v-else>暂无</v-chip>
           </div>
@@ -69,9 +65,7 @@
             </div>
             <div class="email">
               <i class="mdi mdi-email"></i>
-              <span>{{
-                userInfo.email.length ? userInfo.email : "未填写"
-              }}</span>
+              <span>{{ userInfo.email ? userInfo.email : "未填写" }}</span>
             </div>
           </div>
         </div>
@@ -84,7 +78,9 @@
             </h3>
             <!-- <p class="buddy-para"> -->
             <p class="plainText ml-5">
-              {{ userInfo.location ? userInfo.location: "暂无"}}
+              {{
+                userInfo.location != "" ? userInfo.location : "暂无"
+              }}
             </p>
           </div>
           <div class="buddy-resume">
@@ -93,7 +89,7 @@
               | 项目组
             </h3>
             <v-chip-group
-              v-if="userInfo.teamsValue.length > 0 && userInfo.teamsValue[0] != ''"
+              v-if="userInfo.teams != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
@@ -113,7 +109,7 @@
               | 具体项目
             </h3>
             <v-chip-group
-              v-if="userInfo.projectValue.length > 0 && userInfo.projectValue[0] != ''"
+              v-if="userInfo.projects != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
@@ -139,7 +135,9 @@
               class="ml-5"
             >
               <v-chip
-                v-for="(managementExperience, index) in userInfo.managementExperienceValue"
+                v-for="(
+                  managementExperience, index
+                ) in userInfo.managementExperienceValue"
                 :key="index"
                 small
                 >{{ managementExperience }}</v-chip
@@ -153,7 +151,7 @@
               | 熟悉的专业方向
             </h3>
             <v-chip-group
-              v-if="userInfo.majorsValue.length > 0 && userInfo.majorsValue[0] != ''"
+              v-if="userInfo.majors != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
@@ -236,7 +234,7 @@
               | 性格特征自评及测试结果
             </h3>
             <div class="d-flex justify-start">
-              <p class="ml-5">{{ userInfo.character }}</p>
+              <p class="ml-5">{{ userInfo.character ? userInfo.character: "暂无" }}</p>
               <p class="ml-5">{{ userInfo.characterResult }}</p>
             </div>
           </div>
@@ -487,6 +485,5 @@ table.striped > tbody > tr:nth-child(odd) {
 }
 
 .plainText {
-
 }
 </style>

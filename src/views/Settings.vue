@@ -1,53 +1,74 @@
 <template>
   <div class="pageHolder" v-bind:style="{ height: pageHeight + 'px' }">
-    <v-form ref="form" v-model="valid" lazy-validation style="width: 40%">
-      <v-text-field
-        v-model="changePasswordParam.phoneNumber"
-        :rules="rules.phoneNumberRules"
-        label="手机号"
-        required
-      ></v-text-field>
-      <div style="display: flex; flex-direction: row; align-items: center">
-        <v-text-field
-          v-model="changePasswordParam.validationCode"
-          label="验证码"
-          required
-          class="mr-2"
-        ></v-text-field>
-        <v-btn
-          :disabled="btnDisabled"
-          @click="getCaptchaFunc"
-          style="width: 20%"
-        >
-          {{ codeStatus }}
-        </v-btn>
-      </div>
+    <v-form
+      ref="form"
+      v-model="valid"
+      lazy-validation
+      :style="{ width: width + '%' }"
+    >
+      <v-expansion-panels popout>
+        <v-expansion-panel>
+          <v-expansion-panel-header>修改密码</v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-text-field
+              v-model="changePasswordParam.phoneNumber"
+              :rules="rules.phoneNumberRules"
+              label="手机号"
+              required
+            ></v-text-field>
+            <div style="display: flex; flex-direction: row; align-items: center">
+              <v-text-field
+                v-model="changePasswordParam.validationCode"
+                label="验证码"
+                required
+                class="mr-2"
+              ></v-text-field>
+              <v-btn
+                :disabled="btnDisabled"
+                @click="getCaptchaFunc"
+                style="width: 20%"
+              >
+                {{ codeStatus }}
+              </v-btn>
+            </div>
 
-      <v-text-field
-        v-model="changePasswordParam.newPassword"
-        label="新密码"
-        required
-        type="password"
-        autocomplete="off"
-      ></v-text-field>
-      <v-text-field
-        v-model="confirmPassword"
-        label="确认密码"
-        required
-        type="password"
-        autocomplete="off"
-      ></v-text-field>
+            <v-text-field
+              v-model="changePasswordParam.newPassword"
+              label="新密码"
+              required
+              type="password"
+              autocomplete="off"
+            ></v-text-field>
+            <v-text-field
+              v-model="confirmPassword"
+              label="确认密码"
+              required
+              type="password"
+              autocomplete="off"
+            ></v-text-field>
 
-      <div style="display: flex; justify-content: center">
-        <v-btn
-          :disabled="!valid"
-          color="success"
-          @click="changePassword"
-          style="width: 30%"
-        >
-          修改密码
-        </v-btn>
-      </div>
+            <div style="display: flex; justify-content: center">
+              <v-btn
+                :disabled="!valid"
+                color="success"
+                @click="changePassword"
+                style="width: 30%"
+              >
+                修改密码
+              </v-btn>
+            </div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        <v-expansion-panel>
+          <v-expansion-panel-header>注销</v-expansion-panel-header>
+          <v-expansion-panel-content> 
+            <div class="d-flex flex-column align-center">
+              <h4>您确定要注销？</h4>
+              <v-btn @click="pushOut" color="error" class="mt-4" style="width: 40%">注销</v-btn>
+            </div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
     </v-form>
   </div>
 </template>
@@ -76,9 +97,10 @@ export default {
     timer: null,
     selectBtnText: "使用验证码登录",
     pageHeight: 100,
+    width: 40,
   }),
   methods: {
-      async changePassword() {
+    async changePassword() {
       if (
         (this as any).changePasswordParam.newPassword ==
         (this as any).confirmPassword
@@ -151,8 +173,19 @@ export default {
         return false;
       }
     },
+    pushOut() {
+      (this as any).$router.push({ path: "/login" }).catch((err) => {
+        console.log(err);
+      });
+      (this as any).$message.success("已成功退出~");
+    },
   },
   mounted() {
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).width = 90;
+    } else {
+      (this as any).width = 60;
+    }
     // 自动调节组件高度
     (this as any).pageHeight = document.documentElement.clientHeight;
   },

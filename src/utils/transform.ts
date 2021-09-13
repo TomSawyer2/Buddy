@@ -11,102 +11,130 @@ import { Form } from "element-ui";
  * 两个函数用于个人信息获取与提交时的映射
  */
 export function transformAfterGet(data: any) {
+  if (data == undefined) {
+    data = {};
+    return data;
+  }
   if (data.isGraduated) {
     data.isGraduated = "是";
   } else {
     data.isGraduated = "否";
   }
 
-  data.cityValue = data.location.split("-");
+  if (data.location !== undefined) {
+    if (data.location != "") {
+      data.cityValue = data.location.split("-");
+    }
+  }
 
   if (data.birthday == "1900-01-01" || data.birthday == "0001-01-01") {
     data.birthday = "";
   }
 
-  data.teamsValue = [];
-  if (data.teams != "") {
-    data.teamsValue = data.teams.split(';');
+  data.sharesValue = [];
+  if (data.shares !== undefined) {
+    if (data.shares != "") {
+      data.sharesValue = data.shares.split(";");
+    }
   }
 
-  data.sharesValue = [];
-  if (data.shares != "") {
-    data.sharesValue = data.shares.split(';');
-  }
-  
   data.gainsValue = [];
-  if (data.gains != "") {
-    data.gainsValue = data.gains.split(';');
+  if (data.gains !== undefined) {
+    if (data.gains != "") {
+      data.gainsValue = data.gains.split(";");
+    }
   }
 
   data.majorsValue = [];
   data.booksValue = [];
+  data.teamsValue = [];
   data.fieldsValue = [];
-  if (data.fields != "") {
-    data.fieldsValue = data.fields.split(';');
+  if (data.fields !== undefined) {
+    if (data.fields != "") {
+      data.fieldsValue = data.fields.split(";");
+    }
   }
-  if (data.majors != "") {
-    data.majorsValue = data.majors.split(';');
+  if (data.majors !== undefined) {
+    if (data.majors != "") {
+      data.majorsValue = data.majors.split(";");
+    }
   }
-  if (data.books != "") {
-    data.booksValue = data.books.split(';');
+
+  if (data.books !== undefined) {
+    if (data.books != "") {
+      data.booksValue = data.books.split(";");
+    }
+  }
+
+  if (data.teams !== undefined) {
+    if (data.teams != "") {
+      data.teamsValue = data.teams.split(";");
+    }
   }
 
   data.managementExperienceValue = [];
-  if (data.managementExperience != "") {
-    data.managementExperienceValue = data.managementExperience.split(';');
+  if (data.managementExperience !== undefined) {
+    data.managementExperienceValue = data.managementExperience.split(";");
   }
 
-  if(data.teamValue) {
-    data.teamValue = data.teams.split(";");
+  data.characterValue = [];
+  if (data.character !== undefined) {
+    data.characterValue = data.character.split(";");
   }
 
   data.projectValue = [];
-  if(data.projects != "") {
-    data.projectValue = data.projects.split(';');
-  }
-  
   data.resumeValue = [];
-  const projectsTmp: string[] = data.projects.split(";");
-  let idx = 0;
-  for(idx; idx < projectsTmp.length; idx ++ ) {
-    projectsTmp[idx] = projectsTmp[idx].slice(0, 4) + '年' + projectsTmp[idx].slice(4);
-    data.resumeValue = [...data.resumeValue, projectsTmp[idx].split('-')];
+  if (data.projects !== undefined) {
+    if (data.projects != "") {
+      data.projectValue = data.projects.split(";");
+      const projectsTmp: string[] = data.projects.split(";");
+      let idx = 0;
+      for (idx; idx < projectsTmp.length; idx++) {
+        projectsTmp[idx] =
+          projectsTmp[idx].slice(0, 4) + "年" + projectsTmp[idx].slice(4);
+        data.resumeValue = [...data.resumeValue, projectsTmp[idx].split("-")];
+      }
+    }
   }
 
-  if (data.character == -1) {
-    data.character = "";
+  if (data.characterResult == -1) {
+    data.characterResult = "暂无";
+  } else {
+    const characterResultItemsLocal: string[] = [
+      "暂无",
+      "INTJ-A INTJ-T",
+      "INTP-A INTP-T",
+      "ENTJ-A ENTJ-T",
+      "ENTP-A ENTP-T",
+      "INFJ-A INFJ-T",
+      "INFP-A INFP-T",
+      "ENFJ-A ENFJ-T",
+      "ENFP-A ENFP-T",
+      "ISTJ-A ISTJ-T",
+      "ISFJ-A ISFJ-T",
+      "ESTJ-A ESTJ-T",
+      "ESFJ-A ESFJ-T",
+      "ISTP-A ISTP-T",
+      "ISFP-A ISFP-T",
+      "ESTP-A ESTP-T",
+      "ESFP-A ESFP-T",
+    ];
+    data.characterResult = characterResultItemsLocal[data.characterResult];
   }
 
-  const characterItems: string[] = [
-    "暂无",
-    "稳重踏实",
-    "外向开朗",
-    "善解人意",
-    "和蔼可亲",
-    "尚不清楚",
-  ];
-  data.character = characterItems[data.character];
-
-  const characterResultItemsLocal: string[] = [
-    "暂无",
-    "INTJ-A INTJ-T",
-    "INTP-A INTP-T",
-    "ENTJ-A ENTJ-T",
-    "ENTP-A ENTP-T",
-    "INFJ-A INFJ-T",
-    "INFP-A INFP-T",
-    "ENFJ-A ENFJ-T",
-    "ENFP-A ENFP-T",
-    "ISTJ-A ISTJ-T",
-    "ISFJ-A ISFJ-T",
-    "ESTJ-A ESTJ-T",
-    "ESFJ-A ESFJ-T",
-    "ISTP-A ISTP-T",
-    "ISFP-A ISFP-T",
-    "ESTP-A ESTP-T",
-    "ESFP-A ESFP-T",
-  ];
-  data.characterResult = characterResultItemsLocal[data.characterResult];
+  // if (data.character == -1) {
+  //   data.character = "暂无";
+  // } else {
+  //   const characterItems: string[] = [
+  //     "暂无",
+  //     "稳重踏实",
+  //     "外向开朗",
+  //     "善解人意",
+  //     "和蔼可亲",
+  //     "难以描述",
+  //   ];
+  //   data.character = characterItems[data.character];
+  // }
 
   switch (data.identity) {
     case 0:
@@ -137,6 +165,7 @@ export function transformAfterGet(data: any) {
 }
 
 export function transformBeforeUpdate(formData: any) {
+  console.log(formData);
   if (formData.isGraduated && formData.isGraduated == "是") {
     formData.isGraduated = true;
   } else if (formData.isGraduated && formData.isGraduated == "否") {
@@ -144,47 +173,66 @@ export function transformBeforeUpdate(formData: any) {
     formData.substation = "";
   }
 
-  if (formData.cityValue[1] != undefined) {
-    formData.location =
-    formData.cityValue[0] +
-    "-" +
-    formData.cityValue[1] +
-    "-" +
-    formData.cityValue[2] +
-    "-" +
-    formData.cityValue[3];
+  if (formData.cityValue !== undefined) {
+    if (
+      formData.cityValue[1] != "undefined" &&
+      formData.cityValue[2] != "undefined"
+    ) {
+      formData.location =
+        formData.cityValue[0] +
+        "-" +
+        formData.cityValue[1] +
+        "-" +
+        formData.cityValue[2] +
+        "-" +
+        formData.cityValue[3];
+    } else {
+      formData.location = "";
+    }
   }
 
   formData.majors = "";
-  formData.majors = formData.majorsValue.join(';');
+  formData.majors = formData.majorsValue.join(";");
 
   formData.fields = "";
-  formData.fields = formData.fieldsValue.join(';');
+  formData.fields = formData.fieldsValue.join(";");
 
   formData.books = "";
-  formData.books = formData.booksValue.join(';');
+  formData.books = formData.booksValue.join(";");
+
+  formData.teams = "";
+  formData.teams = formData.teamsValue.join(";");
 
   formData.managementExperience = "";
-  formData.managementExperience = formData.managementExperienceValue.join(';');
-  
-  formData.teams = "";
-  if (formData.teamValue) {
-    formData.teams = formData.teamValue[0];
-    if (formData.teamValue.length > 1) {
-      let idx = 1;
-      for(idx; idx < formData.teamValue.length; idx ++ ) {
-        formData.teams = formData.teams + ';' + formData.teamValue[idx];
-      }
-    }
+  formData.managementExperience = formData.managementExperienceValue.join(";");
+
+  formData.character = "";
+  formData.character = formData.characterValue.join(";");
+  if (formData.character.substr(0,1) == ';') {
+    formData.character = formData.character.substr(1);
   }
-  
+
   formData.projects = "";
-  if (formData.resumeValue) {
-    formData.projects = formData.resumeValue[0][0].slice(0, 4) + '-' + formData.resumeValue[0][1] + '-' + formData.resumeValue[0][2];
-    if (formData.resumeValue.length > 1) {
-      let idx = 1;
-      for(idx; idx < formData.resumeValue.length; idx ++ ) {
-        formData.projects = formData.projects + ';' + formData.resumeValue[idx][0].slice(0, 4) + '-' + formData.resumeValue[idx][1] + '-' + formData.resumeValue[idx][2];
+  if (formData.resumeValue !== undefined) {
+    if (formData.resumeValue[1] !== undefined) {
+      formData.projects =
+        formData.resumeValue[0][0].slice(0, 4) +
+        "-" +
+        formData.resumeValue[0][1] +
+        "-" +
+        formData.resumeValue[0][2];
+      if (formData.resumeValue.length > 1) {
+        let idx = 1;
+        for (idx; idx < formData.resumeValue.length; idx++) {
+          formData.projects =
+            formData.projects +
+            ";" +
+            formData.resumeValue[idx][0].slice(0, 4) +
+            "-" +
+            formData.resumeValue[idx][1] +
+            "-" +
+            formData.resumeValue[idx][2];
+        }
       }
     }
   }
@@ -193,6 +241,7 @@ export function transformBeforeUpdate(formData: any) {
   formData.graduateMonth = parseInt(formData.graduateMonth);
 
   const characterResultItemsLocal: string[] = [
+    "暂无",
     "INTJ-A INTJ-T",
     "INTP-A INTP-T",
     "ENTJ-A ENTJ-T",
@@ -214,37 +263,49 @@ export function transformBeforeUpdate(formData: any) {
     formData.characterResult
   );
 
-  const characterItems: string[] = [
-    "稳重踏实",
-    "外向开朗",
-    "善解人意",
-    "和蔼可亲",
-    "尚不清楚",
-  ];
-  formData.character = characterItems.indexOf(formData.character);
-  
+  // const characterItems: string[] = [
+  //   "暂无",
+  //   "稳重踏实",
+  //   "外向开朗",
+  //   "善解人意",
+  //   "和蔼可亲",
+  //   "难以描述",
+  // ];
+  // formData.character = characterItems.indexOf(formData.character);
+
   let i = 1;
   formData.shares = "";
-  if(formData.shareValue === undefined) {
+  if (formData.shareValue === undefined) {
     formData.shareValue = [];
-  } else if (formData.shareValue.length != 0){
-    formData.shares = formData.shareValue[0][0] + "-" + formData.shareValue[0][1];
+  } else if (formData.shareValue.length != 0) {
+    formData.shares =
+      formData.shareValue[0][0] + "-" + formData.shareValue[0][1];
     if (formData.shareValue.length > 1) {
       for (i; i < formData.shareValue.length; i++) {
-        formData.shares = formData.shares + ';' + formData.shareValue[i][0] + "-" + formData.shareValue[i][1];
+        formData.shares =
+          formData.shares +
+          ";" +
+          formData.shareValue[i][0] +
+          "-" +
+          formData.shareValue[i][1];
       }
     }
   }
 
   let j = 1;
   formData.gains = "";
-  if(formData.gainValue === undefined) {
+  if (formData.gainValue === undefined) {
     formData.gainValue = [];
-  } else if (formData.gainValue.length != 0){
+  } else if (formData.gainValue.length != 0) {
     formData.gains = formData.gainValue[0][0] + "-" + formData.gainValue[0][1];
     if (formData.gainValue.length > 1) {
       for (j; j < formData.gainValue.length; j++) {
-        formData.gains = formData.gains + ';' + formData.gainValue[j][0] + "-" + formData.gainValue[j][1];
+        formData.gains =
+          formData.gains +
+          ";" +
+          formData.gainValue[j][0] +
+          "-" +
+          formData.gainValue[j][1];
       }
     }
   }
