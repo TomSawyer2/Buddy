@@ -1,6 +1,6 @@
 <template>
   <div class="buddy-container" :style="{ marginLeft: margin + 'px' }">
-    <div class="search-container" style="padding-top: 18px">
+    <div class="search-container" :style="{paddingTop: paddingTop + 'px'}">
       <BuddySearch
         @search="onSearch"
         @showAllChange="showAllChange"
@@ -104,6 +104,7 @@ export default {
     isAllShow: false,
     i: 0,
     margin: 56,
+    paddingTop: 18,
   }),
 
   methods: {
@@ -221,8 +222,11 @@ export default {
     window.addEventListener("scroll", (this as any).scrollEvent);
     if (localStorage.getItem("ismobile") == "1") {
       (this as any).margin = 0;
+      (this as any).paddingTop = 0;
     } else {
       (this as any).margin = 56;
+      (this as any).paddingTop = 18;
+
     }
     try {
       (this as any).getUserList(1);

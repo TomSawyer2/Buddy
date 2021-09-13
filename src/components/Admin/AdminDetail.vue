@@ -18,10 +18,11 @@
         </v-row>
         <v-row>
           <v-col cols="12" sm="6" md="6">
-            <v-text-field
-              v-model="userData.email"
-              label="电子邮箱"
-            ></v-text-field>
+            <v-select
+              v-model="userData.sex"
+              :items="items.sexItems"
+              label="性别"
+            ></v-select>
           </v-col>
           <v-col cols="12" sm="6" md="6">
             <v-text-field
@@ -31,14 +32,15 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-col cols="12" sm="6" md="6">
-            <v-select
-              v-model="userData.sex"
-              :items="items.sexItems"
-              label="性别"
-            ></v-select>
+          <v-col cols="12" sm="12" md="12">
+            <v-text-field
+              v-model="userData.email"
+              label="电子邮箱"
+            ></v-text-field>
           </v-col>
-          <v-col cols="12" sm="6" md="6">
+        </v-row>
+        <v-row>
+          <v-col cols="12" sm="12" md="12">
             <DatePicker
               :label="label.birthdayLabel"
               @save="saveBirthday"

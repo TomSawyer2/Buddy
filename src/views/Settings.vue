@@ -60,8 +60,13 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
         <v-expansion-panel>
-          <v-expansion-panel-header>功能2</v-expansion-panel-header>
-          <v-expansion-panel-content> 功能2 </v-expansion-panel-content>
+          <v-expansion-panel-header>注销</v-expansion-panel-header>
+          <v-expansion-panel-content> 
+            <div class="d-flex flex-column align-center">
+              <h4>您确定要注销？</h4>
+              <v-btn @click="pushOut" color="error" class="mt-4" style="width: 40%">注销</v-btn>
+            </div>
+          </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
     </v-form>
@@ -167,6 +172,12 @@ export default {
       } else {
         return false;
       }
+    },
+    pushOut() {
+      (this as any).$router.push({ path: "/login" }).catch((err) => {
+        console.log(err);
+      });
+      (this as any).$message.success("已成功退出~");
     },
   },
   mounted() {

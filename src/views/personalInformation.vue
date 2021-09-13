@@ -65,26 +65,30 @@
         label="性别"
         required
       ></v-select>
-
+      
+      <span class="demonstration mt-4">出生日期</span>
       <DatePicker
         :label="label.birthdayLabel"
         @save="saveBirthday"
         :dateOrigin="formData.birthday"
       />
-
-      <MonthPicker
-        :label="label.graduateLabel"
-        :dateYear="formData.graduateYear"
-        :dateMonth="formData.graduateMonth"
-        @save="saveGraduateYear"
-      />
+      
+      <div class="mt-4">
+        <span class="demonstration">毕业年月</span>
+        <MonthPicker
+          :label="label.graduateLabel"
+          :dateYear="formData.graduateYear"
+          :dateMonth="formData.graduateMonth"
+          @save="saveGraduateYear"
+        />
+      </div>
 
       <el-cascader
         v-model="formData.cityValue"
         :options="cityData"
         placeholder="请选择您目前工作所在的城市"
         style="position: relative; width: 100%"
-        class="cityChoose mb-2"
+        class="cityChoose mt-2 mb-2"
         clearable
         filterable
       ></el-cascader>

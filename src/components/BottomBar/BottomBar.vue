@@ -29,12 +29,7 @@
 
       <v-icon>mdi-account-cog</v-icon>
     </v-btn>
-
-    <v-btn @click="pushOut">
-      <span>退出</span>
-
-      <v-icon>mdi-account-off</v-icon>
-    </v-btn>
+    
   </v-bottom-navigation>
 </template>
 
@@ -79,11 +74,6 @@ export default Vue.extend({
     },
     pushToSettings() {
       this.$router.push({ path: "/settings" }).catch((err) => {
-        console.log(err);
-      });
-    },
-    pushOut() {
-      this.$router.push({ path: "/login" }).catch((err) => {
         console.log(err);
       });
     },
