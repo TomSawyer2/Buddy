@@ -21,8 +21,8 @@ export function transformAfterGet(data: any) {
     data.isGraduated = "否";
   }
 
-  if(data.location !== undefined) {
-    if(data.location != "") {
+  if (data.location !== undefined) {
+    if (data.location != "") {
       data.cityValue = data.location.split("-");
     }
   }
@@ -31,44 +31,44 @@ export function transformAfterGet(data: any) {
     data.birthday = "";
   }
 
-  data.teamsValue = [];
-  if (data.teams !== undefined) {
-    if(data.teams != '') {
-      data.teamsValue = data.teams.split(";");
-    }
-  }
-
   data.sharesValue = [];
   if (data.shares !== undefined) {
-    if(data.shares != '') {
+    if (data.shares != "") {
       data.sharesValue = data.shares.split(";");
     }
   }
 
   data.gainsValue = [];
   if (data.gains !== undefined) {
-    if(data.gains != "") {
+    if (data.gains != "") {
       data.gainsValue = data.gains.split(";");
     }
   }
 
   data.majorsValue = [];
   data.booksValue = [];
+  data.teamsValue = [];
   data.fieldsValue = [];
   if (data.fields !== undefined) {
-    if(data.fields != "") {
+    if (data.fields != "") {
       data.fieldsValue = data.fields.split(";");
     }
   }
   if (data.majors !== undefined) {
-    if(data.majors != "") {
+    if (data.majors != "") {
       data.majorsValue = data.majors.split(";");
     }
   }
-    
+
   if (data.books !== undefined) {
-    if(data.books != "") {
+    if (data.books != "") {
       data.booksValue = data.books.split(";");
+    }
+  }
+
+  if (data.teams !== undefined) {
+    if (data.teams != "") {
+      data.teamsValue = data.teams.split(";");
     }
   }
 
@@ -77,14 +77,15 @@ export function transformAfterGet(data: any) {
     data.managementExperienceValue = data.managementExperience.split(";");
   }
 
-  if (data.teamValue) {
-    data.teamValue = data.teams.split(";");
+  data.characterValue = [];
+  if (data.character !== undefined) {
+    data.characterValue = data.character.split(";");
   }
 
   data.projectValue = [];
   data.resumeValue = [];
   if (data.projects !== undefined) {
-    if(data.projects != "" ) {
+    if (data.projects != "") {
       data.projectValue = data.projects.split(";");
       const projectsTmp: string[] = data.projects.split(";");
       let idx = 0;
@@ -120,19 +121,20 @@ export function transformAfterGet(data: any) {
     ];
     data.characterResult = characterResultItemsLocal[data.characterResult];
   }
-  if (data.character == -1) {
-    data.character = "暂无";
-  } else {
-    const characterItems: string[] = [
-      "暂无",
-      "稳重踏实",
-      "外向开朗",
-      "善解人意",
-      "和蔼可亲",
-      "尚不清楚",
-    ];
-    data.character = characterItems[data.character];
-  }
+
+  // if (data.character == -1) {
+  //   data.character = "暂无";
+  // } else {
+  //   const characterItems: string[] = [
+  //     "暂无",
+  //     "稳重踏实",
+  //     "外向开朗",
+  //     "善解人意",
+  //     "和蔼可亲",
+  //     "难以描述",
+  //   ];
+  //   data.character = characterItems[data.character];
+  // }
 
   switch (data.identity) {
     case 0:
@@ -170,8 +172,11 @@ export function transformBeforeUpdate(formData: any) {
     formData.substation = "";
   }
 
-  if(formData.cityValue !== undefined) {
-    if (formData.cityValue[1] !== undefined && formData.cityValue[2] !== undefined) {
+  if (formData.cityValue !== undefined) {
+    if (
+      formData.cityValue[1] != "undefined" &&
+      formData.cityValue[2] != "undefined"
+    ) {
       formData.location =
         formData.cityValue[0] +
         "-" +
@@ -180,6 +185,8 @@ export function transformBeforeUpdate(formData: any) {
         formData.cityValue[2] +
         "-" +
         formData.cityValue[3];
+    } else {
+      formData.location = "";
     }
   }
 
@@ -192,22 +199,20 @@ export function transformBeforeUpdate(formData: any) {
   formData.books = "";
   formData.books = formData.booksValue.join(";");
 
+  formData.teams = "";
+  formData.teams = formData.teamsValue.join(";");
+
   formData.managementExperience = "";
   formData.managementExperience = formData.managementExperienceValue.join(";");
 
-  formData.teams = "";
-  if (formData.teamValue) {
-    formData.teams = formData.teamValue[0];
-    if (formData.teamValue.length > 1) {
-      let idx = 1;
-      for (idx; idx < formData.teamValue.length; idx++) {
-        formData.teams = formData.teams + ";" + formData.teamValue[idx];
-      }
-    }
+  formData.character = "";
+  formData.character = formData.characterValue.join(";");
+  if (formData.character.substr(0,1) == ';') {
+    formData.character = formData.character.substr(1);
   }
 
   formData.projects = "";
-  if(formData.resumeValue !== undefined) {
+  if (formData.resumeValue !== undefined) {
     if (formData.resumeValue[1] !== undefined) {
       formData.projects =
         formData.resumeValue[0][0].slice(0, 4) +
@@ -257,15 +262,15 @@ export function transformBeforeUpdate(formData: any) {
     formData.characterResult
   );
 
-  const characterItems: string[] = [
-    "暂无",
-    "稳重踏实",
-    "外向开朗",
-    "善解人意",
-    "和蔼可亲",
-    "尚不清楚",
-  ];
-  formData.character = characterItems.indexOf(formData.character);
+  // const characterItems: string[] = [
+  //   "暂无",
+  //   "稳重踏实",
+  //   "外向开朗",
+  //   "善解人意",
+  //   "和蔼可亲",
+  //   "难以描述",
+  // ];
+  // formData.character = characterItems.indexOf(formData.character);
 
   let i = 1;
   formData.shares = "";

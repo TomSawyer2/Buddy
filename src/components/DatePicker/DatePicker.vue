@@ -1,36 +1,15 @@
 <template>
-  <div>
-    <v-menu
-      ref="menu"
-      v-model="menu"
-      :close-on-content-click="false"
-      transition="scale-transition"
-      offset-y
-      min-width="auto"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-text-field
-          v-model="date"
-          label="生日"
-          prepend-icon="mdi-calendar"
-          readonly
-          v-bind="attrs"
-          v-on="on"
-        ></v-text-field>
-      </template>
-      <v-date-picker
+    <div class="block">
+      <el-date-picker
         v-model="date"
-        :active-picker.sync="activePicker"
-        :max="
-          new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
-            .toISOString()
-            .substr(0, 10)
-        "
-        min="1950-01-01"
-        @change="save"
-      ></v-date-picker>
-    </v-menu>
-  </div>
+        value-format="yyyy-MM-dd"
+        type="date"
+        class="dateChoose d-flex justify-end"
+        style="width: 100%"
+        placeholder="选择出生日期"
+        :editable="false">
+      </el-date-picker>
+    </div>
 </template>
 
 <script lang="ts">
@@ -41,14 +20,12 @@ export default Vue.extend({
   data() {
     return {
       activePicker: null,
-      menu: false,
-      date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+      date: "",
     };
   },
   methods: {
     save(date) {
-      (this as any).$emit("save", (this as any).date);
-      (this as any).menu = false;
+      (this as any).$emit("save", date);
     },
   },
   mounted() {
@@ -60,7 +37,19 @@ export default Vue.extend({
     },
     dateOrigin(newV, oldV) {
       (this as any).date = newV;
+    },
+    date(newV, oldV) {
+      (this as any).save(newV);
     }
   },
 });
 </script>
+
+<style>
+.dateChoose .el-input__inner {
+  border: 0;
+  border-bottom: 1px solid;
+  border-radius: 0px;
+  padding: 0px 30px;
+}
+</style>

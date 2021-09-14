@@ -39,6 +39,8 @@ const URL = {
   addFields: "/fields/add",
   getBooks: "/books/all",
   addBooks: "/books/add",
+  getTeams: "/teams/all",
+  addTeams: "/teams/add",
   getShareAllDirections: "/share/allDirections",
   getShareAllAspects: "/share/allAspects",
   addShareDirection: "/share/addDirection",

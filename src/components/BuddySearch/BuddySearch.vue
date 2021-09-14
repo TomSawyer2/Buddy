@@ -1,19 +1,19 @@
 <template>
-  <div style="flex-direction: column; width: 80%">
+  <div :style="{flexDirection: 'column', width: serachBarWidth + '%'}">
     <v-expansion-panels class="searchbar panelBar">
       <v-expansion-panel>
         <v-expansion-panel-header>
           <v-text-field
             label="老队员姓名"
             v-model="searchInfo.userName"
-            validate-on-blur
             clearable
             style="width: 60%"
+            v-on:click.native.stop
           />
           <div class="searchContainer ml-2">
             <div class="studentShow">
-              <v-switch v-model="isAllShow"></v-switch>
-              <div class="student-show-text">显示小队员</div>
+              <v-switch v-model="isAllShow" v-on:click.native.stop></v-switch>
+              <div class="student-show-text" style="white-space: nowrap;">显示小队员</div>
             </div>
             <div class="search-btn ml-2">
               <v-btn
@@ -21,6 +21,7 @@
                 color="primary"
                 @click="search"
                 style="width: 30%"
+                v-on:click.native.stop
               >
                 <v-icon>mdi-magnify</v-icon>
                 搜索
@@ -189,6 +190,7 @@ export default Vue.extend({
       isShowShare: false,
       uniqueDirections: [],
       uniqueDirectionsByGain: [],
+      serachBarWidth: 90,
     };
   },
   methods: {
@@ -252,7 +254,17 @@ export default Vue.extend({
           }
         }
       }
-      this.$emit("search", this.searchInfo);
+      var arr = Object.values(this.searchInfo).filter(function (item) {
+          if (item !== '') {
+              return true			//过滤掉为空的项
+          }
+      })
+      var idx = 0;
+      for(idx; idx < arr.length; idx ++ ) {
+        if(arr[idx] != "" && arr[idx] != [] && arr[idx] != null) {
+          this.$emit("search", this.searchInfo);
+        }
+      }
     },
     fillInGraduateYears() {
       let i = new Date().getFullYear();
@@ -316,6 +328,11 @@ export default Vue.extend({
       this.fields = res;
     } catch (error) {
       console.log(error);
+    }
+    if(localStorage.getItem('ismobile') == '1') {
+      (this as any).serachBarWidth = 100;
+    } else {
+      (this as any).serachBarWidth = 90;
     }
     (this as any).managementExperience = managementExperienceItem;
     (this as any).projectName = ResumeData;

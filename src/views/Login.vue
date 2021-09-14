@@ -9,7 +9,12 @@
       align-items: center;
     "
   >
-    <v-form ref="form" v-model="valid" lazy-validation style="width: 40%">
+    <v-form
+      ref="form"
+      v-model="valid"
+      lazy-validation
+      :style="{ width: width + '%' }"
+    >
       <v-text-field
         v-model="loginDataByPwd.phoneNumber"
         :rules="rules.phoneNumberRules"
@@ -127,8 +132,20 @@ export default {
     timer: null,
     selectBtnText: "使用验证码登录",
     pageHeight: 0,
+    ismobile: 0,
+    width: 40,
   }),
   mounted() {
+    let flag = navigator.userAgent.match(
+      /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+    );
+    (this as any).ismobile = flag ? 1 : 0;
+    localStorage.setItem("ismobile", (this as any).ismobile);
+    if ((this as any).ismobile == 1) {
+      (this as any).width = 90;
+    } else {
+      (this as any).width = 40;
+    }
     removeToken();
     removePhone();
     removeAvatarSrc();
@@ -169,6 +186,7 @@ export default {
               setUserName(res.data.data.userName);
               setPhone((this as any).loginDataByPwd.phoneNumber);
               setToken(res.data.data.token);
+              localStorage.setItem('permission', res.data.data.permission);
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
             }

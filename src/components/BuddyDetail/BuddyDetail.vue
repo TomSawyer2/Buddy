@@ -10,6 +10,9 @@
     <template v-slot:default>
       <div class="resume">
         <div class="base">
+          <v-btn @click="onClose" icon color="black" style="right: 50px; top: 50px; position: fixed; z-index: 100003" v-if="isBtnShow == true">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
           <div class="profile">
             <v-avatar size="125">
               <img :src="userInfo.avatar" alt="个人照片" />
@@ -17,9 +20,7 @@
             <div class="info-buddy">
               <h4 class="name">{{ userInfo.userName }}</h4>
               <small class="job">
-                分站：{{
-                  userInfo.substation ? userInfo.substation : "无"
-                }}
+                分站：{{ userInfo.substation ? userInfo.substation : "无" }}
                 <br />
                 编号：{{ userInfo.number ? userInfo.number : "无" }}
                 <br />
@@ -30,11 +31,7 @@
             <h3>个人信息</h3>
             <I>性别：{{ userInfo.sex ? userInfo.sex : "未填写" }}</I>
             <br />
-            <I
-              >生日：{{
-                userInfo.birthday ? userInfo.birthday : "未填写"
-              }}</I
-            >
+            <I>生日：{{ userInfo.birthday ? userInfo.birthday : "未填写" }}</I>
             <br />
             <I
               >毕业年份：{{
@@ -71,9 +68,7 @@
             </div>
             <div class="email">
               <i class="mdi mdi-email"></i>
-              <span>{{
-                userInfo.email ? userInfo.email : "未填写"
-              }}</span>
+              <span>{{ userInfo.email ? userInfo.email : "未填写" }}</span>
             </div>
           </div>
         </div>
@@ -86,7 +81,9 @@
             </h3>
             <!-- <p class="buddy-para"> -->
             <p class="plainText ml-5">
-              {{ userInfo.location ? userInfo.location : "暂无" }}
+              {{
+                userInfo.location != "" ? userInfo.location : "暂无"
+              }}
             </p>
           </div>
           <div class="buddy-resume">
@@ -95,9 +92,7 @@
               | 项目组
             </h3>
             <v-chip-group
-              v-if="
-                userInfo.teams != ''
-              "
+              v-if="userInfo.teams != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
@@ -117,9 +112,7 @@
               | 具体项目
             </h3>
             <v-chip-group
-              v-if="
-                userInfo.projects != ''
-              "
+              v-if="userInfo.projects != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
@@ -161,9 +154,7 @@
               | 熟悉的专业方向
             </h3>
             <v-chip-group
-              v-if="
-                userInfo.majors != ''
-              "
+              v-if="userInfo.majors != ''"
               style="margin-left: 5px"
               column
               class="ml-5"
@@ -246,7 +237,7 @@
               | 性格特征自评及测试结果
             </h3>
             <div class="d-flex justify-start">
-              <p class="ml-5">{{ userInfo.character }}</p>
+              <p class="ml-5">{{ userInfo.character ? userInfo.character: "暂无" }}</p>
               <p class="ml-5">{{ userInfo.characterResult }}</p>
             </div>
           </div>
@@ -276,13 +267,29 @@ export default Vue.extend({
   components: {},
   props: ["userInfo", "isLoading", "messageCenter"],
   data() {
-    return {};
+    return {
+      isBtnShow: false,
+    };
   },
   methods: {
     onAdd(id: string) {
       this.$emit("add", id);
     },
+    onClose() {
+      this.$emit("close");
+    }
   },
+  watch: {
+    isLoading(newV, oldV) {
+      if(newV == false) {
+        setTimeout(() => {
+          (this as any).isBtnShow = true;
+        }, 150);
+      } else if(newV == true) {
+        (this as any).isBtnShow = false;
+      }
+    }
+  }
 });
 </script>
 

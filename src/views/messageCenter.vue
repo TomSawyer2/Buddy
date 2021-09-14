@@ -1,5 +1,5 @@
 <template>
-  <div class="mainBox">
+  <div class="mainBox" :style="{ marginLeft: margin + 'px' }">
     <ChooseBtn
       @childReceived="childReceived"
       :totalReceivedNum="totalReceivedNum"
@@ -79,8 +79,14 @@ export default {
     acceptNumber: 0,
     buddyDetail: {},
     received: 1,
+    margin: 56,
   }),
   mounted() {
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).margin = 0;
+    } else {
+      (this as any).margin = 56;
+    }
     (this as any).getReceivedRequestsFunc();
     (this as any).getSentRequestsFunc();
   },
@@ -228,6 +234,5 @@ export default {
   width: 100%;
   justify-content: center;
   align-items: center;
-  margin-left: 56px;
 }
 </style>

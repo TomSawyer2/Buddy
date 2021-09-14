@@ -1,6 +1,6 @@
 <template>
-  <div class="buddy-container">
-    <div class="search-container" style="padding-top: 18px">
+  <div class="buddy-container" :style="{ marginLeft: margin + 'px' }">
+    <div class="search-container" :style="{paddingTop: paddingTop + 'px'}">
       <BuddySearch
         @search="onSearch"
         @showAllChange="showAllChange"
@@ -55,13 +55,25 @@
     <v-dialog
       v-model="isDetailShow"
       transition="dialog-bottom-transition"
+      class="d-flex"
       style="z-index: 10001"
+      :width="dialogWidth"
     >
       <BuddyDetail
         :userInfo="buddyDetail"
         :isLoading="isDetailLoading"
         @add="onAdd"
+        @close="onClose"
+        v-if="ismobile == 0"
         v-bind:messageCenter="0"
+      />
+      <BuddyDetailMobile
+        v-if="ismobile == 1"
+        v-bind:messageCenter="0"
+        :userInfo="buddyDetail"
+        :isLoading="isDetailLoading"
+        style="z-index: 10002"
+        @add="onAdd"
       />
     </v-dialog>
   </div>
@@ -78,11 +90,12 @@ import {
 import { transformAfterGet, transformBeforeUpdate } from "@/utils/transform";
 import BuddyList from "@/components/BuddyList/BuddyList.vue";
 import BuddyDetail from "@/components/BuddyDetail/BuddyDetail.vue";
+import BuddyDetailMobile from "@/components/BuddyDetail/BuddyDetailMobile.vue";
 import BuddySearch from "@/components/BuddySearch/BuddySearch.vue";
 import Message from "@/components/Message";
 import { getPhone } from "@/utils/storage";
 export default {
-  components: { BuddyList, BuddyDetail, BuddySearch },
+  components: { BuddyList, BuddyDetail, BuddySearch, BuddyDetailMobile },
   data: () => ({
     pageHeight: document.documentElement.clientHeight,
     pageWidth: document.documentElement.clientWidth,
@@ -103,9 +116,17 @@ export default {
     phone: getPhone(),
     isAllShow: false,
     i: 0,
+    margin: 56,
+    paddingTop: 18,
+    ismobile: 0,
+    dialogWidth: null,
   }),
 
   methods: {
+    onClose () {
+      (this as any).isDetailShow = false;
+    },
+    
     showAllChange(isAllShow: boolean) {
       (this as any).isAllShow = isAllShow;
     },
@@ -218,6 +239,16 @@ export default {
 
   async mounted() {
     window.addEventListener("scroll", (this as any).scrollEvent);
+    if (localStorage.getItem("ismobile") == "1") {
+      (this as any).margin = 0;
+      (this as any).paddingTop = 0;
+      (this as any).ismobile = 1;
+      (this as any).dialogWidth = 400;
+    } else {
+      (this as any).margin = 56;
+      (this as any).paddingTop = 18;
+      (this as any).ismobile = 0;
+    }
     try {
       (this as any).getUserList(1);
     } catch (error) {
@@ -233,7 +264,6 @@ export default {
 
 <style scoped>
 .buddy-container {
-  margin-left: 56px;
   flex: 1;
   display: flex;
   flex-direction: column;
