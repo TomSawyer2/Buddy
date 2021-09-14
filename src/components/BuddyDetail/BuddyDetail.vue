@@ -10,6 +10,9 @@
     <template v-slot:default>
       <div class="resume">
         <div class="base">
+          <v-btn @click="onClose" icon color="black" style="right: 50px; top: 50px; position: fixed; z-index: 100003" v-if="isBtnShow == true">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
           <div class="profile">
             <v-avatar size="125">
               <img :src="userInfo.avatar" alt="个人照片" />
@@ -264,13 +267,29 @@ export default Vue.extend({
   components: {},
   props: ["userInfo", "isLoading", "messageCenter"],
   data() {
-    return {};
+    return {
+      isBtnShow: false,
+    };
   },
   methods: {
     onAdd(id: string) {
       this.$emit("add", id);
     },
+    onClose() {
+      this.$emit("close");
+    }
   },
+  watch: {
+    isLoading(newV, oldV) {
+      if(newV == false) {
+        setTimeout(() => {
+          (this as any).isBtnShow = true;
+        }, 150);
+      } else if(newV == true) {
+        (this as any).isBtnShow = false;
+      }
+    }
+  }
 });
 </script>
 

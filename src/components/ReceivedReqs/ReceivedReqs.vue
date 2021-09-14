@@ -60,21 +60,19 @@
                       class="ml-4"
                       v-if="item.fields.length - 2"
                     ></v-divider>
-                    <v-card-text v-if="item.fields.length - 2 && ismobile == 0">
-                      <v-row>
-                        <v-sheet class="ml-3 mx-auto mt-1 mb-1">
-                          <div>
-                            <v-chip
-                              v-for="tag in item.fieldsValue"
-                              :key="tag"
-                              class="mr-1"
-                            >
-                              {{ tag }}
-                            </v-chip>
-                          </div>
-                        </v-sheet>
-                      </v-row>
-                    </v-card-text>
+                    <v-row v-if="item.fields.length - 2 && ismobile == 0">
+                      <v-sheet class="ml-3 mx-auto mt-1 mb-1">
+                        <div>
+                          <v-chip
+                            v-for="tag in item.fieldsValue"
+                            :key="tag"
+                            class="mr-1"
+                          >
+                            {{ tag }}
+                          </v-chip>
+                        </div>
+                      </v-sheet>
+                    </v-row>
                     <v-row v-if="item.status == 0 && acceptNumber < 3">
                       <v-col>
                         <v-card-actions>
@@ -110,6 +108,7 @@
                             rounded
                             small
                             color="error"
+                            class="ml-4"
                             @click="refuseBuddyFunc(item)"
                           >
                             拒绝
@@ -176,6 +175,14 @@
         :userInfo="buddyDetail"
         :isLoading="isDetailLoading"
         v-bind:messageCenter="1"
+        v-if="ismobile == 0"
+      />
+      <BuddyDetailMobile
+        v-if="ismobile == 1"
+        v-bind:messageCenter="1"
+        :userInfo="buddyDetail"
+        :isLoading="isDetailLoading"
+        style="z-index: 10002"
       />
     </v-dialog>
   </div>
@@ -184,8 +191,9 @@
 <script lang="ts">
 import Vue from "vue";
 import BuddyDetail from "@/components/BuddyDetail/BuddyDetail.vue";
+import BuddyDetailMobile from "@/components/BuddyDetail/BuddyDetailMobile.vue";
 export default Vue.extend({
-  components: { BuddyDetail },
+  components: { BuddyDetail, BuddyDetailMobile },
   name: "ReceivedReqs",
   props: [
     "received",

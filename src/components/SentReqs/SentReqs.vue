@@ -148,6 +148,14 @@
         :userInfo="buddyDetail"
         :isLoading="isDetailLoading"
         v-bind:messageCenter="1"
+        v-if="ismobile == 0"
+      />
+      <BuddyDetailMobile
+        v-if="ismobile == 1"
+        v-bind:messageCenter="1"
+        :userInfo="buddyDetail"
+        :isLoading="isDetailLoading"
+        style="z-index: 10002"
       />
     </v-dialog>
   </div>
@@ -156,8 +164,9 @@
 <script lang="ts">
 import Vue from "vue";
 import BuddyDetail from "@/components/BuddyDetail/BuddyDetail.vue";
+import BuddyDetailMobile from "@/components/BuddyDetail/BuddyDetailMobile.vue";
 export default Vue.extend({
-  components: { BuddyDetail },
+  components: { BuddyDetail, BuddyDetailMobile },
   name: "SentReqs",
   props: [
     "received",

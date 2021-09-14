@@ -1,30 +1,30 @@
 <template>
-  <v-bottom-navigation :value="value" absolute color="primary">
-    <v-btn @click="pushToPersonalInformation">
+  <v-bottom-navigation :value="value" absolute color="primary" style="height: 70px" class="pt-1">
+    <v-btn @click="pushToPersonalInformation" style="background-color: #ffffff">
       <span>个人中心</span>
 
       <v-icon>mdi-home</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToBuddySquare">
+    <v-btn @click="pushToBuddySquare" style="background-color: #ffffff">
       <span>Buddy广场</span>
 
       <v-icon>mdi-account-multiple</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToMessageCenter">
+    <v-btn @click="pushToMessageCenter" style="background-color: #ffffff">
       <span>消息中心</span>
 
       <v-icon>mdi-vector-square</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToAdmin" v-if="showAdmin">
+    <v-btn @click="pushToAdmin" v-if="showAdmin" style="background-color: #ffffff">
       <span>管理员界面</span>
 
       <v-icon>mdi-account-key</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToSettings">
+    <v-btn @click="pushToSettings" style="background-color: #ffffff">
       <span>设置</span>
 
       <v-icon>mdi-account-cog</v-icon>
@@ -80,3 +80,8 @@ export default Vue.extend({
   },
 });
 </script>
+
+
+<style>
+
+</style>

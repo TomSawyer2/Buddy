@@ -165,7 +165,6 @@ export function transformAfterGet(data: any) {
 }
 
 export function transformBeforeUpdate(formData: any) {
-  console.log(formData);
   if (formData.isGraduated && formData.isGraduated == "是") {
     formData.isGraduated = true;
   } else if (formData.isGraduated && formData.isGraduated == "否") {

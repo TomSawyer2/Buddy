@@ -92,7 +92,7 @@ export default {
       ],
     },
     btnDisabled: false, // 获取验证码按钮是否可用
-    codeStatus: "获取验证码", // 获取验证码按钮的文字
+    codeStatus: "获取", // 获取验证码按钮的文字
     count: "",
     timer: null,
     selectBtnText: "使用验证码登录",
