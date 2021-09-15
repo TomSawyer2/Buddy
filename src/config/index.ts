@@ -60,6 +60,8 @@ const URL = {
   postAvatar: "/files/avatar",
   postQRCode: "/files/wechat",
   queryNumber: "/number/search",
+  // projects
+  searchProjects: "/search/projects",
   // buddy-related
   getAllUsersByPage: "/index/students",
   getAllOldUsersByPage: "/index/teachers",

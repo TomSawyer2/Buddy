@@ -70,7 +70,7 @@
             multiple
             style="width: 70%"
           ></v-select>
-          <v-select
+          <!-- <v-select
             dense
             v-model="searchInfo.projectYear"
             :items="projectYear"
@@ -96,7 +96,7 @@
             outline
             clearable
             style="width: 70%"
-          ></v-select>
+          ></v-select> -->
           <el-cascader
             v-model="searchInfo.gainsValue"
             :options="gains"

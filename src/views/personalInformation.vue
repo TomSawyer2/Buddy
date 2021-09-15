@@ -193,7 +193,7 @@
         @childrenItems="childrenTeamItems"
       />
 
-      <el-cascader
+      <!-- <el-cascader
         v-model="formData.resumeValue"
         :options="resumeData"
         placeholder="请选择您曾经参与的项目以及身份"
@@ -202,7 +202,91 @@
         clearable
         :props="resumeProp"
         v-if="isShowResume"
-      ></el-cascader>
+      ></el-cascader> -->
+      <p
+        class="font-weight-light mt-4"
+        style="font-size: 15px; margin-bottom: 0px"
+      >
+        请选择您参与过的具体项目
+      </p>
+      <div style="display: flex; flex-direction: row; align-items: center">
+        <!-- <v-combobox
+          v-model="formData.resumeValue"
+          shareDisabled
+          placeholder="暂无"
+          small-chips
+          persistent-hint
+          style="position: relative; width: 100%"
+          class="combobox mb-2"
+          clearable
+        ></v-combobox> -->
+        
+        <v-btn class="mb-2" @click="queryProjectDialog = true">查询</v-btn>
+      </div>
+
+      <v-dialog
+        v-model="queryProjectDialog"
+        persistent
+        max-width="600px"
+        style="z-index: 1001"
+      >
+        <v-card>
+          <v-card-title>
+            <span class="text-h5 mt-4 ml-2">查询具体项目</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container class="mt-5">
+              <v-row>
+                <v-col>
+                  <v-text-field
+                    label="请填写项目进行的大致年份"
+                    clearable
+                    :value="searchProjectsParams.year"
+                    v-model="searchProjectsParams.year"
+                  />
+                  <v-text-field
+                    label="请填写项目的大致方向"
+                    clearable
+                    :value="searchProjectsParams.projectDirection"
+                    v-model="searchProjectsParams.projectDirection"
+                  />
+                  <v-text-field
+                    label="请填写项目的名称"
+                    clearable
+                    :value="searchProjectsParams.projectName"
+                    v-model="searchProjectsParams.projectName"
+                  >
+                  </v-text-field>
+                </v-col>
+              </v-row>
+              <PersonalInformationTable
+                v-if="queryProjectSuccess"
+                :queryData="queryTableDataProject"
+                @projectItemChild="changeProject"
+              />
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="queryProjectDialog = false"
+              class="mb-6"
+            >
+              关闭
+            </v-btn>
+            <v-btn
+              color="blue darken-1"
+              text
+              @click="queryProjectFunc"
+              class="mb-6 mr-5"
+            >
+              查询
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
       <v-select
         v-model="formData.managementExperienceValue"
@@ -540,6 +624,7 @@ import {
   queryNumber,
   getTeams,
   addTeams,
+  searchProjects,
 } from "../apis";
 import {
   setToken,
@@ -560,13 +645,14 @@ import {
 import DatePicker from "@/components/DatePicker/DatePicker.vue";
 import Combobox from "@/components/Combobox/Combobox.vue";
 import Cities from "@/utils/city";
-import Resumes from "@/utils/resume";
+// import Resumes from "@/utils/resume";
 // import Groups from "@/utils/group";
 import Table from "@/components/Table/Table.vue";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
+import PersonalInformationTable from "@/components/PersonalInformationTable/PersonalInformationTable.vue";
 export default {
-  components: { DatePicker, Combobox, MonthPicker, Table },
+  components: { DatePicker, Combobox, MonthPicker, Table, PersonalInformationTable },
   data() {
     let that = this as any;
     return {
@@ -710,6 +796,7 @@ export default {
       addDialog: false,
       addAspectDialog: false,
       queryNumberDialog: false,
+      queryProjectDialog: false,
       newShareDirection: "",
       newShareAspectParam: {
         shareAspect: "",
@@ -744,6 +831,13 @@ export default {
       isShowResume: false,
       width: 50,
       margin: 0,
+      searchProjectsParams: {
+        year: null,
+        projectDirection: "",
+        projectName: "",
+      },
+      queryProjectSuccess: false,
+      queryTableDataProject: [],
     };
   },
   async mounted() {
@@ -757,7 +851,7 @@ export default {
     (this as any).items.managementExperienceItem = managementExperienceItem;
     // (this as any).items.teams = Groups;
     (this as any).cityData = Cities;
-    (this as any).resumeData = Resumes;
+    // (this as any).resumeData = Resumes;
     (this as any).formData.phoneNumber = getPhone();
     await getPersonalInformation()
       .then((res: any) => {
@@ -875,6 +969,14 @@ export default {
     }, 100);
   },
   methods: {
+    changeProject(val) {
+      let i = 0;
+      (this as any).formData.resumeValue = [];
+      for(i; i < val.length; i ++) {
+        (this as any).formData.resumeValue.push(val[i].startYear + '-' + val[i].endYear + '-' + val[i].projectDirection + '-' + val[i].projectName);
+      }
+      (this as any).formData.resumeValue = Array.from(new Set((this as any).formData.resumeValue));
+    },
     changeNumber(val) {
       (this as any).queryNumberDialog = false;
       // (this as any).queryNumberSuccess = false;
@@ -900,6 +1002,26 @@ export default {
       } else {
         (this as any).$message.error("请输入查询的内容");
       }
+    },
+    async queryProjectFunc() {
+      if((this as any).searchProjectsParams.year == null) {
+        (this as any).searchProjectsParams.year == 0;
+      }
+      (this as any).searchProjectsParams.year = Number((this as any).searchProjectsParams.year);
+      await searchProjects((this as any).searchProjectsParams)
+        .then((res: any) => {
+          (this as any).queryTableDataProject = res.data.data;
+          (this as any).$message.success("查询成功！");
+          (this as any).queryProjectSuccess = true;
+          (this as any).queryProjectDialog = false;
+          setTimeout(() => {
+            (this as any).queryProjectDialog = true;
+          }, 100);
+        })
+        .catch((err: any) => {
+          (this as any).queryProjectDialog = false;
+          (this as any).$message.error("查询时发生了一些错误，请重试~");
+        });
     },
     childrenMajorItems(val) {
       (this as any).formData.majorsValue = val;

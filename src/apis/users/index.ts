@@ -25,6 +25,7 @@ import {
   changePwdSubmitInfo,
   addBooksInfo,
   addTeamsInfo,
+  searchProjectsInfo,
 } from "@/models";
 import { URL } from "@/config";
 
@@ -224,4 +225,10 @@ export function addTeams(
   params: addTeamsInfo
 ): Promise<Record<string, unknown>> {
   return axios.post(URL.addTeams, params);
+}
+
+export function searchProjects(
+  params: searchProjectsInfo
+): Promise<Record<string, unknown>> {
+  return axios.post(URL.searchProjects, params);
 }

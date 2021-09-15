@@ -214,27 +214,16 @@ export function transformBeforeUpdate(formData: any) {
   formData.projects = "";
   if (formData.resumeValue !== undefined) {
     if (formData.resumeValue[1] !== undefined) {
-      formData.projects =
-        formData.resumeValue[0][0].slice(0, 4) +
-        "-" +
-        formData.resumeValue[0][1] +
-        "-" +
-        formData.resumeValue[0][2];
+      formData.projects = formData.resumeValue[0];
       if (formData.resumeValue.length > 1) {
         let idx = 1;
         for (idx; idx < formData.resumeValue.length; idx++) {
-          formData.projects =
-            formData.projects +
-            ";" +
-            formData.resumeValue[idx][0].slice(0, 4) +
-            "-" +
-            formData.resumeValue[idx][1] +
-            "-" +
-            formData.resumeValue[idx][2];
+          formData.projects = formData.projects + ';' + formData.resumeValue[idx];
         }
       }
     }
   }
+  console.log(formData.projects);
 
   formData.graduateYear = parseInt(formData.graduateYear);
   formData.graduateMonth = parseInt(formData.graduateMonth);

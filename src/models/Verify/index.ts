@@ -112,3 +112,9 @@ export interface addBooksInfo {
 export interface addTeamsInfo {
   team: string;
 }
+
+export interface searchProjectsInfo {
+  year: number | undefined;
+  projectDirection: string | undefined;
+  projectName: string | undefined;
+}
