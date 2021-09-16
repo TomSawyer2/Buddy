@@ -83,18 +83,20 @@ export function transformAfterGet(data: any) {
   }
 
   data.projectValue = [];
-  data.resumeValue = [];
+
+  // data.projects = "2002-2003-军口项目/公文加密-计算机网络信息加密方法研究;2003-2004-嘉铭激光-一体化标记机控制系统;2003-2004-铁四院-铁四院电化处网页制作;2004-2005-嘉铭激光-独立液晶大屏标记机控制系统(即一体化/5吋屏标记机产品化);2004-2004-华三通信（H3C)-8043路由器web管理系统";  data.resumeValue = [];
   if (data.projects !== undefined) {
     if (data.projects != "") {
       const projectsTmp: string[] = data.projects.split(";");
-      let idx = 0;
-      projectsTmp.forEach(item => {
-        // let 
-        // data.projectValue["startYear"] = ;
-        data.projectValue["endYear"] = projectsTmp[1];
-        data.projectValue["projectDirection"] = projectsTmp[2];
-        data.projectValue["projectName"] = projectsTmp[3];
-      })
+      projectsTmp.forEach((item, idx) => {
+        const tempProject = item.split("-");
+        data.projectValue[idx] = {
+          startYear: Number(tempProject[0]),
+          endYear: Number(tempProject[1]),
+          projectDirection: tempProject[2],
+          projectName: tempProject[3],
+        };
+      });
     }
   }
 
@@ -122,7 +124,6 @@ export function transformAfterGet(data: any) {
     ];
     data.characterResult = characterResultItemsLocal[data.characterResult];
   }
-  console.log(data);
   switch (data.identity) {
     case 0:
       data.identity = "预备队员";
@@ -194,7 +195,7 @@ export function transformBeforeUpdate(formData: any) {
 
   formData.character = "";
   formData.character = formData.characterValue.join(";");
-  if (formData.character.substr(0,1) == ';') {
+  if (formData.character.substr(0, 1) == ";") {
     formData.character = formData.character.substr(1);
   }
 
@@ -205,7 +206,8 @@ export function transformBeforeUpdate(formData: any) {
       if (formData.resumeValue.length > 1) {
         let idx = 1;
         for (idx; idx < formData.resumeValue.length; idx++) {
-          formData.projects = formData.projects + ';' + formData.resumeValue[idx];
+          formData.projects =
+            formData.projects + ";" + formData.resumeValue[idx];
         }
       }
     }

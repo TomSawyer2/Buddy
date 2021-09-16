@@ -111,9 +111,9 @@ export default Vue.extend({
   },
   created() {
     if (localStorage.getItem("ismobile") == "1") {
-      (this as any).footer_props['items-per-page-options'][0] = 2;
+      (this as any).footer_props["items-per-page-options"][0] = 2;
     } else {
-      (this as any).footer_props['items-per-page-options'][0] = 5;
+      (this as any).footer_props["items-per-page-options"][0] = 5;
     }
   },
   mounted() {

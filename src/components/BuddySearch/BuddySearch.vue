@@ -1,5 +1,5 @@
 <template>
-  <div :style="{flexDirection: 'column', width: serachBarWidth + '%'}">
+  <div :style="{ flexDirection: 'column', width: serachBarWidth + '%' }">
     <v-expansion-panels class="searchbar panelBar">
       <v-expansion-panel>
         <v-expansion-panel-header>
@@ -13,7 +13,9 @@
           <div class="searchContainer ml-2">
             <div class="studentShow">
               <v-switch v-model="isAllShow" v-on:click.native.stop></v-switch>
-              <div class="student-show-text" style="white-space: nowrap;">显示小队员</div>
+              <div class="student-show-text" style="white-space: nowrap">
+                显示小队员
+              </div>
             </div>
             <div class="search-btn ml-2">
               <v-btn
@@ -255,13 +257,13 @@ export default Vue.extend({
         }
       }
       var arr = Object.values(this.searchInfo).filter(function (item) {
-          if (item !== '') {
-              return true			//过滤掉为空的项
-          }
-      })
+        if (item !== "") {
+          return true; //过滤掉为空的项
+        }
+      });
       var idx = 0;
-      for(idx; idx < arr.length; idx ++ ) {
-        if(arr[idx] != "" && arr[idx] != [] && arr[idx] != null) {
+      for (idx; idx < arr.length; idx++) {
+        if (arr[idx] != "" && arr[idx] != [] && arr[idx] != null) {
           this.$emit("search", this.searchInfo);
         }
       }
@@ -329,7 +331,7 @@ export default Vue.extend({
     } catch (error) {
       console.log(error);
     }
-    if(localStorage.getItem('ismobile') == '1') {
+    if (localStorage.getItem("ismobile") == "1") {
       (this as any).serachBarWidth = 100;
     } else {
       (this as any).serachBarWidth = 90;

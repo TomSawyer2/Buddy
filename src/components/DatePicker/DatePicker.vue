@@ -1,15 +1,16 @@
 <template>
-    <div class="block">
-      <el-date-picker
-        v-model="date"
-        value-format="yyyy-MM-dd"
-        type="date"
-        class="dateChoose d-flex justify-end"
-        style="width: 100%"
-        placeholder="选择出生日期"
-        :editable="false">
-      </el-date-picker>
-    </div>
+  <div class="block">
+    <el-date-picker
+      v-model="date"
+      value-format="yyyy-MM-dd"
+      type="date"
+      class="dateChoose d-flex justify-end"
+      style="width: 100%"
+      placeholder="选择出生日期"
+      :editable="false"
+    >
+    </el-date-picker>
+  </div>
 </template>
 
 <script lang="ts">
@@ -40,7 +41,7 @@ export default Vue.extend({
     },
     date(newV, oldV) {
       (this as any).save(newV);
-    }
+    },
   },
 });
 </script>

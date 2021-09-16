@@ -139,8 +139,11 @@ export default Vue.extend({
   mounted() {
     // 自动调节组件高度
     this.pageHeight = document.documentElement.clientHeight;
-    if(localStorage.getItem('permission') == '1' || localStorage.getItem('permission') == '2') {
-        this.items = this.itemsForAdmin;
+    if (
+      localStorage.getItem("permission") == "1" ||
+      localStorage.getItem("permission") == "2"
+    ) {
+      this.items = this.itemsForAdmin;
     }
     console.log(this.pageHeight);
     this.avatarSrc = getAvatarSrc();

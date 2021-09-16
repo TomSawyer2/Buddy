@@ -1,6 +1,6 @@
 <template>
   <div class="buddy-container" :style="{ marginLeft: margin + 'px' }">
-    <div class="search-container" :style="{paddingTop: paddingTop + 'px'}">
+    <div class="search-container" :style="{ paddingTop: paddingTop + 'px' }">
       <BuddySearch
         @search="onSearch"
         @showAllChange="showAllChange"
@@ -123,10 +123,10 @@ export default {
   }),
 
   methods: {
-    onClose () {
+    onClose() {
       (this as any).isDetailShow = false;
     },
-    
+
     showAllChange(isAllShow: boolean) {
       (this as any).isAllShow = isAllShow;
     },

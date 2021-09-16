@@ -1,5 +1,11 @@
 <template>
-  <v-bottom-navigation :value="value" absolute color="primary" style="height: 70px" class="pt-1">
+  <v-bottom-navigation
+    :value="value"
+    absolute
+    color="primary"
+    style="height: 70px"
+    class="pt-1"
+  >
     <v-btn @click="pushToPersonalInformation" style="background-color: #ffffff">
       <span>个人中心</span>
 
@@ -18,7 +24,11 @@
       <v-icon>mdi-vector-square</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToAdmin" v-if="showAdmin" style="background-color: #ffffff">
+    <v-btn
+      @click="pushToAdmin"
+      v-if="showAdmin"
+      style="background-color: #ffffff"
+    >
       <span>管理员界面</span>
 
       <v-icon>mdi-account-key</v-icon>
@@ -29,7 +39,6 @@
 
       <v-icon>mdi-account-cog</v-icon>
     </v-btn>
-    
   </v-bottom-navigation>
 </template>
 
@@ -45,7 +54,10 @@ export default Vue.extend({
     };
   },
   created() {
-    if(localStorage.getItem('permission') == '1' || localStorage.getItem('permission') == '2') {
+    if (
+      localStorage.getItem("permission") == "1" ||
+      localStorage.getItem("permission") == "2"
+    ) {
       this.showAdmin = true;
     } else {
       this.showAdmin = false;
@@ -81,7 +93,4 @@ export default Vue.extend({
 });
 </script>
 
-
-<style>
-
-</style>
+<style></style>

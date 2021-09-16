@@ -10,7 +10,13 @@
     <template v-slot:default>
       <div class="resume">
         <div class="base">
-          <v-btn @click="onClose" icon color="black" style="right: 50px; top: 50px; position: fixed; z-index: 100003" v-if="isBtnShow == true">
+          <v-btn
+            @click="onClose"
+            icon
+            color="black"
+            style="right: 50px; top: 50px; position: fixed; z-index: 100003"
+            v-if="isBtnShow == true"
+          >
             <v-icon>mdi-close</v-icon>
           </v-btn>
           <div class="profile">
@@ -81,9 +87,7 @@
             </h3>
             <!-- <p class="buddy-para"> -->
             <p class="plainText ml-5">
-              {{
-                userInfo.location != "" ? userInfo.location : "暂无"
-              }}
+              {{ userInfo.location != "" ? userInfo.location : "暂无" }}
             </p>
           </div>
           <div class="buddy-resume">
@@ -237,7 +241,9 @@
               | 性格特征自评及测试结果
             </h3>
             <div class="d-flex justify-start">
-              <p class="ml-5">{{ userInfo.character ? userInfo.character: "暂无" }}</p>
+              <p class="ml-5">
+                {{ userInfo.character ? userInfo.character : "暂无" }}
+              </p>
               <p class="ml-5">{{ userInfo.characterResult }}</p>
             </div>
           </div>
@@ -277,19 +283,19 @@ export default Vue.extend({
     },
     onClose() {
       this.$emit("close");
-    }
+    },
   },
   watch: {
     isLoading(newV, oldV) {
-      if(newV == false) {
+      if (newV == false) {
         setTimeout(() => {
           (this as any).isBtnShow = true;
         }, 150);
-      } else if(newV == true) {
+      } else if (newV == true) {
         (this as any).isBtnShow = false;
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

@@ -1,9 +1,9 @@
 <template>
   <div
-    v-bind:style="{ height: pageHeight + 'px', marginLeft: margin + 'px'}"
+    v-bind:style="{ height: pageHeight + 'px', marginLeft: margin + 'px' }"
     class="mainBox"
   >
-    <v-form :style="{ width: width + '%'}" class="mt-2">
+    <v-form :style="{ width: width + '%' }" class="mt-2">
       <v-expansion-panels popout>
         <v-expansion-panel>
           <v-expansion-panel-header>用户信息</v-expansion-panel-header>
@@ -43,7 +43,7 @@ import {
   getMajors,
   getFields,
   getBooks,
-  getTeams
+  getTeams,
 } from "../apis";
 import AdminTable from "@/components/Admin/AdminTable.vue";
 import {
@@ -180,5 +180,4 @@ export default {
   width: 100%;
   padding: 0 0;
 }
-
 </style>

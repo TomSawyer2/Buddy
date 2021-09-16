@@ -1,15 +1,16 @@
 <template>
   <div class="block">
-      <el-date-picker
-        v-model="date"
-        value-format="yyyy-MM"
-        type="month"
-        class="dateChoose d-flex justify-end"
-        style="width: 100%"
-        placeholder="选择毕业年月"
-        :editable="false">
-      </el-date-picker>
-    </div>
+    <el-date-picker
+      v-model="date"
+      value-format="yyyy-MM"
+      type="month"
+      class="dateChoose d-flex justify-end"
+      style="width: 100%"
+      placeholder="选择毕业年月"
+      :editable="false"
+    >
+    </el-date-picker>
+  </div>
 </template>
 
 <script lang="ts">
@@ -44,7 +45,7 @@ export default Vue.extend({
     },
     date(newV, oldV) {
       (this as any).save(newV);
-    }
+    },
   },
   created() {
     if ((this as any).dateYear == 0 && (this as any).dateMonth == 0) {

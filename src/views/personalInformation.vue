@@ -65,14 +65,14 @@
         label="性别"
         required
       ></v-select>
-      
+
       <span class="demonstration mt-4">出生日期</span>
       <DatePicker
         :label="label.birthdayLabel"
         @save="saveBirthday"
         :dateOrigin="formData.birthday"
       />
-      
+
       <div class="mt-4">
         <span class="demonstration">毕业年月</span>
         <MonthPicker
@@ -83,15 +83,19 @@
         />
       </div>
 
-      <el-cascader
-        v-model="formData.cityValue"
-        :options="cityData"
-        placeholder="请选择您目前工作所在的城市"
-        style="position: relative; width: 100%"
-        class="cityChoose mt-2 mb-2"
-        clearable
-        filterable
-      ></el-cascader>
+      <div class="mt-4" v-if="ismobile == 0">
+        <span class="demonstration">工作所在城市</span>
+        <el-cascader
+          v-model="formData.cityValue"
+          :options="cityData"
+          placeholder="请选择您目前工作所在的城市"
+          style="position: relative; width: 100%"
+          class="cityChoose mb-2"
+          clearable
+          size="small"
+          filterable
+        ></el-cascader>
+      </div>
 
       <el-divider class="mt-15 mb-15"
         ><i class="el-icon-office-building"></i
@@ -157,11 +161,14 @@
                   </v-text-field>
                 </v-col>
               </v-row>
-              <Table
-                @changeNumber="changeNumber"
-                v-if="queryNumberSuccess"
-                :queryData="queryTableData"
-              />
+              <div v-if="queryNumberSuccess">
+                <Table
+                  @changeNumber="changeNumber"
+                  v-if="queryTableData.length != 0"
+                  :queryData="queryTableData"
+                />
+                <p v-else>暂时未找到您的数据，请联系管理员(❁´◡`❁)</p>
+              </div>
             </v-container>
           </v-card-text>
           <v-card-actions>
@@ -192,16 +199,30 @@
         :model="formData.teamsValue"
         @childrenItems="childrenTeamItems"
       />
-      
+
+      <v-select
+        v-model="formData.managementExperienceValue"
+        :items="items.managementExperienceItem"
+        label="核心层职务"
+        required
+        multiple
+        clearable
+      ></v-select>
+
       <div style="display: flex; flex-direction: row; align-items: center">
         <p
           class="font-weight-light"
           style="font-size: 15px; margin-bottom: 0px"
         >
-          请在查询栏中选择您参与过的具体项目
+          请点击查询并选择您参与过的具体项目
         </p>
-        
-        <v-btn class="mb-2 ml-10" @click="queryProjectDialog = true">查询</v-btn>
+
+        <v-btn
+          class="mb-2"
+          style="margin-left: auto"
+          @click="queryProjectDialog = true"
+          >查询</v-btn
+        >
       </div>
 
       <v-dialog
@@ -214,8 +235,11 @@
           <v-card-title>
             <span class="text-h5 mt-4 ml-2">查询具体项目</span>
           </v-card-title>
+          <p class="font-weight-thin font-italic mt-2 ml-10">
+            *所有项目均为选填，查询后在表格中勾选即可，会自动添加到主页面
+          </p>
           <v-card-text>
-            <v-container class="mt-5">
+            <v-container>
               <v-row>
                 <v-col>
                   <v-text-field
@@ -244,6 +268,7 @@
                 v-if="queryProjectSuccess"
                 :queryData="queryTableDataProject"
                 @projectItemChild="changeProject"
+                :selectedFather="formData.projectValue"
               />
             </v-container>
           </v-card-text>
@@ -271,30 +296,13 @@
 
       <PersonalInformationTable
         :showSelect="false"
-        v-if="queryProjectSuccess"
-        :queryData="formData.resumeValue"
+        v-if="formData.projects != '' || formData.projectValue.length != 0"
+        :queryData="formData.projectValue"
       />
-      <v-select
-        v-model="formData.managementExperienceValue"
-        :items="items.managementExperienceItem"
-        label="核心层职务"
-        required
-        multiple
-        clearable
-      ></v-select>
 
       <el-divider class="mt-15 mb-15"
         ><i class="el-icon-suitcase-1"></i
       ></el-divider>
-
-      <Combobox
-        class="mb-5"
-        :items="items.majorItems"
-        :label="label.majorLabel"
-        :hint="hint.majorHint"
-        :model="formData.majorsValue"
-        @childrenItems="childrenMajorItems"
-      />
 
       <p
         class="font-weight-light mt-4"
@@ -310,7 +318,7 @@
         :disabled="shareDisabled"
         :props="shareProp"
         @change="handleShareChange"
-        placeholder=""
+        placeholder="暂无"
         style="position: relative; width: 100%"
         class="cityChoose mb-5"
         clearable
@@ -525,6 +533,15 @@
       </v-dialog>
 
       <Combobox
+        class="mb-5"
+        :items="items.majorItems"
+        :label="label.majorLabel"
+        :hint="hint.majorHint"
+        :model="formData.majorsValue"
+        @childrenItems="childrenMajorItems"
+      />
+
+      <Combobox
         :items="items.fieldItems"
         :hint="hint.fieldHint"
         :label="label.fieldLabel"
@@ -633,12 +650,22 @@ import Combobox from "@/components/Combobox/Combobox.vue";
 import Cities from "@/utils/city";
 // import Resumes from "@/utils/resume";
 // import Groups from "@/utils/group";
+import { areaList } from '@vant/area-data';
 import Table from "@/components/Table/Table.vue";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
+// import CityPickerMobile from "@/components/CityPickerMobile/CityPickerMobile.vue";
 import PersonalInformationTable from "@/components/PersonalInformationTable/PersonalInformationTable.vue";
 export default {
-  components: { DatePicker, Combobox, MonthPicker, Table, PersonalInformationTable },
+  components: {
+    DatePicker,
+    Combobox,
+    MonthPicker,
+    Table,
+    PersonalInformationTable,
+    
+  },
+  // CityPickerMobile,
   data() {
     let that = this as any;
     return {
@@ -659,6 +686,7 @@ export default {
         character: "",
         characterValue: "",
         projects: "",
+        projectValue: [],
         location: "",
         group: "",
         cityValue: [],
@@ -823,17 +851,21 @@ export default {
         projectName: "",
       },
       queryProjectSuccess: false,
+      queryTableData: [],
       queryTableDataProject: [],
       projects: [],
+      ismobile: 0,
     };
   },
   async mounted() {
     if (localStorage.getItem("ismobile") == "1") {
       (this as any).width = 90;
       (this as any).margin = 0;
+      (this as any).ismobile = 1;
     } else {
       (this as any).width = 50;
       (this as any).margin = 56;
+      (this as any).ismobile = 0;
     }
     (this as any).items.managementExperienceItem = managementExperienceItem;
     // (this as any).items.teams = Groups;
@@ -957,13 +989,49 @@ export default {
   },
   methods: {
     changeProject(val) {
-      (this as any).projects = val;
+      let idxA = 0;
+      let idxB = 0;
+      if ((this as any).formData.projectValue.length != 0) {
+        for (idxB; idxB < (this as any).formData.projectValue.length; idxB++) {
+          for (idxA; idxA < val.length; idxA++) {
+            if (
+              (this as any).formData.projectValue[idxB].projectName !==
+              val[idxA].projectName
+            ) {
+              (this as any).formData.projectValue = [
+                ...(this as any).formData.projectValue,
+                val[idxA],
+              ];
+            }
+          }
+        }
+      } else {
+        for (idxA; idxA < val.length; idxA++) {
+          (this as any).formData.projectValue = [
+            ...(this as any).formData.projectValue,
+            val[idxA],
+          ];
+        }
+      }
+      (this as any).formData.projectValue = Array.from(
+        new Set((this as any).formData.projectValue)
+      );
       let i = 0;
       (this as any).formData.resumeValue = [];
-      for(i; i < val.length; i ++) {
-        (this as any).formData.resumeValue.push(val[i].startYear + '-' + val[i].endYear + '-' + val[i].projectDirection + '-' + val[i].projectName);
+      for (i; i < val.length; i++) {
+        (this as any).formData.resumeValue.push(
+          val[i].startYear +
+            "-" +
+            val[i].endYear +
+            "-" +
+            val[i].projectDirection +
+            "-" +
+            val[i].projectName
+        );
       }
-      (this as any).formData.resumeValue = Array.from(new Set((this as any).formData.resumeValue));
+      (this as any).formData.resumeValue = Array.from(
+        new Set((this as any).formData.resumeValue)
+      );
     },
     changeNumber(val) {
       (this as any).queryNumberDialog = false;
@@ -992,10 +1060,12 @@ export default {
       }
     },
     async queryProjectFunc() {
-      if((this as any).searchProjectsParams.year == null) {
+      if ((this as any).searchProjectsParams.year == null) {
         (this as any).searchProjectsParams.year == 0;
       }
-      (this as any).searchProjectsParams.year = Number((this as any).searchProjectsParams.year);
+      (this as any).searchProjectsParams.year = Number(
+        (this as any).searchProjectsParams.year
+      );
       await searchProjects((this as any).searchProjectsParams)
         .then((res: any) => {
           (this as any).queryTableDataProject = res.data.data;
@@ -1131,7 +1201,7 @@ export default {
           (this as any).addDialog = false;
           (this as any).getShareAllDirectionsFunc();
           //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          (this as any).$router.go(0);
+          // (this as any).$router.go(0);
           (this as any).isShowShare = false;
           setTimeout(() => {
             (this as any).isShowShare = true;
@@ -1148,7 +1218,7 @@ export default {
           (this as any).addGainDialog = false;
           (this as any).getGainAllDirectionsFunc();
           //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          (this as any).$router.go(0);
+          // (this as any).$router.go(0);
           (this as any).isShowGain = false;
           setTimeout(() => {
             (this as any).isShowGain = true;
@@ -1165,7 +1235,7 @@ export default {
           (this as any).addAspectDialog = false;
           (this as any).getShareAllDirectionsFunc();
           //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          (this as any).$router.go(0);
+          // (this as any).$router.go(0);
           (this as any).isShowShare = false;
           setTimeout(() => {
             (this as any).isShowShare = true;
@@ -1182,7 +1252,7 @@ export default {
           (this as any).addGainAspectDialog = false;
           (this as any).getGainAllDirectionsFunc();
           //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          (this as any).$router.go(0);
+          // (this as any).$router.go(0);
           (this as any).isShowGain = false;
           setTimeout(() => {
             (this as any).isShowGain = true;

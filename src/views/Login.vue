@@ -186,7 +186,7 @@ export default {
               setUserName(res.data.data.userName);
               setPhone((this as any).loginDataByPwd.phoneNumber);
               setToken(res.data.data.token);
-              localStorage.setItem('permission', res.data.data.permission);
+              localStorage.setItem("permission", res.data.data.permission);
               //跳转至主页面
               (this as any).$router.push({ path: "/" });
             }

@@ -187,7 +187,7 @@ export default Vue.extend({
     };
   },
   created() {
-    if(localStorage.getItem('ismobile') == '1') {
+    if (localStorage.getItem("ismobile") == "1") {
       (this as any).ismobile = 1;
     } else {
       (this as any).ismobile = 0;

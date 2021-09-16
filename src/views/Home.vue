@@ -4,11 +4,13 @@
     <router-view />
     <BottomBar
       v-if="ismobile == 1"
-      style="position: fixed;
+      style="
+        position: fixed;
         width: 100%;
         background: white;
         z-index: 5;
-        margin: 0 0px -17px 0px;"
+        margin: 0 0px -17px 0px;
+      "
     />
   </div>
 </template>
@@ -74,5 +76,4 @@ export default Vue.extend({
 });
 </script>
 
-<style>
-</style>
+<style></style>
