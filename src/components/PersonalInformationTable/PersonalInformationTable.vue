@@ -5,7 +5,7 @@
         :items="queryData"
         :single-select="singleSelect"
         item-key="projectName"
-        show-select
+        :show-select="showSelect"
         :footer-props="footer_props"
         class="elevation-1"
     >
@@ -16,7 +16,7 @@
 import Vue from "vue";
 export default Vue.extend({
   name: "PersonalInformationTable",
-  props: ["queryData"],
+  props: ["queryData", "showSelect"],
   data() {
     return {
         singleSelect: false,

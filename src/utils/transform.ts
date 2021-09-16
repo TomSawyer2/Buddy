@@ -86,14 +86,15 @@ export function transformAfterGet(data: any) {
   data.resumeValue = [];
   if (data.projects !== undefined) {
     if (data.projects != "") {
-      data.projectValue = data.projects.split(";");
       const projectsTmp: string[] = data.projects.split(";");
       let idx = 0;
-      for (idx; idx < projectsTmp.length; idx++) {
-        projectsTmp[idx] =
-          projectsTmp[idx].slice(0, 4) + "年" + projectsTmp[idx].slice(4);
-        data.resumeValue = [...data.resumeValue, projectsTmp[idx].split("-")];
-      }
+      projectsTmp.forEach(item => {
+        // let 
+        // data.projectValue["startYear"] = ;
+        data.projectValue["endYear"] = projectsTmp[1];
+        data.projectValue["projectDirection"] = projectsTmp[2];
+        data.projectValue["projectName"] = projectsTmp[3];
+      })
     }
   }
 
@@ -121,21 +122,7 @@ export function transformAfterGet(data: any) {
     ];
     data.characterResult = characterResultItemsLocal[data.characterResult];
   }
-
-  // if (data.character == -1) {
-  //   data.character = "暂无";
-  // } else {
-  //   const characterItems: string[] = [
-  //     "暂无",
-  //     "稳重踏实",
-  //     "外向开朗",
-  //     "善解人意",
-  //     "和蔼可亲",
-  //     "难以描述",
-  //   ];
-  //   data.character = characterItems[data.character];
-  // }
-
+  console.log(data);
   switch (data.identity) {
     case 0:
       data.identity = "预备队员";

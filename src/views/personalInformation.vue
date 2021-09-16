@@ -192,36 +192,16 @@
         :model="formData.teamsValue"
         @childrenItems="childrenTeamItems"
       />
-
-      <!-- <el-cascader
-        v-model="formData.resumeValue"
-        :options="resumeData"
-        placeholder="请选择您曾经参与的项目以及身份"
-        style="position: relative; width: 100%"
-        class="cityChoose mb-2"
-        clearable
-        :props="resumeProp"
-        v-if="isShowResume"
-      ></el-cascader> -->
-      <p
-        class="font-weight-light mt-4"
-        style="font-size: 15px; margin-bottom: 0px"
-      >
-        请选择您参与过的具体项目
-      </p>
+      
       <div style="display: flex; flex-direction: row; align-items: center">
-        <!-- <v-combobox
-          v-model="formData.resumeValue"
-          shareDisabled
-          placeholder="暂无"
-          small-chips
-          persistent-hint
-          style="position: relative; width: 100%"
-          class="combobox mb-2"
-          clearable
-        ></v-combobox> -->
+        <p
+          class="font-weight-light"
+          style="font-size: 15px; margin-bottom: 0px"
+        >
+          请在查询栏中选择您参与过的具体项目
+        </p>
         
-        <v-btn class="mb-2" @click="queryProjectDialog = true">查询</v-btn>
+        <v-btn class="mb-2 ml-10" @click="queryProjectDialog = true">查询</v-btn>
       </div>
 
       <v-dialog
@@ -260,6 +240,7 @@
                 </v-col>
               </v-row>
               <PersonalInformationTable
+                :showSelect="true"
                 v-if="queryProjectSuccess"
                 :queryData="queryTableDataProject"
                 @projectItemChild="changeProject"
@@ -288,6 +269,11 @@
         </v-card>
       </v-dialog>
 
+      <PersonalInformationTable
+        :showSelect="false"
+        v-if="queryProjectSuccess"
+        :queryData="formData.resumeValue"
+      />
       <v-select
         v-model="formData.managementExperienceValue"
         :items="items.managementExperienceItem"
@@ -838,6 +824,7 @@ export default {
       },
       queryProjectSuccess: false,
       queryTableDataProject: [],
+      projects: [],
     };
   },
   async mounted() {
@@ -970,6 +957,7 @@ export default {
   },
   methods: {
     changeProject(val) {
+      (this as any).projects = val;
       let i = 0;
       (this as any).formData.resumeValue = [];
       for(i; i < val.length; i ++) {
