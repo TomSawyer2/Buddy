@@ -3,22 +3,20 @@
     :value="value"
     absolute
     color="primary"
-    style="height: 70px"
-    class="pt-1"
+    style="height: 60px"
   >
-    <v-btn @click="pushToPersonalInformation" style="background-color: #ffffff">
-      <span>个人中心</span>
-
-      <v-icon>mdi-home</v-icon>
+    <v-btn @click="pushToPersonalInformation" style="background-color: #ffffff; height: 100%; align-items: center">
+        <span>个人中心</span>
+        <v-icon>mdi-home</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToBuddySquare" style="background-color: #ffffff">
+    <v-btn @click="pushToBuddySquare" style="background-color: #ffffff; height: 100%; align-items: center">
       <span>Buddy广场</span>
 
       <v-icon>mdi-account-multiple</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToMessageCenter" style="background-color: #ffffff">
+    <v-btn @click="pushToMessageCenter" style="background-color: #ffffff; height: 100%; align-items: center">
       <span>消息中心</span>
 
       <v-icon>mdi-vector-square</v-icon>
@@ -27,14 +25,14 @@
     <v-btn
       @click="pushToAdmin"
       v-if="showAdmin"
-      style="background-color: #ffffff"
+      style="background-color: #ffffff; height: 100%; align-items: center"
     >
       <span>管理员界面</span>
 
       <v-icon>mdi-account-key</v-icon>
     </v-btn>
 
-    <v-btn @click="pushToSettings" style="background-color: #ffffff">
+    <v-btn @click="pushToSettings" style="background-color: #ffffff; height: 100%; align-items: center">
       <span>设置</span>
 
       <v-icon>mdi-account-cog</v-icon>
@@ -93,4 +91,9 @@ export default Vue.extend({
 });
 </script>
 
-<style></style>
+<style>
+.bottomBtn {
+  
+  
+}
+</style>

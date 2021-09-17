@@ -5,8 +5,6 @@
  * deWeightArray用于去重数组
  */
 
-import { Form } from "element-ui";
-
 /**
  * 两个函数用于个人信息获取与提交时的映射
  */

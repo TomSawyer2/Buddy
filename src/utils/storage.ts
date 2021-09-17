@@ -1,3 +1,7 @@
+/**
+ * 对localStorage的一些操作
+ * 包括token，phoneNumber，avatarSrc，userName等等
+ */
 export function setToken(content: string) {
   if (!localStorage) {
     throw new Error("您的浏览器不支持localStorage,请尝试更新浏览器");

@@ -9,6 +9,7 @@
     :label="label"
     multiple
     persistent-hint
+    hide-no-data
     small-chips
     clearable
     deletable-chips
@@ -16,7 +17,10 @@
     <template v-slot:no-data>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title>
+          <v-list-item-title v-if="ismobile == 1">
+            没有选项。 重新选中该输入框创建新标签。
+          </v-list-item-title>
+          <v-list-item-title v-else>
             没有匹配的选项。 按下 <kbd>enter</kbd> 创建新标签。
           </v-list-item-title>
         </v-list-item-content>
@@ -34,10 +38,14 @@ export default Vue.extend({
     return {
       search: null,
       localModel: [],
+      ismobile: 0,
     };
   },
   created() {
     (this as any).localModel = (this as any).model;
+  },
+  mounted() {
+    (this as any).ismobile = localStorage.getItem('ismobile');
   },
   methods: {
     handleChange() {

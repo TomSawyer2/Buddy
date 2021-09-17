@@ -9,7 +9,7 @@
         width: 100%;
         background: white;
         z-index: 5;
-        margin: 0 0px -17px 0px;
+        margin: 0 0px 0px 0px;
       "
     />
   </div>

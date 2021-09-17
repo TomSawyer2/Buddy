@@ -97,6 +97,20 @@
         ></el-cascader>
       </div>
 
+      <div class="mt-4" v-if="ismobile == 1">
+        <span class="demonstration">工作所在城市</span>
+        <el-cascader
+          v-model="formData.cityValue"
+          :options="cityData"
+          placeholder="请搜索并选择您目前工作所在的城市"
+          style="position: relative; width: 100%"
+          class="cityChoose mb-2"
+          clearable
+          size="small"
+          filterable
+        ></el-cascader>
+      </div>
+
       <el-divider class="mt-15 mb-15"
         ><i class="el-icon-office-building"></i
       ></el-divider>
@@ -1342,6 +1356,7 @@ export default {
         await updatePersonalInformation((this as any).formData);
         (this as any).$message.success("更新成功！");
         setAvatarSrc((this as any).formData.avatar);
+        (this as any).$store.state.avatarSrc = (this as any).formData.avatar;
         (this as any).formData = transformAfterGet((this as any).formData);
       } catch (error) {
         console.log(error);
@@ -1364,8 +1379,6 @@ export default {
             .then((res: any) => {
               if (res.data.status == 0) {
                 (this as any).formData.avatar = res.data.data.filePath;
-                (this as any).$store.state.avatarSrc = res.data.data.filePath;
-                setAvatarSrc(res.data.data.filePath);
               }
             })
             .catch((err: any) => {
@@ -1557,7 +1570,7 @@ export default {
   watch: {
     "formData.weChatPic"(newVal, oldVal) {
       if (newVal != "") {
-        (this as any).label.weChatPicLabel = "微信二维码已上传~";
+        (this as any).label.weChatPicLabel = "微信二维码已上传，请更新个人资料~";
       }
     },
     shareData(newVal, oldVal) {
