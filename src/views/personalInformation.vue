@@ -265,6 +265,7 @@
               </v-row>
               <PersonalInformationTable
                 :showSelect="true"
+                :showIdentitySelect="false"
                 v-if="queryProjectSuccess"
                 :queryData="queryTableDataProject"
                 @projectItemChild="changeProject"
@@ -298,6 +299,7 @@
         :showSelect="false"
         v-if="formData.projects != '' || formData.projectValue.length != 0"
         :queryData="formData.projectValue"
+        :showIdentitySelect="true"
       />
 
       <el-divider class="mt-15 mb-15"
@@ -989,49 +991,84 @@ export default {
   },
   methods: {
     changeProject(val) {
-      let idxA = 0;
-      let idxB = 0;
-      if ((this as any).formData.projectValue.length != 0) {
-        for (idxB; idxB < (this as any).formData.projectValue.length; idxB++) {
-          for (idxA; idxA < val.length; idxA++) {
-            if (
-              (this as any).formData.projectValue[idxB].projectName !==
-              val[idxA].projectName
-            ) {
-              (this as any).formData.projectValue = [
-                ...(this as any).formData.projectValue,
-                val[idxA],
-              ];
+      if(val.length >= (this as any).formData.projectValue.length) {
+        let idxA = 0;
+        let idxB = 0;
+        if ((this as any).formData.projectValue.length != 0) {
+          for (idxB; idxB < (this as any).formData.projectValue.length; idxB++) {
+            for (idxA; idxA < val.length; idxA++) {
+              if (
+                (this as any).formData.projectValue[idxB].projectName !==
+                val[idxA].projectName
+              ) {
+                (this as any).formData.projectValue = [
+                  ...(this as any).formData.projectValue,
+                  val[idxA],
+                ];
+              }
             }
           }
+        } else {
+          for (idxA; idxA < val.length; idxA++) {
+            (this as any).formData.projectValue = [
+              ...(this as any).formData.projectValue,
+              val[idxA],
+            ];
+          }
         }
-      } else {
+        (this as any).formData.projectValue = Array.from(
+          new Set((this as any).formData.projectValue)
+        );
+        let i = 0;
+        (this as any).formData.resumeValue = [];
+        for (i; i < val.length; i++) {
+          (this as any).formData.resumeValue.push(
+            val[i].startYear +
+              "-" +
+              val[i].endYear +
+              "-" +
+              val[i].projectDirection +
+              "-" +
+              val[i].projectName +
+              "-" +
+              val[i].identity
+          );
+        }
+        (this as any).formData.resumeValue = Array.from(
+          new Set((this as any).formData.resumeValue)
+        );
+      } else if(val.length < (this as any).formData.projectValue.length) {
+        let idxA = 0;
+        let idxB = 0;
+        (this as any).formData.projectValue = [];
         for (idxA; idxA < val.length; idxA++) {
-          (this as any).formData.projectValue = [
-            ...(this as any).formData.projectValue,
-            val[idxA],
-          ];
+            (this as any).formData.projectValue = [
+              ...(this as any).formData.projectValue,
+              val[idxA],
+            ];
         }
-      }
-      (this as any).formData.projectValue = Array.from(
-        new Set((this as any).formData.projectValue)
-      );
-      let i = 0;
-      (this as any).formData.resumeValue = [];
-      for (i; i < val.length; i++) {
-        (this as any).formData.resumeValue.push(
-          val[i].startYear +
-            "-" +
-            val[i].endYear +
-            "-" +
-            val[i].projectDirection +
-            "-" +
-            val[i].projectName
+        (this as any).formData.projectValue = Array.from(
+          new Set((this as any).formData.projectValue)
+        );
+        let i = 0;
+        (this as any).formData.resumeValue = [];
+        for (i; i < val.length; i++) {
+          (this as any).formData.resumeValue.push(
+            val[i].startYear +
+              "-" +
+              val[i].endYear +
+              "-" +
+              val[i].projectDirection +
+              "-" +
+              val[i].projectName +
+              "-" +
+              val[i].identity
+          );
+        }
+        (this as any).formData.resumeValue = Array.from(
+          new Set((this as any).formData.resumeValue)
         );
       }
-      (this as any).formData.resumeValue = Array.from(
-        new Set((this as any).formData.resumeValue)
-      );
     },
     changeNumber(val) {
       (this as any).queryNumberDialog = false;

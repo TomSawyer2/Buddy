@@ -95,6 +95,7 @@ export function transformAfterGet(data: any) {
           endYear: Number(tempProject[1]),
           projectDirection: tempProject[2],
           projectName: tempProject[3],
+          identity: tempProject[4],
         };
       });
     }
@@ -153,6 +154,7 @@ export function transformAfterGet(data: any) {
 }
 
 export function transformBeforeUpdate(formData: any) {
+  console.log(formData);
   if (formData.isGraduated && formData.isGraduated == "是") {
     formData.isGraduated = true;
   } else if (formData.isGraduated && formData.isGraduated == "否") {
@@ -201,18 +203,15 @@ export function transformBeforeUpdate(formData: any) {
 
   formData.projects = "";
   if (formData.resumeValue !== undefined) {
-    if (formData.resumeValue[1] !== undefined) {
-      formData.projects = formData.resumeValue[0];
-      if (formData.resumeValue.length > 1) {
-        let idx = 1;
-        for (idx; idx < formData.resumeValue.length; idx++) {
-          formData.projects =
-            formData.projects + ";" + formData.resumeValue[idx];
-        }
+    formData.projects = formData.resumeValue[0];
+    if (formData.resumeValue.length > 1) {
+      let idx = 1;
+      for (idx; idx < formData.resumeValue.length; idx++) {
+        formData.projects =
+          formData.projects + ";" + formData.resumeValue[idx];
       }
     }
   }
-  console.log(formData.projects);
 
   formData.graduateYear = parseInt(formData.graduateYear);
   formData.graduateMonth = parseInt(formData.graduateMonth);
@@ -239,16 +238,6 @@ export function transformBeforeUpdate(formData: any) {
   formData.characterResult = characterResultItemsLocal.indexOf(
     formData.characterResult
   );
-
-  // const characterItems: string[] = [
-  //   "暂无",
-  //   "稳重踏实",
-  //   "外向开朗",
-  //   "善解人意",
-  //   "和蔼可亲",
-  //   "难以描述",
-  // ];
-  // formData.character = characterItems.indexOf(formData.character);
 
   let i = 1;
   formData.shares = "";
