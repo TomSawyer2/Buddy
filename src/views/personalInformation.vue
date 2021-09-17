@@ -666,7 +666,6 @@ import Combobox from "@/components/Combobox/Combobox.vue";
 import Cities from "@/utils/city";
 // import Resumes from "@/utils/resume";
 // import Groups from "@/utils/group";
-import { areaList } from '@vant/area-data';
 import Table from "@/components/Table/Table.vue";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
