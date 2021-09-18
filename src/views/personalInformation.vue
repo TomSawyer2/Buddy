@@ -39,7 +39,7 @@
           @click="pushToWeChatPic"
           small
           class="mt-3"
-          v-if="label.weChatPicLabel == '微信二维码已上传~'"
+          v-if="label.weChatPicLabel == '微信二维码已上传，请更新个人资料~'"
           >查看二维码</v-btn
         >
       </div>
