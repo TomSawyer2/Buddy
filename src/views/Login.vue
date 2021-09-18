@@ -15,6 +15,7 @@
       lazy-validation
       :style="{ width: width + '%' }"
     >
+      <h1 style="display: flex; justify-content: center" class="mb-4 font-weight-light">用户登录</h1>
       <v-text-field
         v-model="loginDataByPwd.phoneNumber"
         :rules="rules.phoneNumberRules"

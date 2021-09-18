@@ -1,6 +1,6 @@
 <template>
   <div v-bind:style="{ height: pageHeight + 'px' }" class="contain">
-    <h1>用户注册</h1>
+    <h1 class="font-weight-light">用户注册</h1>
     <v-form v-model="valid">
       <v-text-field
         label="真实姓名"

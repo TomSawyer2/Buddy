@@ -1119,7 +1119,9 @@ export default {
       await searchProjects((this as any).searchProjectsParams)
         .then((res: any) => {
           (this as any).queryTableDataProject = res.data.data;
-          (this as any).searchProjectsParams.year = null;
+          if((this as any).searchProjectsParams.year == -1) {
+            (this as any).searchProjectsParams.year = null;
+          }
           (this as any).$message.success("查询成功！");
           (this as any).queryProjectSuccess = true;
           (this as any).queryProjectDialog = false;
@@ -1130,7 +1132,9 @@ export default {
         .catch((err: any) => {
           (this as any).queryProjectDialog = false;
           (this as any).$message.error("查询时发生了一些错误，请重试~");
-          (this as any).searchProjectsParams.year = null;
+          if((this as any).searchProjectsParams.year == -1) {
+            (this as any).searchProjectsParams.year = null;
+          }
         });
     },
     childrenMajorItems(val) {

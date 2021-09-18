@@ -1,6 +1,7 @@
 <template>
   <div v-bind:style="{ height: pageHeight + 'px' }" class="mainBox">
     <v-form ref="form" v-model="valid" lazy-validation style="width: 50%">
+      <h1 style="display: flex; justify-content: center" class="font-weight-light">忘记密码</h1>
       <v-text-field
         v-model="forgetPasswordParam.phoneNumber"
         :rules="rules.phoneNumberRules"
