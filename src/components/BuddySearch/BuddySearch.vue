@@ -161,6 +161,7 @@ export default Vue.extend({
         gainsValue: [],
         shares: [],
         sharesValue: [],
+        isEmpty: false,
       },
       fields: ["1", "2", "3", "4"],
       graduateYear: [],
@@ -265,8 +266,12 @@ export default Vue.extend({
       for (idx; idx < arr.length; idx++) {
         if (arr[idx] != "" && arr[idx] != [] && arr[idx] != null) {
           this.$emit("search", this.searchInfo);
+          return;
         }
       }
+      this.searchInfo.isEmpty = true;
+      this.$emit("search", this.searchInfo);
+      this.searchInfo.isEmpty = false;
     },
     fillInGraduateYears() {
       let i = new Date().getFullYear();

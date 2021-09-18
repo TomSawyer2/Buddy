@@ -145,7 +145,6 @@ export default Vue.extend({
     ) {
       this.items = this.itemsForAdmin;
     }
-    console.log(this.pageHeight);
     this.avatarSrc = getAvatarSrc();
     this.userName = getUserName();
   },

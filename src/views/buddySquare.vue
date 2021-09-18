@@ -8,7 +8,7 @@
       <v-divider class="divider"></v-divider>
     </div>
 
-    <div style="margin: 120px 20px 0 20px">
+    <div style="margin: 120px 20px 40px 20px">
       <BuddyList
         v-for="(item, index) in userList"
         :key="index"
@@ -170,18 +170,28 @@ export default {
       projectName: string;
       gains: string[];
       shares: string[];
+      isEmpty: boolean;
     }) {
-      try {
-        const res = (await searchUsersByNameAndFields(searchInfo)).data.data;
-        (this as any).userList = res.SearchResults;
-        if ((this as any).userList === null) {
+      if(searchInfo.isEmpty === false) {
+        try {
+          const res = (await searchUsersByNameAndFields(searchInfo)).data.data;
+          (this as any).userList = res.SearchResults;
+          if ((this as any).userList === null) {
+            (this as any).userList = [];
+          }
+          (this as any).totalNum = res.Num;
+        } catch (error) {
           (this as any).userList = [];
+          (this as any).totalNum = 0;
+          console.log(error);
         }
-        (this as any).totalNum = res.Num;
-      } catch (error) {
-        (this as any).userList = [];
-        (this as any).totalNum = 0;
-        console.log(error);
+      } else {
+        try {
+          (this as any).userList = [];
+          (this as any).getUserList(1);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
 
@@ -202,12 +212,12 @@ export default {
     },
 
     async scrollEvent() {
-      // 距离底部20px时加载一次
+      // 距离底部40px时加载一次
       let bottomOfWindow =
         document.documentElement.offsetHeight -
           document.documentElement.scrollTop -
           window.innerHeight <=
-        20;
+        40;
       const length = (this as any).userList.length;
       if (
         length < (this as any).totalNum &&

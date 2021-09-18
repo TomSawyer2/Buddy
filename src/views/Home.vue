@@ -53,6 +53,28 @@ export default Vue.extend({
       (this as any).display = "flex";
     }
     localStorage.setItem("ismobile", (this as any).ismobile);
+    
+    var styleTitle1 = `
+    font-size: 20px;
+    font-weight: 600;
+    color: rgb(244,167,89);
+    `
+    var styleTitle2 = `
+    font-style: oblique;
+    font-size:14px;
+    color: rgb(244,167,89);
+    font-weight: 400;
+    `
+    /* 内容代码 */
+    var title1 = ' Buddy '
+    var title2 = '内测版本1.0.0'
+    
+    // => 读取配置型(在配置文件里配置这些会变动的网址)
+    console.log(`%c${title1} %c${title2}`, styleTitle1, styleTitle2)
+    let a = 'background: #606060; color: #fff; border-radius: 3px 0 0 3px;font-size: 15px'
+    let b = 'background: #1475B2; color: #fff; border-radius: 0 3px 3px 0;font-size: 15px'
+    let c = 'font-size: 15px; color: #000; margin-bottom: 5px;'
+    console.log(`%c 都看到这里了，不来聊聊天吗(～￣▽￣)～ \n%c  QQ %c 6272867 \n%c  Github %c TomSawyer2 \n%c  E-mail %c yousaling@hust.edu.cn`, c, a, b, a, b, a, b);
   },
   watch: {
     $route(to, from) {

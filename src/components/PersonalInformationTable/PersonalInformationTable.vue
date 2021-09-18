@@ -7,7 +7,7 @@
     item-key="projectName"
     :show-select="showSelect"
     :footer-props="footer_props"
-    class="elevation-1"
+    class="elevation-1 tableFooter"
     no-data-text="数据库中暂无对应的项目"
   >
     <template v-slot:item.identity="{ item }">
@@ -93,10 +93,9 @@ export default Vue.extend({
           }
         }
       }
-      console.log(newV);
       if(newV !== undefined && newV.length >= oldV.length) {
         if(newV.length == 1) {
-          if(newV[0].identity == '') {
+          if(newV[0].identity == '' || newV[0].identity === undefined) {
             (this as any).$message.error("选中的选项身份信息不能为空！");
             (this as any).selected = [];
           } else {
@@ -135,3 +134,9 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style>
+.tableFooter .v-data-footer {
+  justify-content: end;
+}
+</style>

@@ -1119,6 +1119,7 @@ export default {
       await searchProjects((this as any).searchProjectsParams)
         .then((res: any) => {
           (this as any).queryTableDataProject = res.data.data;
+          (this as any).searchProjectsParams.year = null;
           (this as any).$message.success("查询成功！");
           (this as any).queryProjectSuccess = true;
           (this as any).queryProjectDialog = false;
@@ -1129,6 +1130,7 @@ export default {
         .catch((err: any) => {
           (this as any).queryProjectDialog = false;
           (this as any).$message.error("查询时发生了一些错误，请重试~");
+          (this as any).searchProjectsParams.year = null;
         });
     },
     childrenMajorItems(val) {
@@ -1145,7 +1147,7 @@ export default {
     },
     lazyLoadGain(node: any, resolve: any) {
       const { level } = node;
-      if (level < 2 && node.label != "添加方向") {
+      if (level < 2 && node.label != "添加大方向") {
         var getGainAllAspectsParams = { gainDirection: "" };
         getGainAllAspectsParams.gainDirection = node.label;
         var prevNodes: any[] = [];
@@ -1153,9 +1155,9 @@ export default {
           .then((res: any) => {
             prevNodes = res.data.data.gainAspects;
             if (prevNodes) {
-              prevNodes.push("添加方向");
+              prevNodes.push("添加小方向");
             } else {
-              prevNodes = ["添加方向"];
+              prevNodes = ["添加小方向"];
             }
             var nodes = arrayToObjectDeWeight(prevNodes, node);
             resolve(nodes);
@@ -1169,7 +1171,7 @@ export default {
     },
     lazyLoadShare(node: any, resolve: any) {
       const { level } = node;
-      if (level < 2 && node.label != "添加方向") {
+      if (level < 2 && node.label != "添加大方向") {
         var getShareAllAspectsParams = { shareDirection: "" };
         getShareAllAspectsParams.shareDirection = node.label;
         var prevNodes: any[] = [];
@@ -1177,9 +1179,9 @@ export default {
           .then((res: any) => {
             prevNodes = res.data.data.shareAspects;
             if (prevNodes) {
-              prevNodes.push("添加方向");
+              prevNodes.push("添加小方向");
             } else {
-              prevNodes = ["添加方向"];
+              prevNodes = ["添加小方向"];
             }
             var nodes = arrayToObjectDeWeight(prevNodes, node);
             resolve(nodes);
@@ -1196,9 +1198,9 @@ export default {
         .then((res: any) => {
           var directions = res.data.data.shareDirections;
           if (directions != null) {
-            directions.push("添加方向");
+            directions.push("添加大方向");
           } else {
-            directions = ["添加方向"];
+            directions = ["添加大方向"];
           }
           (this as any).shareData = arrayToObject(directions, false);
         })
@@ -1211,9 +1213,9 @@ export default {
         .then((res: any) => {
           var directions = res.data.data.gainDirections;
           if (directions != null) {
-            directions.push("添加方向");
+            directions.push("添加大方向");
           } else {
-            directions = ["添加方向"];
+            directions = ["添加大方向"];
           }
           (this as any).gainData = arrayToObject(directions, false);
         })
@@ -1224,14 +1226,14 @@ export default {
     handleShareChange(value) {
       let i = 0;
       for (i; i < value.length; i++) {
-        if (value[i][0] == "添加方向") {
+        if (value[i][0] == "添加大方向") {
           (this as any).formData.shareValue.pop();
           (this as any).isShowShare = false;
           setTimeout(() => {
             (this as any).isShowShare = true;
           }, 100);
           (this as any).addDialog = true;
-        } else if (value[i][1] == "添加方向") {
+        } else if (value[i][1] == "添加小方向") {
           (this as any).newShareAspectParam.shareDirection = value[i][0];
           (this as any).formData.shareValue.pop();
           (this as any).isShowShare = false;
@@ -1316,14 +1318,14 @@ export default {
       let i = 0;
       if (value) {
         for (i; i < value.length; i++) {
-          if (value[i][0] == "添加方向") {
+          if (value[i][0] == "添加大方向") {
             (this as any).formData.gainValue.pop();
             (this as any).isShowGain = false;
             setTimeout(() => {
               (this as any).isShowGain = true;
             }, 100);
             (this as any).addGainDialog = true;
-          } else if (value[i][1] == "添加方向") {
+          } else if (value[i][1] == "添加小方向") {
             (this as any).newGainAspectParam.gainDirection = value[i][0];
             (this as any).formData.gainValue.pop();
             (this as any).isShowGain = false;

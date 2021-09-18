@@ -190,6 +190,13 @@ export function transformBeforeUpdate(formData: any) {
   formData.teams = "";
   formData.teams = formData.teamsValue.join(";");
 
+  let idxA = 0; 
+  for(idxA; idxA < formData.managementExperienceValue.length; idxA ++) {
+    if(formData.managementExperienceValue[idxA] == "") {
+      formData.managementExperienceValue.splice(idxA, 1);
+      idxA --;
+    }
+  }
   formData.managementExperience = "";
   formData.managementExperience = formData.managementExperienceValue.join(";");
 
@@ -321,7 +328,7 @@ export function arrayToObjectDeWeight(arr: any, node: any) {
   if (node.children) {
     for (i; i < node.children.length; i++) {
       for (j; j < nodes.length; j++) {
-        if (nodes[j].value != "添加方向") {
+        if (nodes[j].value != "添加小方向") {
           if (node.children[i].value == nodes[j].value) {
             nodes.splice(j, 1);
             j--;
