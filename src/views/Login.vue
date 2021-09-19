@@ -106,6 +106,9 @@ import {
   removePhone,
   removeAvatarSrc,
   removeUserName,
+  setEmail,
+  getEmail,
+  removeEmail,
 } from "../utils/storage";
 export default {
   data: () => ({

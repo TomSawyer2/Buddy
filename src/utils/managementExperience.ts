@@ -2,7 +2,6 @@
  * 个人信息页面的核心层职务
  */
 const managementExperienceItem = [
-  "无",
   "队长",
   "副队长",
   "技术部部长",

@@ -217,7 +217,7 @@
       <v-select
         v-model="formData.managementExperienceValue"
         :items="items.managementExperienceItem"
-        label="核心层职务"
+        label="核心层职务（暂无）"
         required
         multiple
         clearable
@@ -763,7 +763,6 @@ export default {
         teamItems: [],
         managementExperienceItem: [],
         characterItems: [
-          "暂无",
           "稳重踏实",
           "外向开朗",
           "善解人意",
@@ -878,13 +877,11 @@ export default {
       (this as any).ismobile = 0;
     }
     (this as any).items.managementExperienceItem = managementExperienceItem;
-    // (this as any).items.teams = Groups;
     (this as any).cityData = Cities;
-    // (this as any).resumeData = Resumes;
     (this as any).formData.phoneNumber = getPhone();
     // 下面代码用来给后端服务器压力测试
     // let idx = 0;
-    // for(idx ; idx < 100; idx ++ ) {
+    // for(idx ; idx < 1000; idx ++ ) {
     //   getPersonalInformation();
     // }
     await getPersonalInformation()

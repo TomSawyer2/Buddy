@@ -148,6 +148,7 @@
         :isLoading="isDetailLoading"
         v-bind:messageCenter="1"
         v-if="ismobile == 0"
+        @close="onClose"
       />
       <BuddyDetailMobile
         v-if="ismobile == 1"
@@ -193,6 +194,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    onClose() {
+      (this as any).isDetailShow = false;
+    },
     async onToDetail(id: string) {
       (this as any).isDetailLoading = true;
       (this as any).isDetailShow = true;

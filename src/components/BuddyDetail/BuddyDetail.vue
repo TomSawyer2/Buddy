@@ -8,17 +8,17 @@
     type="list-item-avatar-two-line, article, actions"
   >
     <template v-slot:default>
+      <v-btn
+        @click="onClose"
+        icon
+        color="black"
+        style="right: 10px; top: 10px; position: absolute; z-index: 100003"
+        v-if="isBtnShow == true"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
       <div class="resume">
         <div class="base">
-          <v-btn
-            @click="onClose"
-            icon
-            color="black"
-            style="right: 50px; top: 50px; position: fixed; z-index: 100003"
-            v-if="isBtnShow == true"
-          >
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
           <div class="profile">
             <v-avatar size="125">
               <img :src="userInfo.avatar" alt="个人照片" />
@@ -273,7 +273,7 @@ export default Vue.extend({
   props: ["userInfo", "isLoading", "messageCenter"],
   data() {
     return {
-      isBtnShow: false,
+      isBtnShow: true,
     };
   },
   methods: {
@@ -282,17 +282,6 @@ export default Vue.extend({
     },
     onClose() {
       this.$emit("close");
-    },
-  },
-  watch: {
-    isLoading(newV, oldV) {
-      if (newV == false) {
-        setTimeout(() => {
-          (this as any).isBtnShow = true;
-        }, 150);
-      } else if (newV == true) {
-        (this as any).isBtnShow = false;
-      }
     },
   },
 });
