@@ -1,7 +1,7 @@
 <template>
   <div v-bind:style="{ height: pageHeight + 'px' }" class="contain">
-    <h1 class="font-weight-light">用户注册</h1>
-    <v-form v-model="valid">
+    <h1 class="font-weight-light mb-4">注册</h1>
+    <v-form v-model="valid" :style="{ width: width + '%' }">
       <v-text-field
         label="真实姓名"
         v-model="registerData.userName"
@@ -90,6 +90,7 @@ export default {
       codeStatus: "获取验证码",
       timer: null,
       count: 59, // 倒计时
+      width: 40,
 
       rules: {
         phoneRules: [

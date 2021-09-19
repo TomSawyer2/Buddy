@@ -1,5 +1,5 @@
 <template>
-  <div class="mainBox" :style="{ marginLeft: margin + 'px' }">
+  <div class="mainBox" :style="{ marginLeft: margin + 'px'}">
     <ChooseBtn
       @childReceived="childReceived"
       :totalReceivedNum="totalReceivedNum"
@@ -28,7 +28,7 @@
     />
 
     <div
-      class="d-flex flex-no-wrap justify-space-between"
+      class="d-flex flex-no-wrap justify-space-between align-center"
       v-if="noReceivedRequests == 1 && received == 1"
     >
       <h2 class="text-center text--secondary">暂无收到的请求</h2>

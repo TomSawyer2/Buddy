@@ -1,66 +1,72 @@
 <template>
   <div>
-    <v-text-field
-      v-model="search"
-      append-icon="mdi-magnify"
-      label="Search"
-      single-line
-      hide-isDetailShow
-      style="width: 30%; padding-top: 0px; margin-top: 0px"
-    ></v-text-field>
-    <v-data-table
-      :headers="headers"
-      :items="queryData"
-      sort-by="userName"
-      :search="search"
-      class="elevation-1"
-      :footer-props="footer_props"
-      :loading="loading"
-      loading-text="加载中..."
-    >
-      <template v-slot:top>
-        <v-dialog v-model="dialog" max-width="500px" style="z-index: 1000">
-          <AdminDetail
-            :editedItem="editedItem"
-            :majorItems="majorItemsChild"
-            :bookItems="bookItemsChild"
-            :fieldItems="fieldItemsChild"
-            :teamItems="teamItemsChild"
-            @getMajorsChild="getMajors"
-            @getBooksChild="getBooks"
-            @getFieldsChild="getFields"
-            @getTeamsChild="getTeams"
-            @closeChild="close"
-            @updateInfoChild="updateInfo"
-          />
-        </v-dialog>
-        <v-dialog
-          v-model="dialogDelete"
-          max-width="500px"
-          style="z-index: 100000"
-        >
-          <v-card>
-            <v-card-title class="text-h5"
-              >您确定要删除{{ editedItem.userName }}的相关信息？</v-card-title
-            >
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="closeDelete"
-                >取消</v-btn
+    <div v-if="queryData != null">
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-isDetailShow
+        style="width: 30%; padding-top: 0px; margin-top: 0px"
+        v-if="queryData.length > 0"
+      ></v-text-field>
+      <v-data-table
+        :headers="headers"
+        :items="queryData"
+        sort-by="userName"
+        :search="search"
+        class="elevation-1"
+        :footer-props="footer_props"
+        :loading="loading"
+        loading-text="加载中..."
+      >
+        <template v-slot:top>
+          <v-dialog v-model="dialog" max-width="500px" style="z-index: 1000">
+            <AdminDetail
+              :editedItem="editedItem"
+              :majorItems="majorItemsChild"
+              :bookItems="bookItemsChild"
+              :fieldItems="fieldItemsChild"
+              :teamItems="teamItemsChild"
+              @getMajorsChild="getMajors"
+              @getBooksChild="getBooks"
+              @getFieldsChild="getFields"
+              @getTeamsChild="getTeams"
+              @closeChild="close"
+              @updateInfoChild="updateInfo"
+            />
+          </v-dialog>
+          <v-dialog
+            v-model="dialogDelete"
+            max-width="500px"
+            style="z-index: 100000"
+          >
+            <v-card>
+              <v-card-title class="text-h5"
+                >您确定要删除{{ editedItem.userName }}的相关信息？</v-card-title
               >
-              <v-btn color="blue darken-1" text @click="deleteItemConfirm"
-                >确定</v-btn
-              >
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <v-icon small class="mr-2" @click="todetail(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
-      </template>
-    </v-data-table>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeDelete"
+                  >取消</v-btn
+                >
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                  >确定</v-btn
+                >
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </template>
+        <template v-slot:item.actions="{ item }">
+          <v-icon small class="mr-2" @click="todetail(item)"> mdi-pencil </v-icon>
+          <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        </template>
+      </v-data-table>
+    </div>
+    <div v-else>
+      <h5>暂无可查看的用户信息</h5>
+    </div>
   </div>
 </template>
 
@@ -117,7 +123,11 @@ export default Vue.extend({
     }
   },
   mounted() {
-    (this as any).loading = true;
+    if((this as any).queryData != []) {
+      (this as any).loading = false;
+    } else {
+      (this as any).loading = true;
+    }
     (this as any).majorItemsChild = (this as any).majorItems;
     (this as any).fieldItemsChild = (this as any).fieldItems;
     (this as any).bookItemsChild = (this as any).bookItems;
@@ -139,7 +149,6 @@ export default Vue.extend({
     deleteItemConfirm() {
       (this as any).loading = true;
       (this as any).$emit("deleteUserChild", (this as any).editedItem);
-      // (this as any).queryData.splice((this as any).editedIndex, 1);
       (this as any).closeDelete();
     },
 

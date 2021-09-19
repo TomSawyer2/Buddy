@@ -67,7 +67,7 @@ export default Vue.extend({
     `
     /* 内容代码 */
     var title1 = ' Buddy '
-    var title2 = '内测版本1.0.0'
+    var title2 = '内测版本1.1.0'
     
     // => 读取配置型(在配置文件里配置这些会变动的网址)
     console.log(`%c${title1} %c${title2}`, styleTitle1, styleTitle2)

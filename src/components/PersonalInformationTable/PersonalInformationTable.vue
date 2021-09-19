@@ -33,7 +33,6 @@ export default Vue.extend({
       footer_props: {
         "items-per-page-options": [5],
         "show-current-page": true,
-        "show-first-last-page": true,
       },
       identityItems: [
         "核心骨干",
@@ -138,5 +137,8 @@ export default Vue.extend({
 <style>
 .tableFooter .v-data-footer {
   justify-content: end;
+}
+.tableFooter .v-data-table__wrapper .v-data-table__mobile-row .v-data-table__mobile-row__cell {
+  width: 60%;
 }
 </style>

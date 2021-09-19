@@ -15,7 +15,7 @@
       lazy-validation
       :style="{ width: width + '%' }"
     >
-      <h1 style="display: flex; justify-content: center" class="mb-4 font-weight-light">用户登录</h1>
+      <h1 style="display: flex; justify-content: center" class="mb-4 font-weight-light">登录</h1>
       <v-text-field
         v-model="loginDataByPwd.phoneNumber"
         :rules="rules.phoneNumberRules"
@@ -36,8 +36,10 @@
         label="密码"
         required
         v-if="passwordLogin"
-        type="password"
         autocomplete="off"
+        :type="showPwd ? 'text' : 'password'"
+        :append-icon="showPwd ? 'mdi-eye' : 'mdi-eye-off'"
+        @click:append="showPwd = !showPwd"
       ></v-text-field>
       <v-text-field
         v-model="loginDataByCaptcha.validationCode"
@@ -46,8 +48,8 @@
         required
         v-if="captchaLogin"
       ></v-text-field>
-      <div style="display: flex; justify-content: flex-end">
-        <a href="/forgetPassword" class="mr-5" style="text-decoration: none"
+      <div style="display: flex; justify-content: flex-end" class="mb-5">
+        <a href="/forgetPassword" class="mr-4" style="text-decoration: none"
           >忘记密码</a
         >
         <a href="/register" style="text-decoration: none">注册</a>
@@ -59,7 +61,7 @@
           color="success"
           @click="login"
           v-if="passwordLogin"
-          style="width: 30%"
+          style="width: 40%"
         >
           登录
         </v-btn>
@@ -69,7 +71,7 @@
           @click="login"
           class="mr-6"
           v-if="captchaLogin"
-          style="width: 30%"
+          style="width: 40%"
         >
           登录
         </v-btn>
@@ -78,7 +80,7 @@
           v-if="captchaLogin"
           color="warning"
           @click="getCaptchaFunc"
-          style="width: 30%"
+          style="width: 40%"
         >
           {{ codeStatus }}
         </v-btn>
@@ -118,6 +120,7 @@ export default {
       phoneNumber: "",
       validationCode: "",
     },
+    showPwd: false,
     rules: {
       phoneNumberRules: [
         (v: string | undefined) => !!v || "请输入手机号",

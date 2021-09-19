@@ -249,13 +249,13 @@
           <v-card-title>
             <span class="text-h5 mt-4 ml-2">查询具体项目</span>
           </v-card-title>
-          <p class="font-weight-thin font-italic mt-2 ml-10">
-            *所有项目均为选填，查询后在表格中勾选即可，会自动添加到主页面
-          </p>
           <v-card-text>
             <v-container>
               <v-row>
                 <v-col>
+                  <p class="font-weight-thin font-italic mt-2">
+                    *所有项目均为选填，查询后在表格中勾选即可，会自动添加到主页面
+                  </p>
                   <v-text-field
                     label="请填写项目进行的大致年份"
                     clearable
@@ -664,12 +664,9 @@ import {
 import DatePicker from "@/components/DatePicker/DatePicker.vue";
 import Combobox from "@/components/Combobox/Combobox.vue";
 import Cities from "@/utils/city";
-// import Resumes from "@/utils/resume";
-// import Groups from "@/utils/group";
 import Table from "@/components/Table/Table.vue";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
-// import CityPickerMobile from "@/components/CityPickerMobile/CityPickerMobile.vue";
 import PersonalInformationTable from "@/components/PersonalInformationTable/PersonalInformationTable.vue";
 export default {
   components: {
@@ -678,9 +675,7 @@ export default {
     MonthPicker,
     Table,
     PersonalInformationTable,
-    
   },
-  // CityPickerMobile,
   data() {
     let that = this as any;
     return {
@@ -887,6 +882,11 @@ export default {
     (this as any).cityData = Cities;
     // (this as any).resumeData = Resumes;
     (this as any).formData.phoneNumber = getPhone();
+    // 下面代码用来给后端服务器压力测试
+    // let idx = 0;
+    // for(idx ; idx < 100; idx ++ ) {
+    //   getPersonalInformation();
+    // }
     await getPersonalInformation()
       .then((res: any) => {
         (this as any).formData = transformAfterGet(res.data.data);
@@ -1249,74 +1249,90 @@ export default {
       }
     },
     async addShareDirectionFunc() {
-      await addShareDirection({
-        shareDirection: (this as any).newShareDirection,
-      })
-        .then((res: any) => {
-          (this as any).$message.success("已成功添加新方向~");
-          (this as any).addDialog = false;
-          (this as any).getShareAllDirectionsFunc();
-          //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          // (this as any).$router.go(0);
-          (this as any).isShowShare = false;
-          setTimeout(() => {
-            (this as any).isShowShare = true;
-          }, 100);
+      if((this as any).newShareDirection != "" && (this as any).newShareDirection.trim() != "") {
+        await addShareDirection({
+          shareDirection: (this as any).newShareDirection,
         })
-        .catch((err: any) => {
-          console.log(err);
-        });
+          .then((res: any) => {
+            (this as any).$message.success("已成功添加新方向~");
+            (this as any).addDialog = false;
+            (this as any).getShareAllDirectionsFunc();
+            //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
+            // (this as any).$router.go(0);
+            (this as any).isShowShare = false;
+            setTimeout(() => {
+              (this as any).isShowShare = true;
+            }, 100);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+        } else {
+          (this as any).$message.error("内容不能为空，请检查后再提交吧");
+        }
     },
     async addGainDirectionFunc() {
-      await addGainDirection({ gainDirection: (this as any).newGainDirection })
-        .then((res: any) => {
-          (this as any).$message.success("已成功添加新方向~");
-          (this as any).addGainDialog = false;
-          (this as any).getGainAllDirectionsFunc();
-          //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          // (this as any).$router.go(0);
-          (this as any).isShowGain = false;
-          setTimeout(() => {
-            (this as any).isShowGain = true;
-          }, 1000);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
+      if((this as any).newGainDirection != "" && (this as any).newGainDirection.trim() != "") {
+        await addGainDirection({ gainDirection: (this as any).newGainDirection })
+          .then((res: any) => {
+            (this as any).$message.success("已成功添加新方向~");
+            (this as any).addGainDialog = false;
+            (this as any).getGainAllDirectionsFunc();
+            //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
+            // (this as any).$router.go(0);
+            (this as any).isShowGain = false;
+            setTimeout(() => {
+              (this as any).isShowGain = true;
+            }, 1000);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      } else {
+        (this as any).$message.error("内容不能为空，请检查后再提交吧");
+      }
     },
     async addShareAspectFunc() {
-      await addShareAspect((this as any).newShareAspectParam)
-        .then((res: any) => {
-          (this as any).$message.success("已成功添加新方向~");
-          (this as any).addAspectDialog = false;
-          (this as any).getShareAllDirectionsFunc();
-          //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          // (this as any).$router.go(0);
-          (this as any).isShowShare = false;
-          setTimeout(() => {
-            (this as any).isShowShare = true;
-          }, 100);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
+      if((this as any).newShareAspectParam.shareAspect != "" && (this as any).newShareAspectParam.shareAspect.trim() != "") {
+        await addShareAspect((this as any).newShareAspectParam)
+          .then((res: any) => {
+            (this as any).$message.success("已成功添加新方向~");
+            (this as any).addAspectDialog = false;
+            (this as any).getShareAllDirectionsFunc();
+            //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
+            // (this as any).$router.go(0);
+            (this as any).isShowShare = false;
+            setTimeout(() => {
+              (this as any).isShowShare = true;
+            }, 100);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      } else {
+        (this as any).$message.error("内容不能为空，请检查后再提交吧");
+      }
     },
     async addGainAspectFunc() {
-      await addGainAspect((this as any).newGainAspectParam)
-        .then((res: any) => {
-          (this as any).$message.success("已成功添加新方向~");
-          (this as any).addGainAspectDialog = false;
-          (this as any).getGainAllDirectionsFunc();
-          //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          // (this as any).$router.go(0);
-          (this as any).isShowGain = false;
-          setTimeout(() => {
-            (this as any).isShowGain = true;
-          }, 100);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
+      if((this as any).newGainAspectParam.gainAspect != "" && (this as any).newGainAspectParam.gainAspect.trim() != "") {
+        await addGainAspect((this as any).newGainAspectParam)
+          .then((res: any) => {
+            (this as any).$message.success("已成功添加新方向~");
+            (this as any).addGainAspectDialog = false;
+            (this as any).getGainAllDirectionsFunc();
+            //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
+            // (this as any).$router.go(0);
+            (this as any).isShowGain = false;
+            setTimeout(() => {
+              (this as any).isShowGain = true;
+            }, 100);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      } else {
+        (this as any).$message.error("内容不能为空，请检查后再提交吧");
+      }
     },
     handleGainChange(value) {
       let i = 0;

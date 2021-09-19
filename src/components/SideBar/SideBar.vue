@@ -79,7 +79,6 @@ export default Vue.extend({
           icon: "mdi-account-cog",
           route: "/settings",
         },
-        { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
       ],
       itemsForAdmin: [

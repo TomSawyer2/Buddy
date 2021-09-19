@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="344">
-    <v-img :src="userInfo.avatar" height="150px"></v-img>
+    <v-img :src="userInfo.avatar" height="250px"></v-img>
 
     <v-card-title>
       {{ userInfo.userName }}
@@ -112,7 +112,7 @@
                 <h3 class="font-weight-light font_title">具体项目</h3>
                 <v-chip-group v-if="userInfo.projects != ''" column>
                   <v-chip
-                    v-for="(project, index) in userInfo.resumeValue"
+                    v-for="(project, index) in userInfo.projectsArray"
                     :key="index"
                     small
                     >{{ project }}</v-chip
@@ -123,7 +123,7 @@
             </v-row>
             <v-row>
               <v-col cols="12" sm="12" md="12">
-                <h3 class="font-weight-light font_title">具体项目</h3>
+                <h3 class="font-weight-light font_title">核心层职务</h3>
                 <v-chip-group v-if="userInfo.managementExperience != ''" column>
                   <v-chip
                     v-for="(

@@ -85,7 +85,6 @@
               <i class="mdi mdi-map-legend buddy-i"></i>
               | 工作所在城市
             </h3>
-            <!-- <p class="buddy-para"> -->
             <p class="plainText ml-5">
               {{ userInfo.location != "" ? userInfo.location : "暂无" }}
             </p>
@@ -122,7 +121,7 @@
               class="ml-5"
             >
               <v-chip
-                v-for="(project, index) in userInfo.projectValue"
+                v-for="(project, index) in userInfo.projectsArray"
                 :key="index"
                 small
                 >{{ project }}</v-chip

@@ -86,9 +86,9 @@ export default {
 }
 
 .message--error {
-  background-color: #ef9a9a;
-  border-color: #ef9a9a;
-  color: #cc0033;
+  background-color: #EF5350;
+  border-color:	#EF5350;
+  color: 	#ffffff;
 }
 
 .message p {
