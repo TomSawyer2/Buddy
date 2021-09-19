@@ -8,6 +8,15 @@
     >
       <v-expansion-panels popout>
         <v-expansion-panel>
+          <v-expansion-panel-header>公告</v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <div class="d-flex flex-column">
+              <h4>目前存在的一些问题：</h4>
+              <span>1. QQ自带的浏览器在Buddy广场下拉时无法自动触发更新。</span>
+            </div>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+        <v-expansion-panel>
           <v-expansion-panel-header>修改密码</v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-text-field

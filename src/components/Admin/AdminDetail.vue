@@ -352,8 +352,10 @@ export default {
       (this as any).userData.birthday = val;
     },
     saveGraduateYear(val) {
-      (this as any).userData.graduateYear = val.slice(0, 4);
-      (this as any).userData.graduateMonth = val.slice(5, 7);
+      if(val) {
+        (this as any).userData.graduateYear = val.slice(0, 4);
+        (this as any).userData.graduateMonth = val.slice(5, 7);
+      }
     },
     childrenMajorItems(val) {
       (this as any).formData.majorsValue = val;

@@ -77,3 +77,23 @@ export function getUserName() {
 export function removeUserName() {
   localStorage.removeItem("userName");
 }
+
+export function setEmail(content: string) {
+  if (!localStorage) {
+    throw new Error("您的浏览器不支持localStorage,请尝试更新浏览器");
+  }
+  localStorage.setItem("email", content);
+}
+
+export function getEmail() {
+  if (!localStorage) {
+    return "";
+  }
+  const phone = localStorage.getItem("email") || "";
+  return phone;
+}
+
+export function removeEmail() {
+  localStorage.removeItem("email");
+}
+

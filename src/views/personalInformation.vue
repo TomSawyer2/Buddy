@@ -39,7 +39,7 @@
           @click="pushToWeChatPic"
           small
           class="mt-3"
-          v-if="label.weChatPicLabel == '微信二维码已上传~'"
+          v-if="label.weChatPicLabel == '微信二维码已上传，请更新个人资料~'"
           >查看二维码</v-btn
         >
       </div>
@@ -217,7 +217,7 @@
       <v-select
         v-model="formData.managementExperienceValue"
         :items="items.managementExperienceItem"
-        label="核心层职务"
+        label="核心层职务（暂无）"
         required
         multiple
         clearable
@@ -249,13 +249,13 @@
           <v-card-title>
             <span class="text-h5 mt-4 ml-2">查询具体项目</span>
           </v-card-title>
-          <p class="font-weight-thin font-italic mt-2 ml-10">
-            *所有项目均为选填，查询后在表格中勾选即可，会自动添加到主页面
-          </p>
           <v-card-text>
             <v-container>
               <v-row>
                 <v-col>
+                  <p class="font-weight-thin font-italic mt-2">
+                    *所有项目均为选填，查询后在表格中勾选即可，会自动添加到主页面
+                  </p>
                   <v-text-field
                     label="请填写项目进行的大致年份"
                     clearable
@@ -664,12 +664,9 @@ import {
 import DatePicker from "@/components/DatePicker/DatePicker.vue";
 import Combobox from "@/components/Combobox/Combobox.vue";
 import Cities from "@/utils/city";
-// import Resumes from "@/utils/resume";
-// import Groups from "@/utils/group";
 import Table from "@/components/Table/Table.vue";
 import MonthPicker from "@/components/MonthPicker/MonthPicker.vue";
 import managementExperienceItem from "@/utils/managementExperience";
-// import CityPickerMobile from "@/components/CityPickerMobile/CityPickerMobile.vue";
 import PersonalInformationTable from "@/components/PersonalInformationTable/PersonalInformationTable.vue";
 export default {
   components: {
@@ -678,9 +675,7 @@ export default {
     MonthPicker,
     Table,
     PersonalInformationTable,
-    
   },
-  // CityPickerMobile,
   data() {
     let that = this as any;
     return {
@@ -768,7 +763,6 @@ export default {
         teamItems: [],
         managementExperienceItem: [],
         characterItems: [
-          "暂无",
           "稳重踏实",
           "外向开朗",
           "善解人意",
@@ -883,10 +877,13 @@ export default {
       (this as any).ismobile = 0;
     }
     (this as any).items.managementExperienceItem = managementExperienceItem;
-    // (this as any).items.teams = Groups;
     (this as any).cityData = Cities;
-    // (this as any).resumeData = Resumes;
     (this as any).formData.phoneNumber = getPhone();
+    // 下面代码用来给后端服务器压力测试
+    // let idx = 0;
+    // for(idx ; idx < 1000; idx ++ ) {
+    //   getPersonalInformation();
+    // }
     await getPersonalInformation()
       .then((res: any) => {
         (this as any).formData = transformAfterGet(res.data.data);
@@ -1119,6 +1116,9 @@ export default {
       await searchProjects((this as any).searchProjectsParams)
         .then((res: any) => {
           (this as any).queryTableDataProject = res.data.data;
+          if((this as any).searchProjectsParams.year == -1) {
+            (this as any).searchProjectsParams.year = null;
+          }
           (this as any).$message.success("查询成功！");
           (this as any).queryProjectSuccess = true;
           (this as any).queryProjectDialog = false;
@@ -1129,6 +1129,9 @@ export default {
         .catch((err: any) => {
           (this as any).queryProjectDialog = false;
           (this as any).$message.error("查询时发生了一些错误，请重试~");
+          if((this as any).searchProjectsParams.year == -1) {
+            (this as any).searchProjectsParams.year = null;
+          }
         });
     },
     childrenMajorItems(val) {
@@ -1145,7 +1148,7 @@ export default {
     },
     lazyLoadGain(node: any, resolve: any) {
       const { level } = node;
-      if (level < 2 && node.label != "添加方向") {
+      if (level < 2 && node.label != "添加大方向") {
         var getGainAllAspectsParams = { gainDirection: "" };
         getGainAllAspectsParams.gainDirection = node.label;
         var prevNodes: any[] = [];
@@ -1153,9 +1156,9 @@ export default {
           .then((res: any) => {
             prevNodes = res.data.data.gainAspects;
             if (prevNodes) {
-              prevNodes.push("添加方向");
+              prevNodes.push("添加小方向");
             } else {
-              prevNodes = ["添加方向"];
+              prevNodes = ["添加小方向"];
             }
             var nodes = arrayToObjectDeWeight(prevNodes, node);
             resolve(nodes);
@@ -1169,7 +1172,7 @@ export default {
     },
     lazyLoadShare(node: any, resolve: any) {
       const { level } = node;
-      if (level < 2 && node.label != "添加方向") {
+      if (level < 2 && node.label != "添加大方向") {
         var getShareAllAspectsParams = { shareDirection: "" };
         getShareAllAspectsParams.shareDirection = node.label;
         var prevNodes: any[] = [];
@@ -1177,9 +1180,9 @@ export default {
           .then((res: any) => {
             prevNodes = res.data.data.shareAspects;
             if (prevNodes) {
-              prevNodes.push("添加方向");
+              prevNodes.push("添加小方向");
             } else {
-              prevNodes = ["添加方向"];
+              prevNodes = ["添加小方向"];
             }
             var nodes = arrayToObjectDeWeight(prevNodes, node);
             resolve(nodes);
@@ -1196,9 +1199,9 @@ export default {
         .then((res: any) => {
           var directions = res.data.data.shareDirections;
           if (directions != null) {
-            directions.push("添加方向");
+            directions.push("添加大方向");
           } else {
-            directions = ["添加方向"];
+            directions = ["添加大方向"];
           }
           (this as any).shareData = arrayToObject(directions, false);
         })
@@ -1211,9 +1214,9 @@ export default {
         .then((res: any) => {
           var directions = res.data.data.gainDirections;
           if (directions != null) {
-            directions.push("添加方向");
+            directions.push("添加大方向");
           } else {
-            directions = ["添加方向"];
+            directions = ["添加大方向"];
           }
           (this as any).gainData = arrayToObject(directions, false);
         })
@@ -1224,14 +1227,14 @@ export default {
     handleShareChange(value) {
       let i = 0;
       for (i; i < value.length; i++) {
-        if (value[i][0] == "添加方向") {
+        if (value[i][0] == "添加大方向") {
           (this as any).formData.shareValue.pop();
           (this as any).isShowShare = false;
           setTimeout(() => {
             (this as any).isShowShare = true;
           }, 100);
           (this as any).addDialog = true;
-        } else if (value[i][1] == "添加方向") {
+        } else if (value[i][1] == "添加小方向") {
           (this as any).newShareAspectParam.shareDirection = value[i][0];
           (this as any).formData.shareValue.pop();
           (this as any).isShowShare = false;
@@ -1243,87 +1246,103 @@ export default {
       }
     },
     async addShareDirectionFunc() {
-      await addShareDirection({
-        shareDirection: (this as any).newShareDirection,
-      })
-        .then((res: any) => {
-          (this as any).$message.success("已成功添加新方向~");
-          (this as any).addDialog = false;
-          (this as any).getShareAllDirectionsFunc();
-          //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          // (this as any).$router.go(0);
-          (this as any).isShowShare = false;
-          setTimeout(() => {
-            (this as any).isShowShare = true;
-          }, 100);
+      if((this as any).newShareDirection != "" && (this as any).newShareDirection.trim() != "") {
+        await addShareDirection({
+          shareDirection: (this as any).newShareDirection,
         })
-        .catch((err: any) => {
-          console.log(err);
-        });
+          .then((res: any) => {
+            (this as any).$message.success("已成功添加新方向~");
+            (this as any).addDialog = false;
+            (this as any).getShareAllDirectionsFunc();
+            //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
+            // (this as any).$router.go(0);
+            (this as any).isShowShare = false;
+            setTimeout(() => {
+              (this as any).isShowShare = true;
+            }, 100);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+        } else {
+          (this as any).$message.error("内容不能为空，请检查后再提交吧");
+        }
     },
     async addGainDirectionFunc() {
-      await addGainDirection({ gainDirection: (this as any).newGainDirection })
-        .then((res: any) => {
-          (this as any).$message.success("已成功添加新方向~");
-          (this as any).addGainDialog = false;
-          (this as any).getGainAllDirectionsFunc();
-          //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          // (this as any).$router.go(0);
-          (this as any).isShowGain = false;
-          setTimeout(() => {
-            (this as any).isShowGain = true;
-          }, 1000);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
+      if((this as any).newGainDirection != "" && (this as any).newGainDirection.trim() != "") {
+        await addGainDirection({ gainDirection: (this as any).newGainDirection })
+          .then((res: any) => {
+            (this as any).$message.success("已成功添加新方向~");
+            (this as any).addGainDialog = false;
+            (this as any).getGainAllDirectionsFunc();
+            //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
+            // (this as any).$router.go(0);
+            (this as any).isShowGain = false;
+            setTimeout(() => {
+              (this as any).isShowGain = true;
+            }, 1000);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      } else {
+        (this as any).$message.error("内容不能为空，请检查后再提交吧");
+      }
     },
     async addShareAspectFunc() {
-      await addShareAspect((this as any).newShareAspectParam)
-        .then((res: any) => {
-          (this as any).$message.success("已成功添加新方向~");
-          (this as any).addAspectDialog = false;
-          (this as any).getShareAllDirectionsFunc();
-          //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          // (this as any).$router.go(0);
-          (this as any).isShowShare = false;
-          setTimeout(() => {
-            (this as any).isShowShare = true;
-          }, 100);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
+      if((this as any).newShareAspectParam.shareAspect != "" && (this as any).newShareAspectParam.shareAspect.trim() != "") {
+        await addShareAspect((this as any).newShareAspectParam)
+          .then((res: any) => {
+            (this as any).$message.success("已成功添加新方向~");
+            (this as any).addAspectDialog = false;
+            (this as any).getShareAllDirectionsFunc();
+            //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
+            // (this as any).$router.go(0);
+            (this as any).isShowShare = false;
+            setTimeout(() => {
+              (this as any).isShowShare = true;
+            }, 100);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      } else {
+        (this as any).$message.error("内容不能为空，请检查后再提交吧");
+      }
     },
     async addGainAspectFunc() {
-      await addGainAspect((this as any).newGainAspectParam)
-        .then((res: any) => {
-          (this as any).$message.success("已成功添加新方向~");
-          (this as any).addGainAspectDialog = false;
-          (this as any).getGainAllDirectionsFunc();
-          //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
-          // (this as any).$router.go(0);
-          (this as any).isShowGain = false;
-          setTimeout(() => {
-            (this as any).isShowGain = true;
-          }, 100);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
+      if((this as any).newGainAspectParam.gainAspect != "" && (this as any).newGainAspectParam.gainAspect.trim() != "") {
+        await addGainAspect((this as any).newGainAspectParam)
+          .then((res: any) => {
+            (this as any).$message.success("已成功添加新方向~");
+            (this as any).addGainAspectDialog = false;
+            (this as any).getGainAllDirectionsFunc();
+            //强制刷新页面，这里会导致填写的数据重置，但可以考虑直接提交一次
+            // (this as any).$router.go(0);
+            (this as any).isShowGain = false;
+            setTimeout(() => {
+              (this as any).isShowGain = true;
+            }, 100);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      } else {
+        (this as any).$message.error("内容不能为空，请检查后再提交吧");
+      }
     },
     handleGainChange(value) {
       let i = 0;
       if (value) {
         for (i; i < value.length; i++) {
-          if (value[i][0] == "添加方向") {
+          if (value[i][0] == "添加大方向") {
             (this as any).formData.gainValue.pop();
             (this as any).isShowGain = false;
             setTimeout(() => {
               (this as any).isShowGain = true;
             }, 100);
             (this as any).addGainDialog = true;
-          } else if (value[i][1] == "添加方向") {
+          } else if (value[i][1] == "添加小方向") {
             (this as any).newGainAspectParam.gainDirection = value[i][0];
             (this as any).formData.gainValue.pop();
             (this as any).isShowGain = false;

@@ -79,7 +79,6 @@ export default Vue.extend({
           icon: "mdi-account-cog",
           route: "/settings",
         },
-        { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
       ],
       itemsForAdmin: [
@@ -104,7 +103,6 @@ export default Vue.extend({
           icon: "mdi-account-key",
           route: "/admin",
         },
-        { text: "退出", icon: "mdi-account-off", route: "/login" },
         // 这里可以拓展
       ],
       avatarSrc: "",
@@ -145,7 +143,6 @@ export default Vue.extend({
     ) {
       this.items = this.itemsForAdmin;
     }
-    console.log(this.pageHeight);
     this.avatarSrc = getAvatarSrc();
     this.userName = getUserName();
   },

@@ -41,7 +41,7 @@
                       </v-row>
                     </v-card-text>
                     <v-divider class="ml-4"></v-divider>
-                    <v-card-text v-if="item.fields.length - 1 && ismobile == 0">
+                    <v-card-text v-if="item.fields && ismobile == 0">
                       <v-row>
                         <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <v-chip
@@ -56,7 +56,6 @@
                     </v-card-text>
                     <v-row class="ml-4 mt-2 mb-2 text--disabled">
                       <h4>{{ buddyStatus[item.status] }}</h4>
-                      <!-- <v-btn style="right:0;width:auto;height:auto;" class="ml-4">修改理由</v-btn> -->
                       <div v-if="item.status == 0">
                         <v-btn
                           dark
@@ -106,7 +105,7 @@
                               <v-btn
                                 color="blue darken-1"
                                 text
-                                @click="saveReason(item)"
+                                @click="saveReason(reasonItem)"
                                 class="mb-6 mr-5"
                               >
                                 保存
@@ -149,6 +148,7 @@
         :isLoading="isDetailLoading"
         v-bind:messageCenter="1"
         v-if="ismobile == 0"
+        @close="onClose"
       />
       <BuddyDetailMobile
         v-if="ismobile == 1"
@@ -194,6 +194,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    onClose() {
+      (this as any).isDetailShow = false;
+    },
     async onToDetail(id: string) {
       (this as any).isDetailLoading = true;
       (this as any).isDetailShow = true;

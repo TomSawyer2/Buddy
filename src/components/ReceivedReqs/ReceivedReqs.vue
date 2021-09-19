@@ -60,9 +60,9 @@
                       class="ml-4"
                       v-if="item.fields.length - 2"
                     ></v-divider>
-                    <v-row v-if="item.fields.length - 2 && ismobile == 0">
-                      <v-sheet class="ml-3 mx-auto mt-1 mb-1">
-                        <div>
+                    <v-card-text v-if="item.fields && ismobile == 0">
+                      <v-row>
+                        <v-sheet class="ml-3 mx-auto mt-1 mb-1">
                           <v-chip
                             v-for="tag in item.fieldsValue"
                             :key="tag"
@@ -70,9 +70,9 @@
                           >
                             {{ tag }}
                           </v-chip>
-                        </div>
-                      </v-sheet>
-                    </v-row>
+                        </v-sheet>
+                      </v-row>
+                    </v-card-text>
                     <v-row v-if="item.status == 0 && acceptNumber < 3">
                       <v-col>
                         <v-card-actions>
@@ -176,6 +176,7 @@
         :isLoading="isDetailLoading"
         v-bind:messageCenter="1"
         v-if="ismobile == 0"
+        @close="onClose"
       />
       <BuddyDetailMobile
         v-if="ismobile == 1"
@@ -221,6 +222,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    onClose() {
+      (this as any).isDetailShow = false;
+    },
     acceptBuddyFunc(item: any) {
       this.snackbar = false;
       this.$emit("accept", item);

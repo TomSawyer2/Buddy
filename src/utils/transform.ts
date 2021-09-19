@@ -82,7 +82,6 @@ export function transformAfterGet(data: any) {
 
   data.projectValue = [];
 
-  // data.projects = "2002-2003-军口项目/公文加密-计算机网络信息加密方法研究;2003-2004-嘉铭激光-一体化标记机控制系统;2003-2004-铁四院-铁四院电化处网页制作;2004-2005-嘉铭激光-独立液晶大屏标记机控制系统(即一体化/5吋屏标记机产品化);2004-2004-华三通信（H3C)-8043路由器web管理系统";  data.resumeValue = [];
   if (data.projects !== undefined) {
     if (data.projects != "") {
       const projectsTmp: string[] = data.projects.split(";");
@@ -96,6 +95,7 @@ export function transformAfterGet(data: any) {
           identity: tempProject[4],
         };
       });
+      data.projectsArray = data.projects.split(';');
     }
   }
 
@@ -152,7 +152,6 @@ export function transformAfterGet(data: any) {
 }
 
 export function transformBeforeUpdate(formData: any) {
-  console.log(formData);
   if (formData.isGraduated && formData.isGraduated == "是") {
     formData.isGraduated = true;
   } else if (formData.isGraduated && formData.isGraduated == "否") {
@@ -190,6 +189,13 @@ export function transformBeforeUpdate(formData: any) {
   formData.teams = "";
   formData.teams = formData.teamsValue.join(";");
 
+  let idxA = 0; 
+  for(idxA; idxA < formData.managementExperienceValue.length; idxA ++) {
+    if(formData.managementExperienceValue[idxA] == "") {
+      formData.managementExperienceValue.splice(idxA, 1);
+      idxA --;
+    }
+  }
   formData.managementExperience = "";
   formData.managementExperience = formData.managementExperienceValue.join(";");
 
@@ -274,6 +280,9 @@ export function transformBeforeUpdate(formData: any) {
     }
   }
 
+  formData.graduateYear = Number(formData.graduateYear);
+  formData.graduateMonth = Number(formData.graduateMonth);
+
   switch (formData.identity) {
     case "预备队员":
       formData.identity = 0;
@@ -321,7 +330,7 @@ export function arrayToObjectDeWeight(arr: any, node: any) {
   if (node.children) {
     for (i; i < node.children.length; i++) {
       for (j; j < nodes.length; j++) {
-        if (nodes[j].value != "添加方向") {
+        if (nodes[j].value != "添加小方向") {
           if (node.children[i].value == nodes[j].value) {
             nodes.splice(j, 1);
             j--;
