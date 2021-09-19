@@ -205,7 +205,7 @@ export default Vue.extend({
   ],
   data() {
     return {
-      pageWidth: 100,
+      pageWidth: 200,
       isDetailShow: false,
       isDetailLoading: false,
       snackbar: false,
